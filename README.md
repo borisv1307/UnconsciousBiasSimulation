@@ -1,6 +1,6 @@
 # UnconsciousBiasSimulation
 
-A Human Resources Simulation
+## A Human Resources Simulation
 ============
 ---
 ## Introduction
