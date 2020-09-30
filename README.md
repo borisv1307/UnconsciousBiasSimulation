@@ -1,4 +1,4 @@
-# UnconsciousBiasSimulation
+# Unconscious Bias Simulation
 ---
 ## Introduction
 
