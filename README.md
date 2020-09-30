@@ -4,15 +4,16 @@
 
 All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. This website serves both populations with a simulation.
 
+#### Requirements
 ---
-## Job Seekers
+#### Job Seekers
 
 Create a basic online profile similar to Linked In but with a reduced scope. It should include space for one image, name, educational background, position being sought, career highlights. It should not include a full resume or CV, recommendations from others or connections. The job seeker would tag the profile with keywords related to the image and content. Once submitted, it would enter a pool to be randomly shown to HR professionals.
 
 The job seeker would eventually receive a report from the simulation providing statistics related to their profile. This information would reveal how likely that profile was to move on to the next step in the hiring process. The job seeker could then use that information to tweak their profile and try again. In this way, after several iterations, they could fine tune their profile for a positive response.
 
 ---
-## HR Professionals
+#### HR Professionals
 
 We can assume that most companies do not want their HR professionals, or any employee, to allow personal unconscious bias to influence company decisions. This simulation could be part of an overall training package or program to help employees uncover their unconscious biases.
 
