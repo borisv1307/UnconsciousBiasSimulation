@@ -1,0 +1,8 @@
+pymongo==3.10.1
+Flask==1.1.1
+passlib==1.7.2
+Flask_JWT_Extended==3.24.1
+Flask_PyMongo==2.3.0
+PyJWT==1.7.1
+requests==2.24.0
+dnspython==2.0.0
