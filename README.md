@@ -1,5 +1,7 @@
 # Unconscious Bias Simulation
+
 ---
+
 ## Introduction
 
 All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. This website serves both populations with a simulation.
@@ -13,6 +15,7 @@ Create a basic online profile similar to Linked In but with a reduced scope. It 
 The job seeker would eventually receive a report from the simulation providing statistics related to their profile. This information would reveal how likely that profile was to move on to the next step in the hiring process. The job seeker could then use that information to tweak their profile and try again. In this way, after several iterations, they could fine tune their profile for a positive response.
 
 ---
+
 #### HR Professionals
 
 We can assume that most companies do not want their HR professionals, or any employee, to allow personal unconscious bias to influence company decisions. This simulation could be part of an overall training package or program to help employees uncover their unconscious biases.
@@ -24,24 +27,43 @@ If machine learning were applied to the data set thus produced, the employee may
 ---
 
 ## Features
-- 
--
--
 
----
+-
+-
+- ***
+
 ## Architecture
+
 ![](images/Capture.PNG)
 
 ---
 
 ## Setup
 
+## UBS Front-End
 
----
+Source code for FE could be found under [frontend](frontend) directory in the root of the repository.  
+Front-End [README file](frontend/README.md)
+
+## UBS Back-End
+
+Source code for BE could be found under [backend](backend) directory in the root of the repository.  
+Back-End [README file](backend/README.md)
+
+## Steps to run the application
+
+```
+cd backend
+pip install -r requirements.txt
+python app.py
+
+
+cd frontend
+npm install
+npm run start
+
+```
 
 ## Usage
 
-
 ---
-
-
