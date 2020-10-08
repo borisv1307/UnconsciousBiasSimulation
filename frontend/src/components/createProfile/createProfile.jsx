@@ -23,16 +23,44 @@ class CreateProfile extends Component {
     this.setState({ [stateKey]: e.target.value });
   };
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      position: this.state.position,
+      aboutMe: this.state.aboutMe,
+      school: this.state.school,
+      degree: this.state.degree,
+      major: this.state.major,
+      eduStartDate: this.state.eduStartDate,
+      eduEndDate: this.state.eduEndDate,
+      gpa: this.state.gpa,
+      title: this.state.title,
+      company: this.state.company,
+      location: this.state.location,
+      expStartDate: this.state.expStartDate,
+      expEndDate: this.state.expEndDate,
+    };
+    console.log("submit");
+    console.log(this.state.firstName);
+    fetch("http://localhost:5000/createProfile/test@test.com", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => console.log(res));
+  };
+
   render() {
     return (
       <div>
         <h1>Create Profile</h1>
         <div>
-          <form
-            className="profile"
-            action="http://localhost:5000/createProfile/username"
-            method="post"
-          >
+          <form className="profile" action="" onSubmit={this.handleSubmit}>
             <label>First Name</label> <br />
             <input
               type="text"
