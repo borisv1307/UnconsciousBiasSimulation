@@ -12,6 +12,5 @@ def create_app():
   app.config['MONGO_URI'] = 'mongodb+srv://AIBADGE:AIBADGE789@aicluster.d91jv.azure.mongodb.net/test_college?retryWrites=true&w=majority'
 
   app.mongo = PyMongo(app)
-  print(app.mongo)
 
   return app
