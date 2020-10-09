@@ -3,7 +3,6 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 
-
 def create_app():
 
     # Flask Config
