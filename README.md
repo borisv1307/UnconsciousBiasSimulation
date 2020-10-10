@@ -60,7 +60,19 @@ python app.py
 
 cd frontend
 npm install
-npm run start
+npm start
+
+```
+
+## Steps to TDD the application
+
+```
+cd backend/tests
+pytest tests_UBS.py
+
+
+cd frontend
+npm test
 
 ```
 
