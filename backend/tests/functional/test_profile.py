@@ -31,15 +31,21 @@ class TestSomething:
         WHEN the '/createProfile' page is requested (GET)
         THEN check that the response is valid
         """
-            # Get collections
-        users = mongo.db.profiles2
-        id = int(users.find().skip(users.count_documents({}) - 1)[0]['id'])+1
+        # Get collections
+        profile = mongo.db.Profile
+        user = mongo.db.User
+        
+        id = int(profile.find().skip(profile.count_documents({}) - 1)[0]['profile_id'])+1
+        get_user_id = user.find_one( { "email": "test@test.com"},{ 'user_id': 1, '_id': 0 })
+        getUser_idval = get_user_id['user_id']
         data = {
-        "id":id,
-        "firstName": "Jijo",
-        "lastName": "George",
+        "profile_id":id,
+        "user_id": getUser_idval,
+        "email":"test@test.com",
+        "firstName": "Test",
+        "lastName": "User",
         "position": "Developer",
-        "aboutMe": "Hello World Test",
+        "aboutMe": "Hello World",
         "school": "Drexel",
         "degree": "MA",
         "major": "SE",
@@ -50,7 +56,7 @@ class TestSomething:
         "company": "ABC",
         "location": "PH",
         "expStartDate": "0001-01",
-        "expEndDate": "0001-01",
+        "expEndDate": "0001-01"
         }
         response = test_client.post('/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
@@ -63,11 +69,11 @@ class TestSomething:
         THEN check that the response is valid
         """
                     # Get collections
-        users = mongo.db.profiles2
-        id = int(users.find().skip(users.count_documents({}) - 1)[0]['id'])
+        users = mongo.db.Profile
+        id = int(users.find().skip(users.count_documents({}) - 1)[0]['profile_id'])
         
         data = {
-        "id":randint(1,id)
+        "profile_id":randint(1,id)
 
         }
       
