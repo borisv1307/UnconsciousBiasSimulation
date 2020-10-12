@@ -16,13 +16,11 @@ def initialize_extensions(app):
     # Since the application instance is now created, pass it to each Flask
     # extension instance to bind it to the Flask application instance (app)
     CORS(app)
-    app.config['MONGO_URI'] = "mongodb+srv://dbUser:dbUser@cluster0.boaw5.mongodb.net/UBSDB?ssl=true&ssl_cert_reqs=CERT_NONE"
+    # app.config['MONGO_URI'] = "mongodb+srv://dbUser:dbUser@cluster0.boaw5.mongodb.net/UBSDB?ssl=true&ssl_cert_reqs=CERT_NONE"
+    app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDB?ssl=true&ssl_cert_reqs=CERT_NONE"
     mongo.init_app(app)
 
-
-
-# client = pymongo.MongoClient()
-# db = client.test
+ 
 
 
 def register_blueprints(app):
