@@ -31,16 +31,9 @@ class TestSomething:
         WHEN the '/createProfile' page is requested (GET)
         THEN check that the response is valid
         """
-        # Get collections
-        profile = mongo.db.Profile
-        user = mongo.db.User
-        
-        id = int(profile.find().skip(profile.count_documents({}) - 1)[0]['profile_id'])+1
-        get_user_id = user.find_one( { "email": "test@test.com"},{ 'user_id': 1, '_id': 0 })
-        getUser_idval = get_user_id['user_id']
+
         data = {
-        "profile_id":id,
-        "user_id": getUser_idval,
+
         "email":"test@test.com",
         "firstName": "Test",
         "lastName": "User",
