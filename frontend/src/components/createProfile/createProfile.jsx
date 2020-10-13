@@ -26,6 +26,7 @@ class CreateProfile extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = {
+      email: "test@test.com",
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       position: this.state.position,
@@ -44,7 +45,7 @@ class CreateProfile extends Component {
     };
     console.log("submit");
     console.log(this.state.firstName);
-    fetch("http://localhost:5000/createProfile/test@test.com", {
+    fetch("http://localhost:5000/api/v1/createProfile/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
