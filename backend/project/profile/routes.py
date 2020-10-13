@@ -115,7 +115,7 @@ def createProfile():
 
 @profile_blueprint.route('/api/v1/getProfiles', methods=['GET'])
 def getProfiles():
-
+   
     user_id = request.get_json()['user_id']
     # Get collections
     profile = mongo.db.profile
@@ -123,11 +123,11 @@ def getProfiles():
     try:
         profiles = loads(dumps(profile.find({ "user_id": user_id})))
         for profile in profiles:
-
+            
             output.append({
                 "profile_id": profile['profile_id'],
                 "user_id": profile['user_id'],
-                "firstName": profile['firstName'],
+                "firstName": profile['firstName'], 
                 "lastName": profile['lastName'],
                 "position": profile['position'],
                 "aboutMe":  profile['aboutMe'],
@@ -142,9 +142,14 @@ def getProfiles():
                 "location": profile['location'],
                 "expStartDate": profile['expStartDate'],
                 "expEndDate": profile['expEndDate']
-
+                        
             })
-        output = {"count": len(output), "results": output}
+        if len(output)==0:
+            output = {'code': 2, "error": "User not found"}
+        else:
+            output = {"count": len(output), "results": output}
     except:
-        output = {'code': 2, "error": "User not found"}
+        output = {'code': 2, "error": "Error fetching details from DB"}
     return output
+   
+
