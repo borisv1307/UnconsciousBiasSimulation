@@ -51,26 +51,26 @@ class TestSomething:
         "expStartDate": "0001-01",
         "expEndDate": "0001-01"
         }
-        response = test_client.post('/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post('/api/v1/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response != 'null'
 
-    def test_getProfile(self, test_client):
+
+
+    def test_getProfiles(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/getProfile' page is requested (GET)
+        WHEN the '/getProfileCount' page is requested (GET)
         THEN check that the response is valid
         """
-                    # Get collections
-        users = mongo.db.Profile
-        id = int(users.find().skip(users.count_documents({}) - 1)[0]['profile_id'])
+
         
         data = {
-        "profile_id":randint(1,id)
+        "user_id":1
 
         }
       
-        response = test_client.get('/getProfile',data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getProfiles',data=json.dumps(data),headers={'Content-Type': 'application/json'})
         
         assert response.status_code == 200
         assert response != 'null'
