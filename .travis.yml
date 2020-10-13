@@ -17,7 +17,7 @@ install:
   
 # command to run tests
 script:
-  - pytest --setup-show $BACKEND_DIR/tests/functional
+  - coverage run -m pytest --setup-show $BACKEND_DIR/tests/functional
 
 after_script:
   - codecov
