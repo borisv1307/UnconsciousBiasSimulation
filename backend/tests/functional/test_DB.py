@@ -24,15 +24,15 @@ def test_client():
         yield testing_client
 
 class TestDB:
-    
+
 
     def test_dbstatus(self, test_client):
         """
         Test MongoDB connection
         """
         # Get collections
-        users = mongo.db.profiles2
-        id = int(users.find().skip(users.count_documents({}) - 1)[0]['id'])
+        users = mongo.db.profile
+        id = int(users.find().skip(users.count_documents({}) - 1)[0]['profile_id'])
         assert id>1
 
     def test_profileCollection(self, test_client):
@@ -40,6 +40,6 @@ class TestDB:
         Test Profile Collection
         """
         # Get collections
-        users = mongo.db.profiles2
-        mydoc = users.find().count()  
+        users = mongo.db.profile
+        mydoc = users.find().count()
         assert mydoc>0

@@ -24,15 +24,12 @@ def profilevalidation(f):
             profile_data = request.get_json()
             get_email = profile_data['email']
         except:
-            return {"error": "Missing request body"}
+            return {'code': 4,'error': 'Missing request body'}, 403
 
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-        
-        if not (re.search(regex,get_email)):
-            return jsonify({'code': 4,"error": "Invalid email id"}), 403 
 
-        if get_email is None or re.search("^\s*$", get_email):
-            return {'code': 4, "error": "Input fields cannot be blank or null"}, 403                                                
+        if not (re.search(regex,get_email) or get_email is None or re.search("^\s*$", get_email)):
+            return {'code': 4,"error": "Invalid email id"}, 403
         return f(*args, **kwargs)
     return decorated
 
@@ -46,7 +43,7 @@ def helloProfile():
 @profilevalidation
 def createProfile():
    # Get fields from request body, check for missing fields
-  
+
     profile_data = request.get_json()
     get_email = profile_data['email']
 
@@ -58,8 +55,6 @@ def createProfile():
 
     # check if email is already in database
     email_exists = user.count_documents({'email': get_email})
-    
-    
 
     if email_exists:
         get_user_id = user.find_one( { "email": get_email},{ 'user_id': 1, '_id': 0 })
@@ -84,12 +79,15 @@ def createProfile():
         "expStartDate": profile_data['expStartDate'],
         "expEndDate": profile_data['expEndDate']
         })
+
+        print("asfasdfasdf ",create_profile)
+
         if create_profile:
             user = profile.find_one({"profile_id": profile_id})
             output = {
                 "profile_id": user['profile_id'],
                 "user_id": user['user_id'],
-                "firstName": user['firstName'], 
+                "firstName": user['firstName'],
                 "lastName": user['lastName'],
                 "position": user['position'],
                 "aboutMe":  user['aboutMe'],
@@ -104,7 +102,7 @@ def createProfile():
                 "location": user['location'],
                 "expStartDate": user['expStartDate'],
                 "expEndDate": user['expEndDate']
-                        
+
             }
         else:
             output = {'code': 2, "error": "Insert Failed"}
@@ -117,7 +115,7 @@ def createProfile():
 
 @profile_blueprint.route('/api/v1/getProfiles', methods=['GET'])
 def getProfiles():
-   
+
     user_id = request.get_json()['user_id']
     # Get collections
     profile = mongo.db.profile
@@ -125,11 +123,11 @@ def getProfiles():
     try:
         profiles = loads(dumps(profile.find({ "user_id": user_id})))
         for profile in profiles:
-            
+
             output.append({
                 "profile_id": profile['profile_id'],
                 "user_id": profile['user_id'],
-                "firstName": profile['firstName'], 
+                "firstName": profile['firstName'],
                 "lastName": profile['lastName'],
                 "position": profile['position'],
                 "aboutMe":  profile['aboutMe'],
@@ -144,10 +142,9 @@ def getProfiles():
                 "location": profile['location'],
                 "expStartDate": profile['expStartDate'],
                 "expEndDate": profile['expEndDate']
-                        
+
             })
         output = {"count": len(output), "results": output}
     except:
         output = {'code': 2, "error": "User not found"}
     return output
-   
