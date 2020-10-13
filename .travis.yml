@@ -20,4 +20,6 @@ script:
   - coverage run -m pytest --setup-show $BACKEND_DIR/tests/functional
 
 after_script:
+  - bash <(curl -s https://codecov.io/bash) -t 3826d78b-1cde-46e7-a627-7e1350f16f38
   - codecov
+ 
