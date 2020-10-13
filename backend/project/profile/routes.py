@@ -3,6 +3,8 @@ from flask import request
 from bson.json_util import dumps,RELAXED_JSON_OPTIONS
 from bson.objectid import ObjectId
 import json
+from json import loads
+from bson import json_util
 from project import mongo
 from flask import jsonify
 from functools import wraps
@@ -40,7 +42,7 @@ def helloProfile():
     print(profiledata)
     return profiledata
 
-@profile_blueprint.route('/createProfile', methods=['POST'])
+@profile_blueprint.route('/api/v1/createProfile', methods=['POST'])
 @profilevalidation
 def createProfile():
    # Get fields from request body, check for missing fields
@@ -49,8 +51,8 @@ def createProfile():
     get_email = profile_data['email']
 
     # Get collections
-    profile = mongo.db.Profile
-    user = mongo.db.User
+    profile = mongo.db.profile
+    user = mongo.db.user
     profile_id = int(profile.find().skip(profile.count_documents({}) - 1)[0]['profile_id'])+1
 
 
@@ -109,39 +111,43 @@ def createProfile():
     else:
         output = {'code': 2, "error": "User account does not exist"}
 
-    # # bs = dumps(user,json_options=RELAXED_JSON_OPTIONS)
+
     return output
 
 
-@profile_blueprint.route('/api/v1/getProfile', methods=['GET'])
-def getProfile():
+@profile_blueprint.route('/api/v1/getProfiles', methods=['GET'])
+def getProfiles():
    
-    profile_id = request.get_json()['profile_id']
-     # Get collections
-    users = mongo.db.Profile
+    user_id = request.get_json()['user_id']
+    # Get collections
+    profile = mongo.db.profile
+    output=[]
     try:
-        user = users.find_one({"profile_id": profile_id})
-        output = {
-        "profile_id": user['profile_id'], 
-        "user_id": user['user_id'], 
-        "firstName": user['firstName'], 
-        "lastName": user['lastName'],
-        "position": user['position'],
-        "aboutMe":  user['aboutMe'],
-        "school": user['school'],
-        "degree": user['degree'],
-        "major": user['major'],
-        "eduStartDate": user['eduStartDate'],
-        "eduEndDate": user['eduEndDate'],
-        "gpa": user['gpa'],
-        "title": user['title'],
-        "company": user['company'],
-        "location": user['location'],
-        "expStartDate": user['expStartDate'],
-        "expEndDate": user['expEndDate']
-                  
-    }
+        profiles = loads(dumps(profile.find({ "user_id": user_id})))
+        for profile in profiles:
+            
+            output.append({
+                "profile_id": profile['profile_id'],
+                "user_id": profile['user_id'],
+                "firstName": profile['firstName'], 
+                "lastName": profile['lastName'],
+                "position": profile['position'],
+                "aboutMe":  profile['aboutMe'],
+                "school": profile['school'],
+                "degree": profile['degree'],
+                "major": profile['major'],
+                "eduStartDate": profile['eduStartDate'],
+                "eduEndDate": profile['eduEndDate'],
+                "gpa": profile['gpa'],
+                "title": profile['title'],
+                "company": profile['company'],
+                "location": profile['location'],
+                "expStartDate": profile['expStartDate'],
+                "expEndDate": profile['expEndDate']
+                        
+            })
+        output = {"count": len(output), "results": output}
     except:
         output = {'code': 2, "error": "User not found"}
-    return output 
+    return output
    
