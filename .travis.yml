@@ -1,4 +1,6 @@
 language: python
+env:
+  - BACKEND_DIR='backend'
 python:     # current default Python on Travis CI
  
   - "3.8"
@@ -11,11 +13,12 @@ addons:
 
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
+  - pip install -r $BACKEND_DIR/requirements.txt
+  
 # command to run tests
 script:
-  - pytest --setup-show tests/functional
-  - coverage run -m pytest --setup-show tests/functional
+  - pytest --setup-show $BACKEND_DIR/tests/functional
+  - coverage run -m pytest --setup-show $BACKEND_DIR/tests/functional
   - coverage report -m
   - coverage xml
   - coverage html
