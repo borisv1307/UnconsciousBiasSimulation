@@ -49,7 +49,7 @@ class TestSomething:
         "expStartDate": "0001-01",
         "expEndDate": "0001-01"
         }
-        response = test_client.post('/api/v1/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
@@ -78,7 +78,7 @@ class TestSomething:
         "expStartDate": "0001-01",
         "expEndDate": "0001-01"
         }
-        response = test_client.post('/api/v1/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Invalid email id"}\n'
 
@@ -107,7 +107,7 @@ class TestSomething:
         "expStartDate": "0001-01",
         "expEndDate": "0001-01"
         }
-        response = test_client.post('/api/v1/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Invalid email id"}\n'
 
@@ -138,7 +138,7 @@ class TestSomething:
         "expStartDate": "0001-01",
         "expEndDate": "0001-01"
         }
-        response = test_client.post('/api/v1/createProfile', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response != 'null'
 
@@ -154,6 +154,6 @@ class TestSomething:
         data = {
         "user_id":1
         }
-        response = test_client.get('/api/v1/getProfiles',data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getProfiles/',data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response != 'null'
