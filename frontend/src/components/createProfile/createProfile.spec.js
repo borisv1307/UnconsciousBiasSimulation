@@ -101,4 +101,15 @@ describe("CreateProfile", () => {
     expect(expStartDateInput.props().value).toEqual("2020-09");
     expect(expEndDateInput.props().value).toEqual("2020-09");
   });
+
+  it("should include buttons for adding edu and exp", () => {
+    const eduButton = wrapper.find("Button#addEducationButton");
+    const expButton = wrapper.find("Button#addExperienceButton");
+
+    expect(eduButton.length).toEqual(1);
+    expect(expButton.length).toEqual(1);
+
+    expect(eduButton.text()).toEqual("Add Education");
+    expect(expButton.text()).toEqual("Add Experience");
+  });
 });

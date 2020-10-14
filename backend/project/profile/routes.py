@@ -52,6 +52,8 @@ def createProfile():
     profile_data = request.get_json()
     get_email = profile_data['email']
 
+    print(profile_data)
+
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
@@ -73,17 +75,8 @@ def createProfile():
             "lastName": profile_data['lastName'],
             "position": profile_data['position'],
             "aboutMe":  profile_data['aboutMe'],
-            "school": profile_data['school'],
-            "degree": profile_data['degree'],
-            "major": profile_data['major'],
-            "eduStartDate": profile_data['eduStartDate'],
-            "eduEndDate": profile_data['eduEndDate'],
-            "gpa": profile_data['gpa'],
-            "title": profile_data['title'],
-            "company": profile_data['company'],
-            "location": profile_data['location'],
-            "expStartDate": profile_data['expStartDate'],
-            "expEndDate": profile_data['expEndDate']
+            "education": profile_data['education'],
+            "experience": profile_data['experience']
         })
 
         print("asfasdfasdf ", create_profile)
@@ -97,18 +90,8 @@ def createProfile():
                 "lastName": user['lastName'],
                 "position": user['position'],
                 "aboutMe":  user['aboutMe'],
-                "school": user['school'],
-                "degree": user['degree'],
-                "major": user['major'],
-                "eduStartDate": user['eduStartDate'],
-                "eduEndDate": user['eduEndDate'],
-                "gpa": user['gpa'],
-                "title": user['title'],
-                "company": user['company'],
-                "location": user['location'],
-                "expStartDate": user['expStartDate'],
-                "expEndDate": user['expEndDate']
-
+                "education": user['education'],
+                "experience": user['experience']
             }
         else:
             output = {'code': 2, "error": "Insert Failed"}
@@ -137,18 +120,8 @@ def getProfiles():
                 "lastName": profile['lastName'],
                 "position": profile['position'],
                 "aboutMe":  profile['aboutMe'],
-                "school": profile['school'],
-                "degree": profile['degree'],
-                "major": profile['major'],
-                "eduStartDate": profile['eduStartDate'],
-                "eduEndDate": profile['eduEndDate'],
-                "gpa": profile['gpa'],
-                "title": profile['title'],
-                "company": profile['company'],
-                "location": profile['location'],
-                "expStartDate": profile['expStartDate'],
-                "expEndDate": profile['expEndDate']
-
+                "education": profile['education'],
+                "experience": profile['experience']
             })
         if len(output) == 0:
             output = {'code': 2, "error": "User not found"}
