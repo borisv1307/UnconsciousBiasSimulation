@@ -112,4 +112,115 @@ describe("CreateProfile", () => {
     expect(eduButton.text()).toEqual("Add Education");
     expect(expButton.text()).toEqual("Add Experience");
   });
+
+  it("should insert education details in education array when button is clicked", () => {
+    const educationButton = wrapper.find("#addEducationButton")
+
+    const schoolInput = simulateChangeOnInput(
+      wrapper,
+      "#school",
+      "Drexel University"
+    );
+    const degreeInput = simulateChangeOnInput(wrapper, "#degree", "BS");
+    const majorInput = simulateChangeOnInput(wrapper, "#major", "Science");
+    const eduStartDateInput = simulateChangeOnInput(
+      wrapper,
+      "#eduStartDate",
+      "2020-09"
+    );
+    const eduEndDateInput = simulateChangeOnInput(
+      wrapper,
+      "#eduEndDate",
+      "2020-09"
+    );
+    const gpaInput = simulateChangeOnInput(wrapper, "#gpa", "3.50");
+
+    educationButton.simulate('click');
+    wrapper.update();
+    expect(wrapper.state("education")).toEqual([{"degree": "BS", "eduEndDate": "2020-09", "eduStartDate": "2020-09", "gpa": "3.50", "major": "Science", "school": "Drexel University"}]);
+  });
+
+  it("should insert multiple education details in education array when button is clicked multiple times", () => {
+    const educationButton = wrapper.find("#addEducationButton")
+
+    const schoolInput = simulateChangeOnInput(
+      wrapper,
+      "#school",
+      "Drexel University"
+    );
+    const degreeInput = simulateChangeOnInput(wrapper, "#degree", "BS");
+    const majorInput = simulateChangeOnInput(wrapper, "#major", "Science");
+    const eduStartDateInput = simulateChangeOnInput(
+      wrapper,
+      "#eduStartDate",
+      "2020-09"
+    );
+    const eduEndDateInput = simulateChangeOnInput(
+      wrapper,
+      "#eduEndDate",
+      "2020-09"
+    );
+    const gpaInput = simulateChangeOnInput(wrapper, "#gpa", "3.50");
+
+    educationButton.simulate('click');
+    wrapper.update();
+    educationButton.simulate('click');
+    wrapper.update();
+    expect(wrapper.state("education")).toEqual([{"degree": "BS", "eduEndDate": "2020-09", "eduStartDate": "2020-09", "gpa": "3.50", "major": "Science", "school": "Drexel University"}, {"degree": "BS", "eduEndDate": "2020-09", "eduStartDate": "2020-09", "gpa": "3.50", "major": "Science", "school": "Drexel University"}]);
+  });
+
+  it("should insert experience details in experience array when button is clicked", () => {
+    const experienceButton = wrapper.find("#addExperienceButton")
+
+    const titleInput = simulateChangeOnInput(wrapper, "#title", "Intern");
+    const companyInput = simulateChangeOnInput(wrapper, "#company", "DXC");
+    const locationInput = simulateChangeOnInput(
+      wrapper,
+      "#location",
+      "Philadelphia"
+    );
+    const expStartDateInput = simulateChangeOnInput(
+      wrapper,
+      "#expStartDate",
+      "2020-09"
+    );
+    const expEndDateInput = simulateChangeOnInput(
+      wrapper,
+      "#expEndDate",
+      "2020-09"
+    );
+
+    experienceButton.simulate('click');
+    wrapper.update();
+    expect(wrapper.state("experience")).toEqual([{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"}]);
+  });
+
+  it("should insert multiple experience details in experience array when button is clicked multiple times", () => {
+    const experienceButton = wrapper.find("#addExperienceButton")
+
+    const titleInput = simulateChangeOnInput(wrapper, "#title", "Intern");
+    const companyInput = simulateChangeOnInput(wrapper, "#company", "DXC");
+    const locationInput = simulateChangeOnInput(
+      wrapper,
+      "#location",
+      "Philadelphia"
+    );
+    const expStartDateInput = simulateChangeOnInput(
+      wrapper,
+      "#expStartDate",
+      "2020-09"
+    );
+    const expEndDateInput = simulateChangeOnInput(
+      wrapper,
+      "#expEndDate",
+      "2020-09"
+    );
+
+    experienceButton.simulate('click');
+    wrapper.update();
+    experienceButton.simulate('click');
+    wrapper.update();
+    expect(wrapper.state("experience")).toEqual([{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"},{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"}]);
+  });
+
 });

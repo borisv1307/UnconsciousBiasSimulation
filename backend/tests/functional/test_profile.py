@@ -37,23 +37,31 @@ class TestSomething:
         "lastName": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
-        "school": "Drexel",
-        "degree": "MA",
-        "major": "SE",
-        "eduStartDate": "0001-01",
-        "eduEndDate": "0001-01",
-        "gpa": "3",
-        "title": "Developer",
-        "company": "ABC",
-        "location": "PH",
-        "expStartDate": "0001-01",
-        "expEndDate": "0001-01"
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]  
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
-    def test_checking_a_valid_email(self,test_client):
+    def test_checking_a_valid_email_when_null(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
@@ -66,17 +74,25 @@ class TestSomething:
         "lastName": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
-        "school": "Drexel",
-        "degree": "MA",
-        "major": "SE",
-        "eduStartDate": "0001-01",
-        "eduEndDate": "0001-01",
-        "gpa": "3",
-        "title": "Developer",
-        "company": "ABC",
-        "location": "PH",
-        "expStartDate": "0001-01",
-        "expEndDate": "0001-01"
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]  
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -95,17 +111,25 @@ class TestSomething:
         "lastName": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
-        "school": "Drexel",
-        "degree": "MA",
-        "major": "SE",
-        "eduStartDate": "0001-01",
-        "eduEndDate": "0001-01",
-        "gpa": "3",
-        "title": "Developer",
-        "company": "ABC",
-        "location": "PH",
-        "expStartDate": "0001-01",
-        "expEndDate": "0001-01"
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]  
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -120,23 +144,30 @@ class TestSomething:
         """
 
         data = {
-
         "email":"test@test.com",
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
-        "school": "Drexel",
-        "degree": "MA",
-        "major": "SE",
-        "eduStartDate": "0001-01",
-        "eduEndDate": "0001-01",
-        "gpa": "3",
-        "title": "Developer",
-        "company": "ABC",
-        "location": "PH",
-        "expStartDate": "0001-01",
-        "expEndDate": "0001-01"
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]       
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200

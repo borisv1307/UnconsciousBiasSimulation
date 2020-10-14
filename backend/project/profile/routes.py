@@ -19,7 +19,6 @@ from . import profile_blueprint
 
 # ALL FUTURE DATA VALIDATION
 
-
 def profilevalidation(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -28,19 +27,21 @@ def profilevalidation(f):
             get_email = profile_data['email']
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
-
+        
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-
-        if not (re.search(regex, get_email) or get_email is None or re.search("^\s*$", get_email)):
-            return {'code': 4, "error": "Invalid email id"}, 403
+        
+        if get_email is None:
+            return {"code":4,"error":"Invalid email id"}, 403
+        
+        if not (re.search(regex,get_email)):
+            return jsonify({'code': 4,"error": "Invalid email id"}), 403
+        
         return f(*args, **kwargs)
     return decorated
-
 
 @profile_blueprint.route('/helloProfile/too', methods=['POST'])
 def helloProfile():
     profiledata = request.get_json()
-    print(profiledata)
     return profiledata
 
 
@@ -51,8 +52,6 @@ def createProfile():
 
     profile_data = request.get_json()
     get_email = profile_data['email']
-
-    print(profile_data)
 
     # Get collections
     profile = mongo.db.profile
@@ -79,8 +78,6 @@ def createProfile():
             "experience": profile_data['experience']
         })
 
-        print("asfasdfasdf ", create_profile)
-
         if create_profile:
             user = profile.find_one({"profile_id": profile_id})
             output = {
@@ -104,7 +101,7 @@ def createProfile():
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
 def getProfiles():
 
-    profile_id = 55;
+    profile_id = 78;
     # user_id = request.get_json()['user_id']
     # Get collections
     profile = mongo.db.profile

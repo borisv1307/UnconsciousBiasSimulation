@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
+import UploadImage from "./uploadImage";
 
 
 class CreateProfile extends Component {
@@ -41,8 +42,6 @@ class CreateProfile extends Component {
       experience: this.state.experience
     };
 
-    console.log("Submitted form");
-    console.log(JSON.stringify(data));
     fetch("http://localhost:5000/api/v1/createProfile/", {
       method: "POST",
       headers: {
@@ -55,8 +54,6 @@ class CreateProfile extends Component {
   };
 
   addEducation = (e) => {
-    e.preventDefault();
-
     const educationData = {
       school: this.state.school,
       degree: this.state.degree,
@@ -66,18 +63,12 @@ class CreateProfile extends Component {
       gpa: this.state.gpa,
     };
 
-    console.log(JSON.stringify(educationData))
-
     this.setState({
       education:[...this.state.education, educationData]
     });
-
-    console.log("Add Education");
   };
 
   addExperience = (e) => {
-    e.preventDefault();
-
     const experienceData = {
       title: this.state.title,
       company: this.state.company,
@@ -86,21 +77,18 @@ class CreateProfile extends Component {
       expEndDate: this.state.expEndDate,
     };
 
-    console.log(JSON.stringify(experienceData))
-
     this.setState({
       experience:[...this.state.experience, experienceData]
     });
-
-    console.log("Add Experience");
   };
 
   render() {
     return (
-     
+      
       <div>
         <Header />
         <h1>Create Profile</h1>
+        <UploadImage />
         <div>
           <form className="profile" action="" onSubmit={this.handleSubmit}>
             <label>First Name</label> <br />
@@ -263,9 +251,9 @@ class CreateProfile extends Component {
               Add Experience
             </Button>
             <br />
-            <button id="submitButton" className="submit">
+            <Button id="submitButton" className="submit" onClick={this.handleSubmit}>
               Submit
-            </button>
+            </Button>
           </form>
         </div>
       </div>
