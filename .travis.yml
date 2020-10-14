@@ -18,6 +18,7 @@ install:
 # command to run tests
 script:
   - coverage run -m pytest --setup-show $BACKEND_DIR/tests/functional
+  - sonar-scanner
 
 after_script:
   - bash <(curl -s https://codecov.io/bash) -t 3826d78b-1cde-46e7-a627-7e1350f16f38
