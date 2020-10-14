@@ -10,6 +10,7 @@ from flask import jsonify
 from functools import wraps
 import re
 
+
 from . import profile_blueprint
 
 ################
@@ -120,12 +121,13 @@ def createProfile():
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
 def getProfiles():
 
-    user_id = request.get_json()['user_id']
+    profile_id = 55;
+    # user_id = request.get_json()['user_id']
     # Get collections
     profile = mongo.db.profile
     output = []
     try:
-        profiles = loads(dumps(profile.find({"user_id": user_id})))
+        profiles = loads(dumps(profile.find({"profile_id": profile_id})))
         for profile in profiles:
 
             output.append({
