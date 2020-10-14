@@ -1,6 +1,6 @@
 """
 This file (test_profile.py) contains the functional tests which
-test create profile and view profile.
+test creates and gets profile.
 
 """
 import pytest
