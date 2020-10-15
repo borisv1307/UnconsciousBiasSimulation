@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import CreateProfile from "./components/createProfile/createProfile";
-import ViewProfile from "./components/viewProfile/viewProfile";
+import ViewProfile from "./components/viewProfile/viewProfiles";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(

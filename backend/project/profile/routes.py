@@ -101,13 +101,13 @@ def createProfile():
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
 def getProfiles():
 
-    profile_id = 78;
+    user_id = 1;
     # user_id = request.get_json()['user_id']
     # Get collections
     profile = mongo.db.profile
     output = []
     try:
-        profiles = loads(dumps(profile.find({"profile_id": profile_id})))
+        profiles = loads(dumps(profile.find({"user_id": user_id})))
         for profile in profiles:
 
             output.append({
