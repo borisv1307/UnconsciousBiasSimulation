@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Nav from "react-bootstrap/Nav";
-import "../../index.css";
 
 class Header extends Component {
   render() {
