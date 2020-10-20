@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import UploadImage from "./uploadImage";
-
 
 class CreateProfile extends Component {
   state = {
+    profileName: "",
+    profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
     firstName: "",
     lastName: "",
     position: "",
@@ -34,6 +34,8 @@ class CreateProfile extends Component {
     e.preventDefault();
     const data = {
       email: "test@test.com",
+      profileName: this.state.profileName,
+      profileImg: this.state.profileImg,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       position: this.state.position,
@@ -41,6 +43,8 @@ class CreateProfile extends Component {
       education: this.state.education,
       experience: this.state.experience
     };
+
+    console.log(JSON.stringify(data));
 
     fetch("http://localhost:5000/api/v1/createProfile/", {
       method: "POST",
@@ -82,15 +86,56 @@ class CreateProfile extends Component {
     });
   };
 
+  imageHandler = (e) => {
+    const preview = document.querySelector('img');
+    const file = document.querySelector('input[type=file]').files[0];
+    const reader = new FileReader();
+    var fileImageTypes = ["image/png", "image/jpeg"];
+    
+    reader.addEventListener("load", function() {
+        preview.src = reader.result;
+    }, false);
+
+    if(file){
+        if(fileImageTypes.includes(file.type)){
+            reader.readAsDataURL(file);
+            this.setState({
+                profileImg: e.target.files[0]
+              }, () => {
+                console.log("profileImg State:", this.state.profileImg);
+              });
+        }
+        else{
+            console.log("Invalid file type uploaded")
+        }
+    }
+  }
+
   render() {
+    const {profileImg} = this.state
     return (
-      
       <div>
         <Header />
         <h1>Create Profile</h1>
-        <UploadImage />
+        <div className="page">
+          <div className="container">
+            <h2 className="heading">Add your Image</h2>
+            <img src={profileImg} width="200" alt="" id="profileImage" className="img" />
+            <input type="file" accept="image/*" name="image-upload" id="UploadImageInput" onChange={this.imageHandler} />
+          </div>
+        </div>
         <div>
           <form className="profile" action="" onSubmit={this.handleSubmit}>
+            <label>Profile Name</label> <br />
+            <input
+              type="text"
+              value={this.state.profileName}
+              onChange={this.updateField("profileName")}
+              id="profileName"
+              name="profileName"
+              required
+            />{" "}
+            <br />
             <label>First Name</label> <br />
             <input
               type="text"

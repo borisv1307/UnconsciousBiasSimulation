@@ -63,6 +63,8 @@ def createUserProfile():
         create_profile = profile.insert_one({
             "profile_id": profile_id,
             "user_id": userId,
+            "profileName": profile_data['profileName'],
+            "profileImg": profile_data['profileImg'],
             "firstName": profile_data['firstName'],
             "lastName": profile_data['lastName'],
             "position": profile_data['position'],
@@ -76,6 +78,8 @@ def createUserProfile():
             output = {
                 "profile_id": user['profile_id'],
                 "user_id": user['user_id'],
+                "profileName": user['profileName'],
+                "profileImg": user['profileImg'],
                 "firstName": user['firstName'],
                 "lastName": user['lastName'],
                 "position": user['position'],
@@ -104,6 +108,8 @@ def getUserProfiles():
             output.append({
                 "profile_id": profile['profile_id'],
                 "user_id": profile['user_id'],
+                "profileName": profile['profileName'],
+                "profileImg": profile['profileImg'],
                 "firstName": profile['firstName'],
                 "lastName": profile['lastName'],
                 "position": profile['position'],

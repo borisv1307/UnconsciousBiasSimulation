@@ -4,7 +4,6 @@ import Header from "../Header/Header";
 import Profile from "../viewProfile/Profile";
 import Accordion from "react-bootstrap/Accordion";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 
 class ViewProfiles extends Component {
   constructor() {

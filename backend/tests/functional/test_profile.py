@@ -33,6 +33,8 @@ class TestSomething:
         THEN check that request has email address
         """
         data = {
+        "profileName":"Profile A",
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -70,6 +72,8 @@ class TestSomething:
 
         data = {
         "email": None,
+        "profileName":"Profile A",
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -107,6 +111,8 @@ class TestSomething:
         
         data = {
         "email":"testtest.com",
+        "profileName":"Profile A",
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -145,6 +151,8 @@ class TestSomething:
 
         data = {
         "email":"test@test.com",
+        "profileName":"Profile A",
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",

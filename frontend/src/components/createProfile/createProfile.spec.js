@@ -23,10 +23,11 @@ describe("CreateProfile", () => {
   });
 
   it("CreateProfile should include 15 inputs", () => {
-    expect(wrapper.find("input").length).toEqual(15);
+    expect(wrapper.find("input").length).toEqual(17);
   });
 
   it("should include inputs for personal details, education, and experience", () => {
+    expect(wrapper.find("input#profileName").length).toEqual(1);
     expect(wrapper.find("input#firstName").length).toEqual(1);
     expect(wrapper.find("input#lastName").length).toEqual(1);
     expect(wrapper.find("input#position").length).toEqual(1);
@@ -45,6 +46,7 @@ describe("CreateProfile", () => {
   });
 
   it("update input forms ", () => {
+    const profileNameInput = simulateChangeOnInput(wrapper, "#profileName", "Profile 1");
     const firstNameInput = simulateChangeOnInput(wrapper, "#firstName", "John");
     const lastNameInput = simulateChangeOnInput(wrapper, "#lastName", "Doe");
     const positionInput = simulateChangeOnInput(wrapper, "#position", "Worker");
@@ -84,7 +86,8 @@ describe("CreateProfile", () => {
       "#expEndDate",
       "2020-09"
     );
-
+    
+    expect(profileNameInput.props().value).toEqual("Profile 1");
     expect(firstNameInput.props().value).toEqual("John");
     expect(lastNameInput.props().value).toEqual("Doe");
     expect(positionInput.props().value).toEqual("Worker");
@@ -221,6 +224,24 @@ describe("CreateProfile", () => {
     experienceButton.simulate('click');
     wrapper.update();
     expect(wrapper.state("experience")).toEqual([{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"},{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"}]);
+  });
+
+  describe("UploadImage", () => {
+    let wrapper;
+    beforeEach(() => (wrapper = shallow(<CreateProfile />)));
+
+    it("should have a button for uploading an image", () =>{
+        expect(wrapper.find("input#UploadImageInput").length).toEqual(1);
+    });
+
+    it("should render an image", () => {
+        expect(wrapper.find("img#profileImage").length).toEqual(1);
+    });
+
+    it("should display generic avatar picture when no image is uploaded yet", () => {
+        const imgInput = wrapper.find("img#profileImage");
+        expect(imgInput.getElement(0).props.src).toEqual("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png");
+    });
   });
 
 });
