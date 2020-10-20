@@ -19,7 +19,7 @@ from . import profile_blueprint
 
 # ALL FUTURE DATA VALIDATION
 
-def profilevalidation(f):
+def profileValidation(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
@@ -27,27 +27,22 @@ def profilevalidation(f):
             get_email = profile_data['email']
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
-        
+
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-        
+
         if get_email is None:
             return {"code":4,"error":"Invalid email id"}, 403
-        
+
         if not (re.search(regex,get_email)):
             return jsonify({'code': 4,"error": "Invalid email id"}), 403
-        
+
         return f(*args, **kwargs)
     return decorated
 
-@profile_blueprint.route('/helloProfile/too', methods=['POST'])
-def helloProfile():
-    profiledata = request.get_json()
-    return profiledata
-
 
 @profile_blueprint.route('/api/v1/createProfile/', methods=['POST'])
-@profilevalidation
-def createProfile():
+@profileValidation
+def createUserProfile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
@@ -61,15 +56,13 @@ def createProfile():
 
     # check if email is already in database
     email_exists = user.count_documents({'email': get_email})
-
     if email_exists:
         get_user_id = user.find_one({"email": get_email}, {
                                     'user_id': 1, '_id': 0})
-        getUser_idval = get_user_id['user_id']
-
+        userId = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
-            "user_id": getUser_idval,
+            "user_id": userId,
             "firstName": profile_data['firstName'],
             "lastName": profile_data['lastName'],
             "position": profile_data['position'],
@@ -99,11 +92,9 @@ def createProfile():
 
 
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
-def getProfiles():
+def getUserProfiles():
 
     user_id = 1;
-    # user_id = request.get_json()['user_id']
-    # Get collections
     profile = mongo.db.profile
     output = []
     try:

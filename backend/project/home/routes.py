@@ -10,7 +10,3 @@ from . import home_blueprint
 @home_blueprint.route('/')
 def get():
     return "Hello World"
-
-@home_blueprint.route('/hello', methods=['POST'])
-def getHello():
-    return "Hello "
