@@ -86,29 +86,25 @@ class CreateProfile extends Component {
     });
   };
 
-  imageHandler = (e) => {
-    const preview = document.querySelector('img');
-    const file = document.querySelector('input[type=file]').files[0];
-    const reader = new FileReader();
-    var fileImageTypes = ["image/png", "image/jpeg"];
-    
-    reader.addEventListener("load", function() {
-        preview.src = reader.result;
-    }, false);
+  imageHandler = async e => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'unconsciousbias')
+    const res = await fetch(
+      '	https://api.cloudinary.com/v1_1/unconsciousbiassimulator/image/upload',
+      {
+        method: 'POST',
+        body: data
+      }
+    )
+    const file = await res.json()
 
-    if(file){
-        if(fileImageTypes.includes(file.type)){
-            reader.readAsDataURL(file);
-            this.setState({
-                profileImg: e.target.files[0]
-              }, () => {
-                console.log("profileImg State:", this.state.profileImg);
-              });
-        }
-        else{
-            console.log("Invalid file type uploaded")
-        }
-    }
+    this.setState({
+      profileImg: file.secure_url
+    }, () => {
+      console.log("profileImg State:", this.state.profileImg);
+    });
   }
 
   render() {
