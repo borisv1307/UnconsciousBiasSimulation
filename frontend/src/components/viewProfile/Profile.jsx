@@ -25,7 +25,7 @@ class Profile extends Component {
               {" "}
               <Image
                 style={{ width: "12rem" }}
-                src="../images/Disk_pack1.png"
+                src={this.state.profile.profileImg}
                 roundedCircle
               />
             </Col>

@@ -9,8 +9,11 @@ configure({ adapter: new Adapter() });
 describe("Profile", () => {
   let wrapper;
   let profile = {
+    profileName: "Profile J",
     profile_id: 1,
     user_id: 1,
+    profileImg:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     firstName: "Jimmy",
     lastName: "Doe",
     position: "Developer",
@@ -65,6 +68,11 @@ describe("Profile", () => {
   it("Profile should include image", () => {
     const container = wrapper.find("Image");
     expect(container.length).toEqual(1);
+  });
+
+  it("renders the respective image", () => {
+    const container = wrapper.find("Image");
+    expect(container.prop("src")).toEqual(profile.profileImg);
   });
 
   it("Profile should include labels", () => {

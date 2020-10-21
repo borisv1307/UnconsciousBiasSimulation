@@ -18,6 +18,7 @@ class ViewProfiles extends Component {
       .then((response) => response.json())
       .then((res) => {
         this.setState({ profiles: res["results"] });
+        // console.log(res["results"]);
       });
   }
 
@@ -31,7 +32,7 @@ class ViewProfiles extends Component {
             {this.state.profiles.map((profile, i) => (
               <Card>
                 <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                  {profile.profile_id}
+                  {profile.profileName}
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={i + 1}>
                   <Card.Body>
