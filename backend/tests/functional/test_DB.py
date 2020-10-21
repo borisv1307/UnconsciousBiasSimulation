@@ -26,7 +26,7 @@ def test_client():
 class TestDB:
 
 
-    def test_dbstatus(self, test_client):
+    def test_db_status(self, test_client):
         """
         Test MongoDB connection
         """

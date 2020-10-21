@@ -144,7 +144,7 @@ class TestSomething:
         assert response.data == b'{"code":4,"error":"Invalid email id"}\n'
 
 
-    def test_createProfile(self,test_client):
+    def test_create_profile(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
@@ -185,7 +185,7 @@ class TestSomething:
 
 
 
-    def test_getProfiles(self, test_client):
+    def test_get_profiles(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/getProfileCount' page is requested (GET)
