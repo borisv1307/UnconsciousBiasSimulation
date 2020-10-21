@@ -193,6 +193,7 @@ class TestSomething:
         data = {
         "user_id":1
         }
+
         response = test_client.get('/api/v1/getProfiles/',data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response != 'null'

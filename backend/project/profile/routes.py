@@ -107,6 +107,7 @@ def getUserProfiles():
 
             output.append({
                 "profile_id": profile['profile_id'],
+                "profileName" : profile['profileName'],
                 "user_id": profile['user_id'],
                 "profileName": profile['profileName'],
                 "profileImg": profile['profileImg'],
