@@ -16,6 +16,8 @@ from project import mongo
 from bson.objectid import ObjectId
 from random import randint
 
+profilename = "Profile A"
+
 @pytest.fixture
 def test_client():
     flask_app = create_app()
@@ -33,8 +35,8 @@ class TestSomething:
         THEN check that request has email address
         """
         data = {
-        "profileName":"Profile A",
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
+        "profileName":profilename,
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -57,7 +59,7 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]  
+        ]
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -72,8 +74,8 @@ class TestSomething:
 
         data = {
         "email": None,
-        "profileName":"Profile A",
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
+        "profileName":profilename,
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -96,7 +98,7 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]  
+        ]
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -108,11 +110,11 @@ class TestSomething:
         WHEN the '/createProfile' page is requested (POST)
         THEN check email address is valid
         """
-        
+
         data = {
         "email":"testtest.com",
-        "profileName":"Profile A",
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
+        "profileName":profilename,
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -135,7 +137,7 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]  
+        ]
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -151,8 +153,8 @@ class TestSomething:
 
         data = {
         "email":"test@test.com",
-        "profileName":"Profile A",
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",    
+        "profileName":profilename,
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "firstName": "Test",
         "lastName": "User",
         "position": "Developer",
@@ -175,7 +177,7 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]       
+        ]
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200

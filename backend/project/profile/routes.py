@@ -19,7 +19,7 @@ from . import profile_blueprint
 
 # ALL FUTURE DATA VALIDATION
 
-def profileValidation(f):
+def profile_validation(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
@@ -41,8 +41,8 @@ def profileValidation(f):
 
 
 @profile_blueprint.route('/api/v1/createProfile/', methods=['POST'])
-@profileValidation
-def createUserProfile():
+@profile_validation
+def create_user_profile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
@@ -59,10 +59,10 @@ def createUserProfile():
     if email_exists:
         get_user_id = user.find_one({"email": get_email}, {
                                     'user_id': 1, '_id': 0})
-        userId = get_user_id['user_id']
+        user_id = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
-            "user_id": userId,
+            "user_id": user_id,
             "profileName": profile_data['profileName'],
             "profileImg": profile_data['profileImg'],
             "firstName": profile_data['firstName'],
@@ -96,7 +96,7 @@ def createUserProfile():
 
 
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
-def getUserProfiles():
+def get_user_profiles():
 
     user_id = 1;
     profile = mongo.db.profile
@@ -109,7 +109,6 @@ def getUserProfiles():
                 "profile_id": profile['profile_id'],
                 "profileName" : profile['profileName'],
                 "user_id": profile['user_id'],
-                "profileName": profile['profileName'],
                 "profileImg": profile['profileImg'],
                 "firstName": profile['firstName'],
                 "lastName": profile['lastName'],

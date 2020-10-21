@@ -32,10 +32,10 @@ class TestDB:
         """
         # Get collections
         users = mongo.db.profile
-        id = int(users.find().skip(users.count_documents({}) - 1)[0]['profile_id'])
-        assert id>1
+        profile_id = int(users.find().skip(users.count_documents({}) - 1)[0]['profile_id'])
+        assert profile_id>1
 
-    def test_profileCollection(self, test_client):
+    def test_profile_collection(self, test_client):
         """
         Test Profile Collection
         """
