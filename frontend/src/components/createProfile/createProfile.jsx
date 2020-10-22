@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+import { Container, Button, Row, Col, Form } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -88,215 +88,248 @@ class CreateProfile extends Component {
 
   imageHandler = async e => {
     const files = e.target.files
-    const data = new FormData()
-    data.append('file', files[0])
-    data.append('upload_preset', 'unconsciousbias')
-    const res = await fetch(
-      '	https://api.cloudinary.com/v1_1/unconsciousbiassimulator/image/upload',
-      {
-        method: 'POST',
-        body: data
-      }
-    )
-    const file = await res.json()
 
-    this.setState({
-      profileImg: file.secure_url
-    }, () => {
-      console.log("profileImg State:", this.state.profileImg);
-    });
+    if(files[0].size < 2000000) {
+      const data = new FormData()
+      data.append('file', files[0])
+      data.append('upload_preset', 'unconsciousbias')
+      const res = await fetch(
+        '	https://api.cloudinary.com/v1_1/unconsciousbiassimulator/image/upload',
+        {
+          method: 'POST',
+          body: data
+        }
+      )
+      const file = await res.json()
+
+      this.setState({
+        profileImg: file.secure_url
+      }, () => {
+        console.log("profileImg State:", this.state.profileImg);
+      });
+    } else{
+      console.log("File is too large")
+    }
   }
 
   render() {
     const {profileImg} = this.state
     return (
       <div>
+        
         <Header />
-        <h1>Create Profile</h1>
-        <div className="page">
-          <div className="container">
-            <h2 className="heading">Add your Image</h2>
-            <img src={profileImg} width="200" alt="" id="profileImage" className="img" />
-            <input type="file" accept="image/*" name="image-upload" id="UploadImageInput" onChange={this.imageHandler} />
-          </div>
-        </div>
-        <div>
-          <form className="profile" action="" onSubmit={this.handleSubmit}>
-            <label>Profile Name</label> <br />
-            <input
-              type="text"
-              value={this.state.profileName}
-              onChange={this.updateField("profileName")}
-              id="profileName"
-              name="profileName"
-              required
-            />{" "}
-            <br />
-            <label>First Name</label> <br />
-            <input
-              type="text"
-              value={this.state.firstName}
-              onChange={this.updateField("firstName")}
-              id="firstName"
-              name="firstName"
-              required
-            />{" "}
-            <br />
-            <label>Last Name</label> <br />
-            <input
-              type="text"
-              value={this.state.lastName}
-              onChange={this.updateField("lastName")}
-              id="lastName"
-              name="lastName"
-              required
-            />{" "}
-            <br />
-            <label>Position</label> <br />
-            <input
-              type="text"
-              value={this.state.position}
-              onChange={this.updateField("position")}
-              id="position"
-              name="position"
-              required
-            />{" "}
-            <br />
-            <label>About me</label> <br />
-            <input
-              type="text"
-              value={this.state.aboutMe}
-              onChange={this.updateField("aboutMe")}
-              id="aboutMe"
-              name="aboutMe"
-              required
-            />{" "}
-            <br />
-            <h3>Insert Education</h3>
-            <label>School</label> <br />
-            <input
-              type="text"
-              value={this.state.school}
-              onChange={this.updateField("school")}
-              id="school"
-              name="school"
-              required
-            />{" "}
-            <br />
-            <label>Degree</label> <br />
-            <input
-              type="text"
-              value={this.state.degree}
-              onChange={this.updateField("degree")}
-              id="degree"
-              name="degree"
-              required
-            />{" "}
-            <br />
-            <label>Major</label> <br />
-            <input
-              type="text"
-              value={this.state.major}
-              onChange={this.updateField("major")}
-              id="major"
-              name="major"
-              required
-            />{" "}
-            <br />
-            <label>Start Year</label> <br />
-            <input
-              type="month"
-              value={this.state.eduStartDate}
-              onChange={this.updateField("eduStartDate")}
-              id="eduStartDate"
-              name="eduStartDate"
-              required
-            />{" "}
-            <br />
-            <label>End Year</label> <br />
-            <input
-              type="month"
-              value={this.state.eduEndDate}
-              onChange={this.updateField("eduEndDate")}
-              id="eduEndDate"
-              name="eduEndDate"
-              required
-            />{" "}
-            <br />
-            <label>GPA</label> <br />
-            <input
-              type="number"
-              step="0.01"
-              value={this.state.gpa}
-              onChange={this.updateField("gpa")}
-              id="gpa"
-              name="gpa"
-              required
-            />{" "}
-            <br />
-            <Button id="addEducationButton" onClick={this.addEducation}>
-              Add Education
-            </Button>
-            <h3>Insert Experience</h3>
-            <label>Title</label> <br />
-            <input
-              type="text"
-              value={this.state.title}
-              onChange={this.updateField("title")}
-              id="title"
-              name="title"
-              required
-            />{" "}
-            <br />
-            <label>Company</label> <br />
-            <input
-              type="text"
-              value={this.state.company}
-              onChange={this.updateField("company")}
-              id="company"
-              name="company"
-              required
-            />{" "}
-            <br />
-            <label>Location</label> <br />
-            <input
-              type="text"
-              value={this.state.location}
-              onChange={this.updateField("location")}
-              id="location"
-              name="location"
-              required
-            />{" "}
-            <br />
-            <label>Start Date</label> <br />
-            <input
-              type="month"
-              value={this.state.expStartDate}
-              onChange={this.updateField("expStartDate")}
-              id="expStartDate"
-              name="expStartDate"
-              required
-            />{" "}
-            <br />
-            <label>End Date</label> <br />
-            <input
-              type="month"
-              value={this.state.expEndDate}
-              onChange={this.updateField("expEndDate")}
-              id="expEndDate"
-              name="expEndDate"
-              required
-            />{" "}
-            <br />
-            <Button id="addExperienceButton" onClick={this.addExperience}>
-              Add Experience
-            </Button>
-            <br />
+
+        <Container className="containbody justify-content-center">
+        <br/><h1 className="text-center">Create Profile</h1> <br/>
+        
+        <Row>
+          <Col>
+            <Container>
+              <Form>
+                <Form.Group>
+                  <Form.Label>Profile Name</Form.Label>
+                  <Form.Control type="text" value={this.state.profileName}
+                    onChange={this.updateField("profileName")}
+                    id="profileName"
+                    name="profileName" placeholder="Profile A"/>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control type="text"
+                    value={this.state.firstName}
+                    onChange={this.updateField("firstName")}
+                    id="firstName"
+                    name="firstName" placeholder="John"/>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control type="text"
+                    value={this.state.lastName}
+                    onChange={this.updateField("lastName")}
+                    id="lastName"
+                    name="lastName" placeholder="Doe"/>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Position</Form.Label>
+                  <Form.Control type="text"
+                    value={this.state.position}
+                    onChange={this.updateField("position")}
+                    id="position"
+                    name="position" placeholder="Intern"/>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>About Me</Form.Label>
+                  <Form.Control type="text"
+                    value={this.state.aboutMe}
+                    onChange={this.updateField("aboutMe")}
+                    id="aboutMe"
+                    name="aboutMe" placeholder="Hardworking"/>
+                </Form.Group>
+
+              </Form>
+            </Container>
+                 
+          </Col>
+            
+          <Col>
+            <Container className="text-center">
+              <div className="page">
+                <div className="container">
+                  <h3 className="heading">Add your Image</h3> <br/>
+                  <img src={profileImg} width="200" alt="" id="profileImage" className="img" /> <br/> <br/>
+                  <input type="file" accept="image/*" name="image-upload" id="UploadImageInput" onChange={this.imageHandler} />
+                </div>
+              </div>
+            </Container>
+          </Col>
+        </Row>
+
+        <br/><h3 className="text-center">Add Education</h3>
+        <Container>
+            <Form>
+
+              <Form.Group>
+                <Form.Label>School</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.school}
+                  onChange={this.updateField("school")}
+                  id="school"
+                  name="school" placeholder="X University"/>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Degree</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.degree}
+                  onChange={this.updateField("degree")}
+                  id="degree"
+                  name="degree" placeholder="Bachelor's"/>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Major</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.major}
+                  onChange={this.updateField("major")}
+                  id="major"
+                  name="major" placeholder="Software Engineering"/>
+              </Form.Group>
+
+              <Row>
+                <Col>
+                <Form.Group>
+                  <Form.Label>Start Date</Form.Label>
+                  <Form.Control type="month"
+                    value={this.state.eduStartDate}
+                    onChange={this.updateField("eduStartDate")}
+                    id="eduStartDate"
+                    name="eduStartDate"/>
+                </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group>
+                  <Form.Label>End Date</Form.Label>
+                  <Form.Control type="month"
+                    value={this.state.eduEndDate}
+                    onChange={this.updateField("eduEndDate")}
+                    id="eduEndDate"
+                    name="eduEndDate"/>
+                </Form.Group>
+                </Col>
+              </Row>
+              
+              <Form.Group>
+                <Form.Label>GPA</Form.Label>
+                <Form.Control type="number"
+                  step="0.01"
+                  value={this.state.gpa}
+                  onChange={this.updateField("gpa")}
+                  id="gpa"
+                  name="gpa" placeholder="4"/>
+              </Form.Group>
+              <div class="text-center">
+                <Button id="addEducationButton" onClick={this.addEducation}>
+                  Add Education
+                </Button>
+              </div>
+              
+            </Form>
+          </Container>
+
+          <br/><h3 className="text-center">Add Experience</h3>
+          <Container>
+            <Form>
+
+              <Form.Group>
+                <Form.Label>Title</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.title}
+                  onChange={this.updateField("title")}
+                  id="title"
+                  name="title" placeholder="Intern"/>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Company</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.company}
+                  onChange={this.updateField("company")}
+                  id="company"
+                  name="company" placeholder="Y Company"/>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Location</Form.Label>
+                <Form.Control type="text"
+                  value={this.state.location}
+                  onChange={this.updateField("location")}
+                  id="location"
+                  name="location" placeholder="Philadelphia"/>
+              </Form.Group>
+
+              <Row>
+                <Col>
+                <Form.Group>
+                  <Form.Label>Start Date</Form.Label>
+                  <Form.Control type="month"
+                    value={this.state.expStartDate}
+                    onChange={this.updateField("expStartDate")}
+                    id="expStartDate"
+                    name="expStartDate"/>
+                </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group>
+                  <Form.Label>End Date</Form.Label>
+                  <Form.Control type="month"
+                    value={this.state.expEndDate}
+                    onChange={this.updateField("expEndDate")}
+                    id="expEndDate"
+                    name="expEndDate"/>
+                </Form.Group>
+                </Col>
+              </Row>
+              <div class="text-center">
+                <Button id="addExperienceButton" onClick={this.addExperience}>
+                  Add Experience
+                </Button>
+              </div>
+              
+            </Form>
+          </Container>
+
+          <br />
+          <div class="text-center">
             <Button id="submitButton" className="submit" onClick={this.handleSubmit}>
               Submit
             </Button>
-          </form>
-        </div>
+          </div>
+          
+        </Container>
       </div>
     );
   }
