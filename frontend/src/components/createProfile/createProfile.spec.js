@@ -18,31 +18,31 @@ describe("CreateProfile", () => {
   let wrapper;
   beforeEach(() => (wrapper = shallow(<CreateProfile />)));
 
-  it("should include forms", () => {
-    expect(wrapper.find("form.profile").exists()).toBe(true);
+  it("CreateProfile should include 3 forms for personal details, education and experience", () => {
+    expect(wrapper.find("Form").length).toEqual(3);
   });
 
-  it("CreateProfile should include 15 inputs", () => {
-    expect(wrapper.find("input").length).toEqual(17);
+  it("CreateProfile should include an accordion", () => {
+    expect(wrapper.find("Accordion").length).toEqual(1);
   });
 
   it("should include inputs for personal details, education, and experience", () => {
-    expect(wrapper.find("input#profileName").length).toEqual(1);
-    expect(wrapper.find("input#firstName").length).toEqual(1);
-    expect(wrapper.find("input#lastName").length).toEqual(1);
-    expect(wrapper.find("input#position").length).toEqual(1);
-    expect(wrapper.find("input#aboutMe").length).toEqual(1);
-    expect(wrapper.find("input#school").length).toEqual(1);
-    expect(wrapper.find("input#degree").length).toEqual(1);
-    expect(wrapper.find("input#major").length).toEqual(1);
-    expect(wrapper.find("input#eduStartDate").length).toEqual(1);
-    expect(wrapper.find("input#eduEndDate").length).toEqual(1);
-    expect(wrapper.find("input#gpa").length).toEqual(1);
-    expect(wrapper.find("input#title").length).toEqual(1);
-    expect(wrapper.find("input#company").length).toEqual(1);
-    expect(wrapper.find("input#location").length).toEqual(1);
-    expect(wrapper.find("input#expStartDate").length).toEqual(1);
-    expect(wrapper.find("input#expEndDate").length).toEqual(1);
+    expect(wrapper.find("#profileName").length).toEqual(1);
+    expect(wrapper.find("#firstName").length).toEqual(1);
+    expect(wrapper.find("#lastName").length).toEqual(1);
+    expect(wrapper.find("#position").length).toEqual(1);
+    expect(wrapper.find("#aboutMe").length).toEqual(1);
+    expect(wrapper.find("#school").length).toEqual(1);
+    expect(wrapper.find("#degree").length).toEqual(1);
+    expect(wrapper.find("#major").length).toEqual(1);
+    expect(wrapper.find("#eduStartDate").length).toEqual(1);
+    expect(wrapper.find("#eduEndDate").length).toEqual(1);
+    expect(wrapper.find("#gpa").length).toEqual(1);
+    expect(wrapper.find("#title").length).toEqual(1);
+    expect(wrapper.find("#company").length).toEqual(1);
+    expect(wrapper.find("#location").length).toEqual(1);
+    expect(wrapper.find("#expStartDate").length).toEqual(1);
+    expect(wrapper.find("#expEndDate").length).toEqual(1);
   });
 
   it("update input forms ", () => {

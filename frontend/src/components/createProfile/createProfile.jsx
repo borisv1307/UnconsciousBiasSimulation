@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap";
+import { Container, Button, Row, Col, Form, Accordion, Card } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -188,147 +188,169 @@ class CreateProfile extends Component {
           </Col>
         </Row>
 
-        <br/><h3 className="text-center">Add Education</h3>
         <Container>
-            <Form>
 
-              <Form.Group>
-                <Form.Label>School</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.school}
-                  onChange={this.updateField("school")}
-                  id="school"
-                  name="school" placeholder="X University"/>
-              </Form.Group>
+        
+        <Accordion>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                <h4>Add Education</h4>
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey="0">
+              <Container>
+                <br />
+                <Form>
 
-              <Form.Group>
-                <Form.Label>Degree</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.degree}
-                  onChange={this.updateField("degree")}
-                  id="degree"
-                  name="degree" placeholder="Bachelor's"/>
-              </Form.Group>
+                  <Form.Group>
+                    <Form.Label>School</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.school}
+                      onChange={this.updateField("school")}
+                      id="school"
+                      name="school" placeholder="X University"/>
+                  </Form.Group>
 
-              <Form.Group>
-                <Form.Label>Major</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.major}
-                  onChange={this.updateField("major")}
-                  id="major"
-                  name="major" placeholder="Software Engineering"/>
-              </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Degree</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.degree}
+                      onChange={this.updateField("degree")}
+                      id="degree"
+                      name="degree" placeholder="Bachelor's"/>
+                  </Form.Group>
 
-              <Row>
-                <Col>
-                <Form.Group>
-                  <Form.Label>Start Date</Form.Label>
-                  <Form.Control type="month"
-                    value={this.state.eduStartDate}
-                    onChange={this.updateField("eduStartDate")}
-                    id="eduStartDate"
-                    name="eduStartDate"/>
-                </Form.Group>
-                </Col>
-                <Col>
-                <Form.Group>
-                  <Form.Label>End Date</Form.Label>
-                  <Form.Control type="month"
-                    value={this.state.eduEndDate}
-                    onChange={this.updateField("eduEndDate")}
-                    id="eduEndDate"
-                    name="eduEndDate"/>
-                </Form.Group>
-                </Col>
-              </Row>
-              
-              <Form.Group>
-                <Form.Label>GPA</Form.Label>
-                <Form.Control type="number"
-                  step="0.01"
-                  value={this.state.gpa}
-                  onChange={this.updateField("gpa")}
-                  id="gpa"
-                  name="gpa" placeholder="4"/>
-              </Form.Group>
-              <div class="text-center">
-                <Button id="addEducationButton" onClick={this.addEducation}>
-                  Add Education
-                </Button>
-              </div>
-              
-            </Form>
-          </Container>
+                  <Form.Group>
+                    <Form.Label>Major</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.major}
+                      onChange={this.updateField("major")}
+                      id="major"
+                      name="major" placeholder="Software Engineering"/>
+                  </Form.Group>
 
-          <br/><h3 className="text-center">Add Experience</h3>
-          <Container>
-            <Form>
+                  <Row>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>Start Date</Form.Label>
+                      <Form.Control type="month"
+                        value={this.state.eduStartDate}
+                        onChange={this.updateField("eduStartDate")}
+                        id="eduStartDate"
+                        name="eduStartDate"/>
+                    </Form.Group>
+                    </Col>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>End Date</Form.Label>
+                      <Form.Control type="month"
+                        value={this.state.eduEndDate}
+                        onChange={this.updateField("eduEndDate")}
+                        id="eduEndDate"
+                        name="eduEndDate"/>
+                    </Form.Group>
+                    </Col>
+                  </Row>
 
-              <Form.Group>
-                <Form.Label>Title</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.title}
-                  onChange={this.updateField("title")}
-                  id="title"
-                  name="title" placeholder="Intern"/>
-              </Form.Group>
+                  <Form.Group>
+                    <Form.Label>GPA</Form.Label>
+                    <Form.Control type="number"
+                      step="0.01"
+                      value={this.state.gpa}
+                      onChange={this.updateField("gpa")}
+                      id="gpa"
+                      name="gpa" placeholder="4"/>
+                  </Form.Group>
+                  <div className="text-center">
+                    <Button id="addEducationButton" onClick={this.addEducation}>
+                      Add Education
+                    </Button>
+                  </div>
+                </Form>
+                <br />
+              </Container>
+            </Accordion.Collapse>
+          </Card>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                <h4>Add Experience</h4>
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey="1">
+              <Container>
+                <br />
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.title}
+                      onChange={this.updateField("title")}
+                      id="title"
+                      name="title" placeholder="Intern"/>
+                  </Form.Group>
 
-              <Form.Group>
-                <Form.Label>Company</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.company}
-                  onChange={this.updateField("company")}
-                  id="company"
-                  name="company" placeholder="Y Company"/>
-              </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Company</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.company}
+                      onChange={this.updateField("company")}
+                      id="company"
+                      name="company" placeholder="Y Company"/>
+                  </Form.Group>
 
-              <Form.Group>
-                <Form.Label>Location</Form.Label>
-                <Form.Control type="text"
-                  value={this.state.location}
-                  onChange={this.updateField("location")}
-                  id="location"
-                  name="location" placeholder="Philadelphia"/>
-              </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Location</Form.Label>
+                    <Form.Control type="text"
+                      value={this.state.location}
+                      onChange={this.updateField("location")}
+                      id="location"
+                      name="location" placeholder="Philadelphia"/>
+                  </Form.Group>
 
-              <Row>
-                <Col>
-                <Form.Group>
-                  <Form.Label>Start Date</Form.Label>
-                  <Form.Control type="month"
-                    value={this.state.expStartDate}
-                    onChange={this.updateField("expStartDate")}
-                    id="expStartDate"
-                    name="expStartDate"/>
-                </Form.Group>
-                </Col>
-                <Col>
-                <Form.Group>
-                  <Form.Label>End Date</Form.Label>
-                  <Form.Control type="month"
-                    value={this.state.expEndDate}
-                    onChange={this.updateField("expEndDate")}
-                    id="expEndDate"
-                    name="expEndDate"/>
-                </Form.Group>
-                </Col>
-              </Row>
-              <div class="text-center">
-                <Button id="addExperienceButton" onClick={this.addExperience}>
-                  Add Experience
-                </Button>
-              </div>
-              
-            </Form>
-          </Container>
+                  <Row>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>Start Date</Form.Label>
+                      <Form.Control type="month"
+                        value={this.state.expStartDate}
+                        onChange={this.updateField("expStartDate")}
+                        id="expStartDate"
+                        name="expStartDate"/>
+                    </Form.Group>
+                    </Col>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>End Date</Form.Label>
+                      <Form.Control type="month"
+                        value={this.state.expEndDate}
+                        onChange={this.updateField("expEndDate")}
+                        id="expEndDate"
+                        name="expEndDate"/>
+                    </Form.Group>
+                    </Col>
+                  </Row>
+                  <div className="text-center">
+                    <Button id="addExperienceButton" onClick={this.addExperience}>
+                      Add Experience
+                    </Button>
+                  </div>                 
+                </Form>
+                <br />
+              </Container>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
 
+        </Container>
           <br />
-          <div class="text-center">
+          <div className="text-center">
             <Button id="submitButton" className="submit" onClick={this.handleSubmit}>
               Submit
             </Button>
-          </div>
-          
+          </div>    
+          <br />    
         </Container>
       </div>
     );
