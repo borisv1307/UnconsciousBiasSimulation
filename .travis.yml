@@ -9,7 +9,7 @@ addons:
   sonarcloud:
     organization: "jijogeorge69" # the key of the org you chose at step #3
     token:
-      secure: $USBS # encrypted value of your token
+      secure: $SONAR_TOKEN # encrypted value of your token
 # command to install dependencies
 install:
   - pip install -r $BACKEND_DIR/requirements.txt
