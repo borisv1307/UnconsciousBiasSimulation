@@ -25,8 +25,7 @@ def profile_validation(f):
         try:
             profile_data = request.get_json()
             get_email = profile_data['email']
-        except ValueError as ev:
-            print('Error',ev)
+        except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
@@ -122,7 +121,6 @@ def get_user_profiles():
             output = {'code': 2, "error": "User not found"}
         else:
             output = {"count": len(output), "results": output}
-    except ValueError as ev:
-        print('Error',ev)
+    except:
         output = {'code': 2, "error": "Error fetching details from DB"}
     return output
