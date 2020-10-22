@@ -15,6 +15,7 @@ install:
   - pip install -r $BACKEND_DIR/requirements.txt
   - npm --prefix $FRONTEND_DIR install
   - pip install codecov
+  - pip install pylint
   
   
 # command to run tests
@@ -22,6 +23,8 @@ script:
   - pytest --setup-show $BACKEND_DIR/tests/functional
   - coverage run -m pytest $BACKEND_DIR/tests/functional
   - npm --prefix $FRONTEND_DIR test
+  - pylint $BACKEND_DIR/home/**
+  - pylint $BACKEND_DIR/tests/functional/**
   #- sonar-scanner
 
 after_script:
