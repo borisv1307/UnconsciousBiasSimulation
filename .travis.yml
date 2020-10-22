@@ -20,7 +20,7 @@ install:
 # command to run tests
 script:
   - pytest --setup-show $BACKEND_DIR/tests/functional
-  - coverage run $BACKEND_DIR/tests/functional
+  - coverage run -m pytest $BACKEND_DIR/tests/functional
   - npm --prefix $FRONTEND_DIR test
   #- sonar-scanner
 
