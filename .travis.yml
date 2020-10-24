@@ -24,8 +24,8 @@ script:
   - coverage run -m pytest $BACKEND_DIR/tests/functional
   - npm --prefix $FRONTEND_DIR test
   - pylint $BACKEND_DIR/project/**/** --errors-only
-  - pylint $BACKEND_DIR/tests/functional/** --errors-only
-  #- sonar-scanner
+  # - pylint $BACKEND_DIR/tests/functional/** --errors-only
+  # - sonar-scanner
 
 after_script:
   - codecov
