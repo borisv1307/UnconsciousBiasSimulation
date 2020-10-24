@@ -1,5 +1,4 @@
 from . import home_blueprint
-from flask import render_template
 
 ################
 #### routes ####

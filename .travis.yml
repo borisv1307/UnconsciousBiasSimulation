@@ -24,7 +24,7 @@ script:
   - coverage run -m pytest $BACKEND_DIR/tests/functional
   - npm --prefix $FRONTEND_DIR test
   - pylint $BACKEND_DIR/project/**/**
-  - pylint $BACKEND_DIR/tests/functional/**
+  # - pylint $BACKEND_DIR/tests/functional/**
   #- sonar-scanner
 
 after_script:
