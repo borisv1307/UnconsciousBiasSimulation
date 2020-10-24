@@ -18,8 +18,6 @@ def initialize_extensions(app):
     mongo.init_app(app)
 
 
-
-
 def register_blueprints(app):
     from project.home import home_blueprint
     from project.profile import profile_blueprint

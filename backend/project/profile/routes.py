@@ -1,16 +1,9 @@
-from flask import render_template
-from flask import request
-from bson.json_util import dumps, RELAXED_JSON_OPTIONS
-from bson.objectid import ObjectId
-import json
-from json import loads
-from bson import json_util
-from project import mongo
-from flask import jsonify
-from functools import wraps
 import re
-
-
+from json import loads
+from functools import wraps
+from bson.json_util import dumps
+from flask import request, jsonify
+from project import mongo
 from . import profile_blueprint
 
 ################
@@ -19,8 +12,8 @@ from . import profile_blueprint
 
 # ALL FUTURE DATA VALIDATION
 
-def profile_validation(f):
-    @wraps(f)
+def profile_validation(func):
+    @wraps(func)
     def decorated(*args, **kwargs):
         try:
             profile_data = request.get_json()
@@ -31,12 +24,12 @@ def profile_validation(f):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
         if get_email is None:
-            return {"code":4,"error":"Invalid email id"}, 403
+            return {"code":4, "error":"Invalid email id"}, 403
 
-        if not (re.search(regex,get_email)):
-            return jsonify({'code': 4,"error": "Invalid email id"}), 403
+        if not(re.search(regex, get_email)):
+            return jsonify({'code': 4, "error": "Invalid email id"}), 403
 
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
     return decorated
 
 
@@ -57,8 +50,7 @@ def create_user_profile():
     # check if email is already in database
     email_exists = user.count_documents({'email': get_email})
     if email_exists:
-        get_user_id = user.find_one({"email": get_email}, {
-                                    'user_id': 1, '_id': 0})
+        get_user_id = user.find_one({"email": get_email}, {'user_id': 1, '_id': 0})
         user_id = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
@@ -97,8 +89,7 @@ def create_user_profile():
 
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
 def get_user_profiles():
-
-    user_id = 1;
+    user_id = 1
     profile = mongo.db.profile
     output = []
     try:

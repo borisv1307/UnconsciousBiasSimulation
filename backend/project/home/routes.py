@@ -1,7 +1,5 @@
-from flask import render_template
-
 from . import home_blueprint
-
+from flask import render_template
 
 ################
 #### routes ####
@@ -9,4 +7,4 @@ from . import home_blueprint
 
 @home_blueprint.route('/')
 def get():
-    return "Hello World"
+    return "Test"
