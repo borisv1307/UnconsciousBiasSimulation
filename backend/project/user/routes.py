@@ -1,11 +1,8 @@
-import re
-import bcrypt
-from json import loads
-from flask_jwt_extended import create_access_token, JWTManager
-from functools import wraps
-from bson.json_util import dumps
 from datetime import datetime
-from flask import request, jsonify
+import bcrypt
+from flask_jwt_extended import create_access_token
+from bson.json_util import dumps
+from flask import request
 from project import mongo
 from . import user_blueprint
 
@@ -17,12 +14,12 @@ def create_user():
         firstname = request.get_json()['firstName']
         lastname = request.get_json()['lastName']
         email = request.get_json()['email']
-        password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
+        hashed_password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
         registration_type = request.get_json()['registration_type']
     except:
         return {'code': 4, 'error': 'Missing request body'}, 403
 
-    if firstname == '' or lastname == '' or password == '' or email == '' or registrationType == '':
+    if firstname == '' or lastname == '' or password == '' or email == '' or registration_type == '':
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
 
     users = mongo.db.user
@@ -43,7 +40,7 @@ def create_user():
     else:
         user = users.insert_one({
             'user_id': user_id,
-            'password': password,
+            'password': hashed_password,
             'firstname': firstname,
             'lastname': lastname,
             'email': email,
@@ -53,9 +50,11 @@ def create_user():
             'contactDetails' : request.get_json()['contactDetails'],
         })
         if user:
-            access_token = create_access_token(identity={'user_id': user_id,'date_joined': dateJoined})
+            access_token = create_access_token(
+            identity={'user_id': user_id,'date_joined': date_joined})
             tokens = mongo.db.authtoken
-            tokens.insert_one({"user_id": user_id, "key": access_token, 'created': datetime.utcnow()})
+            tokens.insert_one({"user_id": user_id, "key": access_token,
+            'created': datetime.utcnow()})
             output = {'token': access_token, 'user': {
             'user_id': user_id, 'firstname': firstname, 'email': email}}
 
