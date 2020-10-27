@@ -93,7 +93,7 @@ class TestSomething:
         "lastName":"",
         "email":"test@test.com",
         "password": "Hello",
-        "registrationType": "",
+        "registration_type": "",
         "contactDetails": {
             "address": "test Street",
             "address2": "test Street 2",

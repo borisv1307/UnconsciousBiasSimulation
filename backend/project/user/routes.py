@@ -18,7 +18,7 @@ def create_user():
         lastname = request.get_json()['lastName']
         email = request.get_json()['email']
         password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
-        registrationType = request.get_json()['registrationType']
+        registration_type = request.get_json()['registration_type']
     except:
         return {'code': 4, 'error': 'Missing request body'}, 403
 
@@ -32,7 +32,7 @@ def create_user():
     except:
         user_id = 1
 
-    dateJoined = datetime.utcnow()
+    date_joined = datetime.utcnow()
 
     # check if username or email is already in database
     email_exists = users.count_documents({'email': email})
@@ -48,8 +48,8 @@ def create_user():
             'lastname': lastname,
             'email': email,
             'password' : password,
-            'dateJoined' : dateJoined,
-            'registrationType' : registrationType,
+            'date_joined' : date_joined,
+            'registrationType' : registration_type,
             'contactDetails' : request.get_json()['contactDetails'],
         })
         if user:
