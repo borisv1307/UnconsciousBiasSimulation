@@ -46,10 +46,10 @@ def create_user_profile():
     profile = mongo.db.profile
     user = mongo.db.user
     try:
-        profile_id = int(profile.find().skip(
-        profile.count_documents({}) - 1)[0]['profile_id'])+1
+        profile_id = int(profile.find().skip(profile.count_documents({}) - 1)[0]['profile_id'])+1
     except:
         profile_id = 1
+
     # check if email is already in database
     email_exists = user.count_documents({'email': get_email})
     if email_exists:
