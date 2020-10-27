@@ -1,3 +1,4 @@
+#pylint: disable = line-too-long, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 import re
 from json import loads
 from functools import wraps
@@ -26,7 +27,7 @@ def profile_validation(func):
         if get_email is None:
             return {"code":4, "error":"Invalid email id"}, 403
 
-        if not(re.search(regex, get_email)):
+        if not re.search(regex, get_email):
             return jsonify({'code': 4, "error": "Invalid email id"}), 403
 
         return func(*args, **kwargs)
@@ -44,9 +45,11 @@ def create_user_profile():
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
-    profile_id = int(profile.find().skip(
+    try:
+        profile_id = int(profile.find().skip(
         profile.count_documents({}) - 1)[0]['profile_id'])+1
-
+    except:
+        profile_id = 1
     # check if email is already in database
     email_exists = user.count_documents({'email': get_email})
     if email_exists:
