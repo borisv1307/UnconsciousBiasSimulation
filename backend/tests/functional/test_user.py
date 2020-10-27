@@ -6,6 +6,7 @@ test create profile and view profile.
 import pytest
 import os
 import sys
+from faker import Faker
 from flask import jsonify, request, json
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 PARENT_ROOT=os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
@@ -14,7 +15,8 @@ sys.path.insert(0,GRANDPAPA_ROOT)
 from project import create_app
 from project import mongo
 from bson.objectid import ObjectId
-from random import randint
+
+
 
 
 
@@ -29,31 +31,34 @@ def test_client():
 class TestSomething:
 
     def test_for_create_user(self,test_client):
+        fake = Faker()
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/createUser/' page is requested (POST)
         THEN check that the response is valid
         """
-        userCollection = mongo.db.user
-        userCollection.remove({})
+
+        # userCollection = mongo.db.user
+        # userCollection.remove({})
+        # random
         data = {
         "firstName":"testFName",
         "lastName":"testLName",
-        "email":"test@test.com",
+        "email":fake.email(),
         "password": "Hello",
-        "registrationType": "jobSeeker",
-        "contactDetails": {
+        "registration_type": "jobSeeker",
+        "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
             "city": "Philadelphia",
             "state":"PA",
             "zip":"19104",
-            "contactNumber":"12345678"
+            "contact_number":"12345678"
         }
         }
         response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response != 'null'
+        assert response.data != 'null'
 
 
     def test_for_missing_user_details(self,test_client):

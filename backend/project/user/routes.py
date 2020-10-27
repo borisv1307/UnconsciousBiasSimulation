@@ -19,7 +19,7 @@ def create_user():
     except:
         return {'code': 4, 'error': 'Missing request body'}, 403
 
-    if firstname == '' or lastname == '' or password == '' or email == '' or registration_type == '':
+    if firstname == '' or lastname == '' or request.get_json()['password'] == '' or email == '' or registration_type == '':
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
 
     users = mongo.db.user
@@ -44,10 +44,10 @@ def create_user():
             'firstname': firstname,
             'lastname': lastname,
             'email': email,
-            'password' : password,
+            'password' : hashed_password,
             'date_joined' : date_joined,
-            'registrationType' : registration_type,
-            'contactDetails' : request.get_json()['contactDetails'],
+            'registration_type' : registration_type,
+            'contact_details' : request.get_json()['contact_details'],
         })
         if user:
             access_token = create_access_token(
