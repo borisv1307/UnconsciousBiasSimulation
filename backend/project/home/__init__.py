@@ -1,7 +1,7 @@
 """
 The recipes Blueprint handles the viewing of home for this application.
 """
-#pylint: disable = line-too-long,wrong-import-position, missing-final-newline, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
+#pylint: disable = line-too-long, wrong-import-position, missing-final-newline, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
 from flask import Blueprint
 
 

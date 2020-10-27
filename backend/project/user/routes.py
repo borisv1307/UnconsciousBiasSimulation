@@ -2,7 +2,6 @@
 from datetime import datetime
 import bcrypt
 from flask_jwt_extended import create_access_token
-from bson.json_util import dumps
 from flask import request
 from project import mongo
 from . import user_blueprint
@@ -41,7 +40,6 @@ def create_user():
     else:
         user = users.insert_one({
             'user_id': user_id,
-            'password': hashed_password,
             'firstname': firstname,
             'lastname': lastname,
             'email': email,
@@ -51,12 +49,9 @@ def create_user():
             'contact_details' : request.get_json()['contact_details'],
         })
         if user:
-            access_token = create_access_token(
-            identity={'user_id': user_id,'date_joined': date_joined})
+            access_token = create_access_token(identity={'user_id': user_id, 'date_joined': date_joined})
             tokens = mongo.db.authtoken
-            tokens.insert_one({"user_id": user_id, "key": access_token,
-            'created': datetime.utcnow()})
-            output = {'token': access_token, 'user': {
-            'user_id': user_id, 'firstname': firstname, 'email': email}}
+            tokens.insert_one({"user_id": user_id, "key": access_token, 'created': datetime.utcnow()})
+            output = {'token': access_token, 'user': {'user_id': user_id, 'firstname': firstname, 'email': email}}
 
     return output

@@ -2,7 +2,7 @@
 The recipes Blueprint handles the creation, modification, deletion,
 and viewing of USER for this application.
 """
-#pylint: disable = line-too-long,cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+#pylint: disable = line-too-long, wrong-import-position, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
 
 from flask import Blueprint
 
