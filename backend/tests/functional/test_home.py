@@ -2,6 +2,7 @@
 This file (test_app.py) contains the functional tests .
 
 """
+#pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
 import pytest
 import os
 import sys
@@ -14,7 +15,7 @@ from project import create_app
 
 @pytest.fixture
 def test_client():
-    flask_app = create_app()
+    flask_app = create_app('test')
     flask_app.config['TESTING'] = True
 
     with flask_app.test_client() as testing_client:
