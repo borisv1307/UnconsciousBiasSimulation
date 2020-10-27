@@ -1,12 +1,9 @@
-#pylint: disable = missing-function-docstring ,missing-module-docstring, missing-final-newline, missing-module-docstring, missing-function-docstring, line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
-from project.home import home_blueprint
-from project.profile import profile_blueprint
+#pylint: disable = missing-function-docstring ,import-outside-toplevel, trailing-whitespace ,missing-module-docstring, missing-final-newline, missing-module-docstring, missing-function-docstring, line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 
 mongo = PyMongo()
-
 
 def create_app(env_name):
 
@@ -24,7 +21,8 @@ def initialize_extensions(app,env_name):
         app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDBTEST?ssl=true&ssl_cert_reqs=CERT_NONE"
     mongo.init_app(app)
 
-
 def register_blueprints(app):
+    from project.home import home_blueprint	
+    from project.profile import profile_blueprint
     app.register_blueprint(home_blueprint)
     app.register_blueprint(profile_blueprint)
