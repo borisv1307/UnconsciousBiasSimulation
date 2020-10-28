@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Col, Form } from "react-bootstrap";
+import { Container, Button, Col, Row, Form } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -9,6 +9,8 @@ class Register extends Component {
     lastName: "",
     email: "",
     password: "",
+    gender: "",
+    date_of_birth: "",
     registration_type: "",
     contact_details: [],
     address: "",
@@ -31,6 +33,8 @@ class Register extends Component {
       email: this.state.email,
       password: this.state.password,
       registration_type: this.state.registration_type,
+      gender: this.state.gender,
+      date_of_birth: this.state.date_of_birth,
       contact_details: this.state.contact_details,
     };
 
@@ -136,6 +140,33 @@ class Register extends Component {
                             <option value="HR Professional">HR Professional</option>
                     </Form.Control>
                     </Form.Group>
+
+                    <Row>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>Gender</Form.Label>
+                      <Form.Control as="select" value={this.state.gender}
+                          onChange={this.updateField("gender")}
+                          id="gender"
+                          name="gender" >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer Not To Say">Prefer Not To Say</option>
+                      </Form.Control>
+                    </Form.Group>
+                    </Col>
+                    <Col>
+                    <Form.Group>
+                      <Form.Label>Birth Date</Form.Label>
+                      <Form.Control type="date"
+                        value={this.state.date_of_birth}
+                        onChange={this.updateField("date_of_birth")}
+                        id="date_of_birth"
+                        name="date_of_birth"/>
+                    </Form.Group>
+                    </Col>
+                    </Row>
 
                     <Form.Group>
                     <Form.Label>Address</Form.Label>

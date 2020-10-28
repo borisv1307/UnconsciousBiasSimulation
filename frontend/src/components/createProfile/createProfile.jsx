@@ -225,7 +225,7 @@ class CreateProfile extends Component {
           <Card>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                <h4>Add Education</h4>
+                <h4>Education</h4>
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
@@ -305,7 +305,7 @@ class CreateProfile extends Component {
           <Card>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                <h4>Add Experience</h4>
+                <h4>Experience</h4>
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="1">
