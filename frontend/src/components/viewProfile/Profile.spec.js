@@ -75,9 +75,14 @@ describe("Profile", () => {
     expect(container.prop("src")).toEqual(profile.profileImg);
   });
 
+  it("ViewProfiles should include Accordion", () => {
+    const accordian = wrapper.find("Accordion");
+    expect(accordian.length).toEqual(2);
+  });
+
   it("Profile should include labels", () => {
     expect(wrapper.find("label").length).toEqual(
-      7 + profile.education.length * 12 + profile.experience.length * 10
+      7 + profile.education.length * 16 + profile.experience.length * 14
     );
   });
 
@@ -87,7 +92,7 @@ describe("Profile", () => {
 
   it("Profile should include  h6 tags", () => {
     expect(wrapper.find("h6").length).toEqual(
-      profile.education.length * 6 + profile.experience.length * 5
+      profile.education.length * 8 + profile.experience.length * 7
     );
   });
 
@@ -105,10 +110,10 @@ describe("Profile", () => {
     expect(wrapper.find("label#position").length).toEqual(1);
     expect(wrapper.find("label#aboutMe").length).toEqual(1);
     expect(wrapper.find("label#school").length).toEqual(
-      profile.education.length
+      profile.education.length * 2
     );
     expect(wrapper.find("label#degree").length).toEqual(
-      profile.education.length
+      profile.education.length * 2
     );
     expect(wrapper.find("label#major").length).toEqual(
       profile.education.length
@@ -121,7 +126,7 @@ describe("Profile", () => {
     );
     expect(wrapper.find("label#gpa").length).toEqual(profile.education.length);
     expect(wrapper.find("label#title").length).toEqual(
-      profile.experience.length
+      profile.experience.length * 2
     );
     expect(wrapper.find("label#company").length).toEqual(
       profile.experience.length
