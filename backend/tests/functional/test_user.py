@@ -30,7 +30,7 @@ def test_client():
 
 class TestSomething:
 
-    def test_for_create_user(self,test_client):
+    def test_for_create_user(self, test_client):
         fake = Faker()
         """
         GIVEN a Flask application configured for testing
@@ -38,12 +38,10 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-        # userCollection = mongo.db.user
-        # userCollection.remove({})
-        # random
+
         data = {
-        "firstName":"testFName",
-        "lastName":"testLName",
+        "firstname":"testFName",
+        "lastname":"testLName",
         "email":fake.email(),
         "password": "Hello",
         "registration_type": "jobSeeker",
@@ -61,7 +59,7 @@ class TestSomething:
         assert response.data != 'null'
 
 
-    def test_for_missing_user_details(self,test_client):
+    def test_for_missing_user_details(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/createUser/' page is requested (POST)
@@ -69,8 +67,8 @@ class TestSomething:
         """
 
         data = {
-        "firstName":"testFName",
-        "lastName":"testLName",
+        "firstname":"testFName",
+        "lastname":"testLName",
         "registrationType": "jobSeeker",
         "contactDetails": {
             "address": "test Street",
@@ -86,7 +84,7 @@ class TestSomething:
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
 
-    def test_for_invalid_user_details(self,test_client):
+    def test_for_invalid_user_details(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/createUser/' page is requested (POST)
@@ -94,8 +92,8 @@ class TestSomething:
         """
 
         data = {
-        "firstName":"",
-        "lastName":"",
+        "firstname":"",
+        "lastname":"",
         "email":"test@test.com",
         "password": "Hello",
         "registration_type": "",
@@ -111,3 +109,96 @@ class TestSomething:
         response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Field/s cannot be blank"}\n'
+
+
+    def test_for_existing_email(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+        "firstname":"testFName",
+        "lastname":"testLName",
+        "email":"justin97@yahoo.com",
+        "password": "Hello",
+        "registration_type": "jobSeeker",
+        "contactDetails": {
+            "address": "test Street",
+            "address2": "test Street 2",
+            "city": "Philadelphia",
+            "state":"PA",
+            "zip":"19104",
+            "contactNumber":"12345678"
+        }
+        }
+        response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"Email is already in use"}\n'
+
+
+
+    def test_for_user_login(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+        "email":"justin97@yahoo.com",
+        "password": "Hello"
+        }
+        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data != 'null'
+
+
+    def test_for_login_with_missing_details(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+        "email":"justin97@yahoo.com"
+        }
+
+        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"Missing request body"}\n'
+
+
+    def test_for_login_with_invalid_details(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        data = {
+        "email":"",
+        "password": ""
+        }
+
+        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"Field/s cannot be blank"}\n'
+
+
+    def test_for_login_with_unknown_details(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        fake = Faker()
+        data = {
+        "email":fake.email(),
+        "password": "Hello"
+        }
+
+        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"User not found"}\n'

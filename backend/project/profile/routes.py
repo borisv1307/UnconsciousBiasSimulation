@@ -70,16 +70,16 @@ def create_user_profile():
 
         if create_profile:
             output = {
-            "profile_id": profile_id,
-            "user_id": user_id,
-            "profileName": profile_data['profileName'],
-            "profileImg": profile_data['profileImg'],
-            "firstName": profile_data['firstName'],
-            "lastName": profile_data['lastName'],
-            "position": profile_data['position'],
-            "aboutMe":  profile_data['aboutMe'],
-            "education": profile_data['education'],
-            "experience": profile_data['experience']
+                "profile_id": profile_id,
+                "user_id": user_id,
+                "profileName": profile_data['profileName'],
+                "profileImg": profile_data['profileImg'],
+                "firstName": profile_data['firstName'],
+                "lastName": profile_data['lastName'],
+                "position": profile_data['position'],
+                "aboutMe":  profile_data['aboutMe'],
+                "education": profile_data['education'],
+                "experience": profile_data['experience']
             }
         else:
             output = {'code': 2, "error": "Insert Failed"}

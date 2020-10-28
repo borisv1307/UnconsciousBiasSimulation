@@ -4,6 +4,7 @@ import bcrypt
 from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo
+from pymongo import ReturnDocument
 from . import user_blueprint
 
 
@@ -11,8 +12,8 @@ from . import user_blueprint
 @user_blueprint.route('/api/v1/createUser/', methods=['POST'])
 def create_user():
     try:
-        firstname = request.get_json()['firstName']
-        lastname = request.get_json()['lastName']
+        firstname = request.get_json()['firstname']
+        lastname = request.get_json()['lastname']
         email = request.get_json()['email']
         hashed_password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
         registration_type = request.get_json()['registration_type']
@@ -25,7 +26,6 @@ def create_user():
     users = mongo.db.user
     try:
         user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 1
-        print("Id ", user_id)
     except:
         user_id = 1
 
@@ -55,3 +55,31 @@ def create_user():
             output = {'token': access_token, 'user': {'user_id': user_id, 'firstname': firstname, 'email': email}}
 
     return output
+
+@user_blueprint.route('/api/v1/login/', methods=['POST'])
+def user_login():
+    try:
+        email = request.get_json()['email']
+        password = request.get_json()['password']
+    except:
+        return {'code': 4, 'error': 'Missing request body'}, 403
+
+    if request.get_json()['password'] == '' or email == '':
+        return {'code': 4, 'error': "Field/s cannot be blank"}, 403
+
+    users = mongo.db.user
+
+    user = users.find_one({"email" : email})
+    if not user:
+        return {'code': 4, 'error':"User not found"}, 403
+
+    if bcrypt.checkpw(password.encode('utf-8'), user['password']):
+        access_token = create_access_token(identity={'id': user['user_id'], 'date_joined': user['date_joined']})
+        print(access_token)
+        tokens = mongo.db.authtoken_token
+
+        tokens.find_one_and_update({"user_id": user['user_id']}, {"$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
+        user = users.find_one_and_update({"user_id": user['user_id']}, {"$set": {'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
+
+        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token}
+        return output
