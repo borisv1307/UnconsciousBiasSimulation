@@ -30,20 +30,20 @@ class Profile extends Component {
   componentDidMount() {
     var profile = this.state.profile;
     var exp = profile.experience;
-    exp.map((e, i) => {
+    exp.forEach((e, i) => {
       var yeardiff = this.yearsDiff(
         e.expStartDate,
-        e.expEndDate != "" ? e.expEndDate : new Date().toString()
+        e.expEndDate !== "" ? e.expEndDate : new Date().toString()
       );
       var monthDiff = this.monthsDiff(
         e.expStartDate,
-        e.expEndDate != "" ? e.expEndDate : new Date().toString()
+        e.expEndDate !== "" ? e.expEndDate : new Date().toString()
       );
       console.log(yeardiff + " year " + monthDiff + " months");
       exp[i]["duration"] =
         yeardiff > 1
           ? yeardiff + " years "
-          : yeardiff == 0
+          : yeardiff === 0
           ? ""
           : yeardiff + " year ";
       exp[i]["duration"] +=

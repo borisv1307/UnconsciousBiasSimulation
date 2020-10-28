@@ -27,7 +27,7 @@ class ViewProfiles extends Component {
       <>
         <Header />
 
-        <Container className="containbody justify-content-center">
+        <Container className="justify-content-center">
           <Accordion defaultActiveKey="0">
             {this.state.profiles.map((profile, i) => (
               <Card>
