@@ -28,6 +28,8 @@ describe("Register", () => {
     expect(wrapper.find("#email").length).toEqual(1);
     expect(wrapper.find("#password").length).toEqual(1);
     expect(wrapper.find("#registration_type").length).toEqual(1);
+    expect(wrapper.find("#gender").length).toEqual(1);
+    expect(wrapper.find("#date_of_birth").length).toEqual(1);
     expect(wrapper.find("#address").length).toEqual(1);
     expect(wrapper.find("#address2").length).toEqual(1);
     expect(wrapper.find("#city").length).toEqual(1);
@@ -42,6 +44,8 @@ describe("Register", () => {
     const emailInput = simulateChangeOnInput(wrapper, "#email", "test@test.com");
     const passwordInput = simulateChangeOnInput(wrapper, "#password", "Test123!");
     const registrationTypeInput = simulateChangeOnInput(wrapper, "#registration_type", "Job Seeker");
+    const genderInput = simulateChangeOnInput(wrapper, "#gender", "Male");
+    const dateOfBirthInput = simulateChangeOnInput(wrapper, "#date_of_birth", "2000-01-01")
     const address1Input = simulateChangeOnInput(wrapper, "#address", "1234 Test Street");
     const address2Input = simulateChangeOnInput(wrapper, "#address2", "Apartment 1");
     const cityInput = simulateChangeOnInput(wrapper, "#city", "Philadelphia");
@@ -49,12 +53,13 @@ describe("Register", () => {
     const zipInput = simulateChangeOnInput(wrapper, "#zip", "00000");
     const phoneNumberInput = simulateChangeOnInput(wrapper, "#contact_number", "000000000");
 
-    
     expect(firstNameInput.props().value).toEqual("John");
     expect(lastNameInput.props().value).toEqual("Doe");
     expect(emailInput.props().value).toEqual("test@test.com");
     expect(passwordInput.props().value).toEqual("Test123!");
     expect(registrationTypeInput.props().value).toEqual("Job Seeker");
+    expect(genderInput.props().value).toEqual("Male");
+    expect(dateOfBirthInput.props().value).toEqual("2000-01-01");
     expect(address1Input.props().value).toEqual("1234 Test Street");
     expect(address2Input.props().value).toEqual("Apartment 1");
     expect(cityInput.props().value).toEqual("Philadelphia");
