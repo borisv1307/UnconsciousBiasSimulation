@@ -69,18 +69,17 @@ def create_user_profile():
         })
 
         if create_profile:
-            user = profile.find_one({"profile_id": profile_id})
             output = {
-                "profile_id": user['profile_id'],
-                "user_id": user['user_id'],
-                "profileName": user['profileName'],
-                "profileImg": user['profileImg'],
-                "firstName": user['firstName'],
-                "lastName": user['lastName'],
-                "position": user['position'],
-                "aboutMe":  user['aboutMe'],
-                "education": user['education'],
-                "experience": user['experience']
+            "profile_id": profile_id,
+            "user_id": user_id,
+            "profileName": profile_data['profileName'],
+            "profileImg": profile_data['profileImg'],
+            "firstName": profile_data['firstName'],
+            "lastName": profile_data['lastName'],
+            "position": profile_data['position'],
+            "aboutMe":  profile_data['aboutMe'],
+            "education": profile_data['education'],
+            "experience": profile_data['experience']
             }
         else:
             output = {'code': 2, "error": "Insert Failed"}
