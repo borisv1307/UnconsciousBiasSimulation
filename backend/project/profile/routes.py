@@ -84,7 +84,7 @@ def create_user_profile():
         else:
             output = {'code': 2, "error": "Insert Failed"}
     else:
-        output = {'code': 2, "error": "User account does not exist"}
+        output = {'code': 2, "error": "User account does not exist"}, 403
 
     return output
 

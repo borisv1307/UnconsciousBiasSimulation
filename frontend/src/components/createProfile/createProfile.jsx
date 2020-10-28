@@ -31,7 +31,6 @@ class CreateProfile extends Component {
   };
 
   handleSubmit = (e) => {
-    e.preventDefault();
     const data = {
       email: "test@test.com",
       profileName: this.state.profileName,
@@ -54,7 +53,27 @@ class CreateProfile extends Component {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((res) => console.log(res));   
+      .then((res) => console.log(res));  
+      
+    this.setState({ 
+      profileName: "",
+      profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+      firstName: "",
+      lastName: "",
+      position: "",
+      aboutMe: "",
+      school: "",
+      degree: "",
+      major: "",
+      eduStartDate: "",
+      eduEndDate: "",
+      gpa: "",
+      title: "",
+      company: "",
+      location: "",
+      expStartDate: "",
+      expEndDate: "",
+    });  
   };
 
   addEducation = (e) => {
@@ -68,7 +87,13 @@ class CreateProfile extends Component {
     };
 
     this.setState({
-      education:[...this.state.education, educationData]
+      education:[...this.state.education, educationData],
+      school: "",
+      degree: "",
+      major: "",
+      eduStartDate: "",
+      eduEndDate: "",
+      gpa: "",
     });
   };
 
@@ -82,7 +107,12 @@ class CreateProfile extends Component {
     };
 
     this.setState({
-      experience:[...this.state.experience, experienceData]
+      experience:[...this.state.experience, experienceData],
+      title: "",
+      company: "",
+      location: "",
+      expStartDate: "",
+      expEndDate: "",
     });
   };
 
