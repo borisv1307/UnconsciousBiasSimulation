@@ -68,18 +68,17 @@ def user_login():
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
 
     users = mongo.db.user
-
     user = users.find_one({"email" : email})
-    if not user:
-        return {'code': 4, 'error':"User not found"}, 403
+    if user:
+        if bcrypt.checkpw(password.encode('utf-8'), user['password']):
+            access_token = create_access_token(identity={'id': user['user_id'], 'date_joined': user['date_joined']})
+            print(access_token)
+            tokens = mongo.db.authtoken_token
 
-    if bcrypt.checkpw(password.encode('utf-8'), user['password']):
-        access_token = create_access_token(identity={'id': user['user_id'], 'date_joined': user['date_joined']})
-        print(access_token)
-        tokens = mongo.db.authtoken_token
+            tokens.find_one_and_update({"user_id": user['user_id']}, {"$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
+            user = users.find_one_and_update({"user_id": user['user_id']}, {"$set": {'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
 
-        tokens.find_one_and_update({"user_id": user['user_id']}, {"$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
-        user = users.find_one_and_update({"user_id": user['user_id']}, {"$set": {'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
+            output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token}
+            return output
 
-        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token}
-        return output
+    return {'code': 4, 'error':"User not found"}, 403
