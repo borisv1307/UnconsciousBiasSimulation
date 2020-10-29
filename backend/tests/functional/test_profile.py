@@ -38,8 +38,8 @@ class TestSomething:
         data = {
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        "firstName": "Test",
-        "lastName": "User",
+        "first_name": "Test",
+        "last_name": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
         "education": [
@@ -77,8 +77,8 @@ class TestSomething:
         "email": None,
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        "firstName": "Test",
-        "lastName": "User",
+        "first_name": "Test",
+        "last_name": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
         "education": [
@@ -116,8 +116,8 @@ class TestSomething:
         "email":"testtest.com",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        "firstName": "Test",
-        "lastName": "User",
+        "first_name": "Test",
+        "last_name": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
         "education": [
@@ -153,11 +153,11 @@ class TestSomething:
         """
 
         data = {
-        "email":"test1@gmail.com",
+        "email":"max@gmail.com",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        "firstName": "Test",
-        "lastName": "User",
+        "first_name": "Test",
+        "last_name": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
         "education": [
@@ -195,8 +195,8 @@ class TestSomething:
         "email":"test@test78.com",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        "firstName": "Test",
-        "lastName": "User",
+        "first_name": "Test",
+        "last_name": "User",
         "position": "Developer",
         "aboutMe": "Hello World",
         "education": [
