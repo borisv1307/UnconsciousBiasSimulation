@@ -127,7 +127,7 @@ class TestSomething:
         data = {
         "first_name":"testFName",
         "last_name":"testLName",
-        "email":"max@gmail.com",
+        "email":"jasonmax@gmail.com",
         "password": "Hello",
         "registration_type": "jobSeeker",
         "gender": "Male",
@@ -155,7 +155,7 @@ class TestSomething:
         """
 
         data = {
-        "email":"tharamax@gmail.com",
+        "email":"jasonmax@gmail.com",
         "password": "Hello3"
         }
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
@@ -170,7 +170,7 @@ class TestSomething:
         """
 
         data = {
-        "email":"tharamax@gmail.com",
+        "email":"jasonmax@gmail.com",
         "password": "Hello234"
         }
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
