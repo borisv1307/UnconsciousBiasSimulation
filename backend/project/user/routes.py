@@ -13,8 +13,8 @@ from . import user_blueprint
 def create_user():
     # Get fields from request body, check for missing fields
     try:
-        firstname = request.get_json()['firstname']
-        lastname = request.get_json()['lastname']
+        first_name = request.get_json()['first_name']
+        last_name = request.get_json()['last_name']
         email = request.get_json()['email']
         hashed_password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
         registration_type = request.get_json()['registration_type']
@@ -22,12 +22,12 @@ def create_user():
         date_of_birth = request.get_json()['date_of_birth']
     except:
         return {'code': 4, 'error': 'Missing request body'}, 403
-    # Check for null and white spaces
-    if firstname == '' or lastname == '' or request.get_json()['password'] == '' or email == '' or registration_type == '':
+    # Check for blanks
+    if first_name == '' or last_name == '' or request.get_json()['password'] == '' or email == '' or registration_type == '':
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
     # Get collections
     users = mongo.db.user
-    # Get last user_id and increment it by one, When no records found ser user_id=1
+    # Get last user_id and increment it by one, When no records found set user_id=1
     try:
         user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 1
     except:
@@ -45,8 +45,8 @@ def create_user():
     else:
         user = users.insert_one({
             'user_id': user_id,
-            'firstname': firstname,
-            'lastname': lastname,
+            'first_name': first_name,
+            'last_name': last_name,
             'email': email,
             'password' : hashed_password,
             'date_joined' : date_joined,
@@ -60,7 +60,7 @@ def create_user():
             access_token = create_access_token(identity={'user_id': user_id, 'date_joined': date_joined})
             tokens = mongo.db.authtoken
             tokens.insert_one({"user_id": user_id, "key": access_token, 'created': datetime.utcnow()})
-            output = {'token': access_token, 'user': {'user_id': user_id, 'firstname': firstname, 'email': email}}
+            output = {'token': access_token, 'user': {'user_id': user_id, 'first_name': first_name, 'email': email}}
 
     return output
 
@@ -111,8 +111,8 @@ def get_all_users():
                                 
                 output.append({
                     'user_id': int(user['user_id']), 
-                    'firstname': user['firstname'], 
-                    'lastname': user['lastname'],
+                    'first_name': user['first_name'], 
+                    'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
@@ -153,8 +153,8 @@ def edit_one_user(user_id):
         try:
             output = {
                     'user_id': int(user['user_id']), 
-                    'firstname': user['firstname'], 
-                    'lastname': user['lastname'],
+                    'first_name': user['first_name'], 
+                    'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
@@ -170,7 +170,7 @@ def edit_one_user(user_id):
         return output
     # Patch Request
     elif request.method == 'PATCH':
-        fields = ['firstname', 'lastname', 'registration_type','gender','date_of_birth', 'contact_details']
+        fields = ['first_name', 'last_name', 'registration_type','gender','date_of_birth', 'contact_details']
         pairs = {}
         request_body = request.get_json()
 
@@ -187,8 +187,8 @@ def edit_one_user(user_id):
     try:
         output = {
                     'user_id': int(user['user_id']), 
-                    'firstname': user['firstname'], 
-                    'lastname': user['lastname'],
+                    'first_name': user['first_name'], 
+                    'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
