@@ -40,8 +40,8 @@ class TestSomething:
 
 
         data = {
-        "firstname":"testFName",
-        "lastname":"testLName",
+        "first_name":"testFName",
+        "last_name":"testLName",
         "email":fake.email(),
         "password": "Hello",
         "registration_type": "jobSeeker",
@@ -69,8 +69,8 @@ class TestSomething:
         """
 
         data = {
-        "firstname":"testFName",
-        "lastname":"testLName",
+        "first_name":"testFName",
+        "last_name":"testLName",
         "registrationType": "jobSeeker",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
@@ -96,8 +96,8 @@ class TestSomething:
         """
 
         data = {
-        "firstname":"",
-        "lastname":"",
+        "first_name":"",
+        "last_name":"",
         "email":"test@test.com",
         "password": "Hello",
         "registration_type": "",
@@ -125,9 +125,9 @@ class TestSomething:
         """
 
         data = {
-        "firstname":"testFName",
-        "lastname":"testLName",
-        "email":"test1@gmail.com",
+        "first_name":"testFName",
+        "last_name":"testLName",
+        "email":"max@gmail.com",
         "password": "Hello",
         "registration_type": "jobSeeker",
         "gender": "Male",
@@ -155,8 +155,8 @@ class TestSomething:
         """
 
         data = {
-        "email":"test1@gmail.com",
-        "password": "Hello"
+        "email":"tharamax@gmail.com",
+        "password": "Hello3"
         }
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
@@ -170,7 +170,7 @@ class TestSomething:
         """
 
         data = {
-        "email":"test1@gmail.com",
+        "email":"tharamax@gmail.com",
         "password": "Hello234"
         }
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
@@ -190,9 +190,8 @@ class TestSomething:
         }
 
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('res*****************************',response.data)
         assert response.status_code == 403
-        
+        print('res*********',response)
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
 
@@ -296,7 +295,7 @@ class TestSomething:
         assert response.data == b'{"code":5,"error":"User does not exist"}\n'
 
     def test_for_update_user(self, test_client):
-        fake = Faker()
+        
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/createUser/' page is requested (POST)
@@ -305,8 +304,8 @@ class TestSomething:
 
 
         data = {
-        "firstname":"testFName_update",
-        "lastname":"testLName_update",
+        "first_name":"testFName_update",
+        "last_name":"testLName_update",
         "email":"update@gmail.com",
         "password": "Hello",
         "registration_type": "jobSeeker",
