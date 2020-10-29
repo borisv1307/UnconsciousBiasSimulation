@@ -18,12 +18,12 @@ describe("CreateProfile", () => {
   let wrapper;
   beforeEach(() => (wrapper = shallow(<CreateProfile />)));
 
-  it("CreateProfile should include 3 forms for personal details, education and experience", () => {
+  it("should include 3 forms for personal details, education and experience", () => {
     expect(wrapper.find("Form").length).toEqual(3);
   });
 
-  it("CreateProfile should include an accordion", () => {
-    expect(wrapper.find("Accordion").length).toEqual(1);
+  it("should include an accordion for inserting edu/exp, editing edu, and editing exp", () => {
+    expect(wrapper.find("Accordion").length).toEqual(3);
   });
 
   it("should include inputs for personal details, education, and experience", () => {
@@ -273,6 +273,34 @@ describe("CreateProfile", () => {
     experienceButton.simulate('click');
     wrapper.update();
     expect(wrapper.state("experience")).toEqual([{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"},{"company": "DXC", "expEndDate": "2020-09", "expStartDate": "2020-09", "location": "Philadelphia", "title": "Intern"}]);
+  });
+
+  describe("Edit array", () => {
+    it("should have an edit button after submitting and turn editState to true when Edit button is clicked for education", () => {
+      wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+        wrapper.update();
+        wrapper.find("#toggleEditEducationButton").simulate('click'), () => { //display edit
+          wrapper.update();
+        };
+      };
+
+      expect(wrapper.find("#toggleEditEducationButton").length).toEqual(1);
+      wrapper.find("#toggleEditEducationButton").simulate('click');
+      expect(wrapper.state("editState")).toEqual(true);
+    });
+
+    it("should have an edit button after submitting and turn editState to true when Edit button is clicked for experience", () => {
+      wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
+        wrapper.update();
+        wrapper.find("#toggleEditExperienceButton").simulate('click'), () => { //display edit
+          wrapper.update();
+        };
+      };
+
+      expect(wrapper.find("#toggleEditExperienceButton").length).toEqual(1);
+      wrapper.find("#toggleEditExperienceButton").simulate('click');
+      expect(wrapper.state("editState")).toEqual(true);
+    });
   });
 
   describe("UploadImage", () => {

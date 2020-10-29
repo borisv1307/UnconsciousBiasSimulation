@@ -23,8 +23,8 @@ describe("Register", () => {
   });
 
   it("should include inputs for registration", () => {
-    expect(wrapper.find("#firstName").length).toEqual(1);
-    expect(wrapper.find("#lastName").length).toEqual(1);
+    expect(wrapper.find("#first_name").length).toEqual(1);
+    expect(wrapper.find("#last_name").length).toEqual(1);
     expect(wrapper.find("#email").length).toEqual(1);
     expect(wrapper.find("#password").length).toEqual(1);
     expect(wrapper.find("#registration_type").length).toEqual(1);
@@ -39,8 +39,8 @@ describe("Register", () => {
   });
 
   it("should update input forms ", () => {
-    const firstNameInput = simulateChangeOnInput(wrapper, "#firstName", "John");
-    const lastNameInput = simulateChangeOnInput(wrapper, "#lastName", "Doe");
+    const firstNameInput = simulateChangeOnInput(wrapper, "#first_name", "John");
+    const lastNameInput = simulateChangeOnInput(wrapper, "#last_name", "Doe");
     const emailInput = simulateChangeOnInput(wrapper, "#email", "test@test.com");
     const passwordInput = simulateChangeOnInput(wrapper, "#password", "Test123!");
     const registrationTypeInput = simulateChangeOnInput(wrapper, "#registration_type", "Job Seeker");

@@ -6,9 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 class CreateProfile extends Component {
   state = {
     profileName: "",
+    email: "",
     profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     position: "",
     aboutMe: "",
     school: "",
@@ -23,7 +24,19 @@ class CreateProfile extends Component {
     expStartDate: "",
     expEndDate: "",
     education: [],
-    experience: []
+    experience: [],
+    editState: false,
+    editSchool: "",
+    editDegree: "",
+    editMajor: "",
+    editEduStartDate: "",
+    editEduEndDate: "",
+    editGpa: "",
+    editTitle: "",
+    editCompany: "",
+    editLocation: "",
+    editExpStartDate: "",
+    editExpEndDate: "",
   };
 
   updateField = (stateKey) => (e) => {
@@ -32,11 +45,11 @@ class CreateProfile extends Component {
 
   handleSubmit = (e) => {
     const data = {
-      email: "test@test.com",
+      email: this.state.email,
       profileName: this.state.profileName,
       profileImg: this.state.profileImg,
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
       position: this.state.position,
       aboutMe: this.state.aboutMe,
       education: this.state.education,
@@ -56,10 +69,11 @@ class CreateProfile extends Component {
       .then((res) => console.log(res));  
       
     this.setState({ 
+      email: "",
       profileName: "",
       profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       position: "",
       aboutMe: "",
       school: "",
@@ -116,6 +130,51 @@ class CreateProfile extends Component {
     });
   };
 
+  toggleEditForm = (input) => (e) => {
+    this.setState({ editState: input });
+  };
+
+  editEducation = (index) => (e) => {
+    const editEducationData = {
+      school: this.state.editSchool,
+      degree: this.state.editDegree,
+      major: this.state.editMajor,
+      eduStartDate: this.state.editEduStartDate,
+      eduEndDate: this.state.editEduEndDate,
+      gpa: this.state.editGpa,
+    };
+
+    const newEducation = this.state.education.slice() 
+    newEducation[index] = editEducationData 
+
+    this.setState({
+      education: newEducation,
+      editState: false
+    }, () => {
+      console.log(this.state.education);
+    });
+  };
+
+  editExperience = (index) => (e) => {
+    const editExperienceData = {
+      title: this.state.editTitle,
+      company: this.state.editCompany,
+      location: this.state.editLocation,
+      expStartDate: this.state.editExpStartDate,
+      expEndDate: this.state.editExpEndDate,
+    };
+
+    const newExperience = this.state.experience.slice() 
+    newExperience[index] = editExperienceData 
+
+    this.setState({
+      experience: newExperience,
+      editState: false
+    }, () => {
+      console.log(this.state.experience);
+    });
+  };
+
   imageHandler = async e => {
     const files = e.target.files
 
@@ -165,21 +224,29 @@ class CreateProfile extends Component {
                 </Form.Group>
 
                 <Form.Group>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" value={this.state.email}
+                    onChange={this.updateField("email")}
+                    id="email"
+                    name="email" placeholder="test@test.com"/>
+                </Form.Group>
+
+                <Form.Group>
                   <Form.Label>First Name</Form.Label>
                   <Form.Control type="text"
-                    value={this.state.firstName}
-                    onChange={this.updateField("firstName")}
-                    id="firstName"
-                    name="firstName" placeholder="John"/>
+                    value={this.state.first_name}
+                    onChange={this.updateField("first_name")}
+                    id="first_name"
+                    name="first_name" placeholder="John"/>
                 </Form.Group>
 
                 <Form.Group>
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control type="text"
-                    value={this.state.lastName}
-                    onChange={this.updateField("lastName")}
-                    id="lastName"
-                    name="lastName" placeholder="Doe"/>
+                    value={this.state.last_name}
+                    onChange={this.updateField("last_name")}
+                    id="last_name"
+                    name="last_name" placeholder="Doe"/>
                 </Form.Group>
 
                 <Form.Group>
@@ -224,11 +291,14 @@ class CreateProfile extends Component {
         <Accordion>
           <Card>
             <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+              <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
                 <h4>Education</h4>
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
+              <Row>
+                <Col>
+
               <Container>
                 <br />
                 <Form>
@@ -238,7 +308,7 @@ class CreateProfile extends Component {
                     <Form.Control type="text"
                       value={this.state.school}
                       onChange={this.updateField("school")}
-                      id="school"
+                      id="school" 
                       name="school" placeholder="X University"/>
                   </Form.Group>
 
@@ -260,9 +330,8 @@ class CreateProfile extends Component {
                       name="major" placeholder="Software Engineering"/>
                   </Form.Group>
 
-                  <Row>
-                    <Col>
-                    <Form.Group>
+                  <Form.Row>
+                    <Form.Group as={Col}>
                       <Form.Label>Start Date</Form.Label>
                       <Form.Control type="month"
                         value={this.state.eduStartDate}
@@ -270,9 +339,7 @@ class CreateProfile extends Component {
                         id="eduStartDate"
                         name="eduStartDate"/>
                     </Form.Group>
-                    </Col>
-                    <Col>
-                    <Form.Group>
+                    <Form.Group as={Col}>
                       <Form.Label>End Date</Form.Label>
                       <Form.Control type="month"
                         value={this.state.eduEndDate}
@@ -280,8 +347,7 @@ class CreateProfile extends Component {
                         id="eduEndDate"
                         name="eduEndDate"/>
                     </Form.Group>
-                    </Col>
-                  </Row>
+                  </Form.Row>
 
                   <Form.Group>
                     <Form.Label>GPA</Form.Label>
@@ -300,15 +366,118 @@ class CreateProfile extends Component {
                 </Form>
                 <br />
               </Container>
+              </Col>
+                
+              <Col>
+              <br />
+              <h4>Education Added</h4>
+              <Container>
+                <Accordion>
+                  {
+                    this.state.education.map((edu, index) => {
+                      return (
+                        <Card>
+                          <Card.Header>
+                            <Accordion.Toggle as={Card.Header} variant="link" eventKey={"edu"+index+1} onClick={this.toggleEditForm(false)}>
+                              {edu.school}: {edu.degree} in {edu.major}
+                            </Accordion.Toggle>
+                          </Card.Header>
+                          <Accordion.Collapse eventKey={"edu"+index+1}>
+                            <Card.Body> 
+                              {edu.eduStartDate} to {edu.eduEndDate} <br />
+                              GPA: {edu.gpa} <br />
+                              { !this.state.editState ? <Button id="toggleEditEducationButton" onClick={this.toggleEditForm(true)}>Edit</Button> : ""}
+                              { this.state.editState ? 
+                                <div>
+                                  <Form>
+                                    <Form.Group>
+                                      <Form.Label>School</Form.Label>
+                                      <Form.Control type="text"
+                                        onChange={this.updateField("editSchool")}
+                                        id="editSchool"
+                                        name="editSchool"
+                                        defaultValue={edu.school} />
+                                    </Form.Group>
+
+                                    <Form.Group>
+                                      <Form.Label>Degree</Form.Label>
+                                      <Form.Control type="text"
+                                        onChange={this.updateField("editDegree")}
+                                        id="editDegree"
+                                        name="editDegree"
+                                        defaultValue={edu.degree} />
+                                    </Form.Group>
+
+                                    <Form.Group>
+                                      <Form.Label>Major</Form.Label>
+                                      <Form.Control type="text"
+                                        onChange={this.updateField("editMajor")}
+                                        id="editMajor"
+                                        name="editMajor"
+                                        defaultValue={edu.major} />
+                                    </Form.Group>
+
+                                    <Form.Row>
+                                      <Form.Group as={Col}>
+                                        <Form.Label>Start Date</Form.Label>
+                                        <Form.Control type="month"
+                                          onChange={this.updateField("editEduStartDate")}
+                                          id="editEduStartDate"
+                                          name="editEduStartDate"
+                                          defaultValue={edu.eduStartDate} />
+                                      </Form.Group>
+                                      <Form.Group as={Col}>
+                                        <Form.Label>End Date</Form.Label>
+                                        <Form.Control type="month"
+                                          onChange={this.updateField("editEduEndDate")}
+                                          id="editEduEndDate"
+                                          name="editEduEndDate"
+                                          defaultValue={edu.eduEndDate} />
+                                      </Form.Group>
+                                    </Form.Row>
+
+                                    <Form.Group>
+                                      <Form.Label>GPA</Form.Label>
+                                      <Form.Control type="number"
+                                        step="0.01"
+                                        onChange={this.updateField("editGpa")}
+                                        id="editGpa"
+                                        name="editGpa" defaultValue={edu.gpa}/>
+                                    </Form.Group>
+                                    <div className="text-center">
+                                      
+                                    </div>
+                                  </Form>
+                                  <Row>
+                                    <Col> <Button id="editEducationButton" onClick={this.editEducation(index)}> Save </Button> </Col>
+                                    <Col> <Button id="cancelEditEducationButton" onClick={this.toggleEditForm(false)}>Cancel</Button> </Col>
+                                  </Row>
+                                  
+                                </div>
+                                : ''
+                              }
+                            </Card.Body>
+                          </Accordion.Collapse>
+                        </Card>)
+                    })
+                  }
+                </Accordion>
+              </Container>
+              <br />
+              </Col>
+              </Row>
             </Accordion.Collapse>
           </Card>
           <Card>
             <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+              <Accordion.Toggle as={Card.Header} variant="link" eventKey="1">
                 <h4>Experience</h4>
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="1">
+              <Row>
+                <Col>
+
               <Container>
                 <br />
                 <Form>
@@ -339,9 +508,8 @@ class CreateProfile extends Component {
                       name="location" placeholder="Philadelphia"/>
                   </Form.Group>
 
-                  <Row>
-                    <Col>
-                    <Form.Group>
+                  <Form.Row>
+                    <Form.Group as={Col}>
                       <Form.Label>Start Date</Form.Label>
                       <Form.Control type="month"
                         value={this.state.expStartDate}
@@ -349,9 +517,7 @@ class CreateProfile extends Component {
                         id="expStartDate"
                         name="expStartDate"/>
                     </Form.Group>
-                    </Col>
-                    <Col>
-                    <Form.Group>
+                    <Form.Group as={Col}>
                       <Form.Label>End Date</Form.Label>
                       <Form.Control type="month"
                         value={this.state.expEndDate}
@@ -359,8 +525,7 @@ class CreateProfile extends Component {
                         id="expEndDate"
                         name="expEndDate"/>
                     </Form.Group>
-                    </Col>
-                  </Row>
+                  </Form.Row>
                   <div className="text-center">
                     <Button id="addExperienceButton" onClick={this.addExperience}>
                       Add Experience
@@ -369,6 +534,94 @@ class CreateProfile extends Component {
                 </Form>
                 <br />
               </Container>
+
+                </Col>
+
+                <Col>
+                <br />
+                <h4>Experience Added</h4>
+                <Container>
+                  <Accordion>
+                    {
+                      this.state.experience.map((exp, index) => {
+                        return (
+                          <Card>
+                            <Card.Header>
+                              <Accordion.Toggle as={Card.Header} variant="link" eventKey={"exp"+index+1} onClick={this.toggleEditForm(false)}>
+                                {exp.company} {exp.title}
+                              </Accordion.Toggle>
+                            </Card.Header>
+                            <Accordion.Collapse eventKey={"exp"+index+1}>
+                              <Card.Body> 
+                                {exp.location} <br />
+                                {exp.expStartDate} to {exp.expEndDate} <br />
+                                { !this.state.editState ? <Button id="toggleEditExperienceButton" onClick={this.toggleEditForm(true)}> Edit </Button> : ""}
+                                { this.state.editState ? 
+                                  <div>
+                                    <Form>
+                                      <Form.Group>
+                                        <Form.Label>Title</Form.Label>
+                                        <Form.Control type="text"
+                                          onChange={this.updateField("editTitle")}
+                                          id="editTitle"
+                                          name="editTitle" 
+                                          defaultValue={exp.title}/>
+                                      </Form.Group>
+
+                                      <Form.Group>
+                                        <Form.Label>Company</Form.Label>
+                                        <Form.Control type="text"
+                                          onChange={this.updateField("editCompany")}
+                                          id="editCompany"
+                                          name="editCompany"
+                                          defaultValue={exp.company}/>
+                                      </Form.Group>
+
+                                      <Form.Group>
+                                        <Form.Label>Location</Form.Label>
+                                        <Form.Control type="text"
+                                          onChange={this.updateField("editLocation")}
+                                          id="editLocation"
+                                          name="editLocation"
+                                          defaultValue={exp.location}/>
+                                      </Form.Group>
+
+                                      <Form.Row>
+                                        <Form.Group as={Col}>
+                                          <Form.Label>Start Date</Form.Label>
+                                          <Form.Control type="month"
+                                            onChange={this.updateField("editExpStartDate")}
+                                            id="editExpStartDate"
+                                            name="editExpStartDate"
+                                            defaultValue={exp.expStartDate}/>
+                                        </Form.Group>
+                                        <Form.Group as={Col}>
+                                          <Form.Label>End Date</Form.Label>
+                                          <Form.Control type="month"
+                                            onChange={this.updateField("editExpEndDate")}
+                                            id="editExpEndDate"
+                                            name="editExpEndDate"
+                                            defaultValue={exp.expEndDate}/>
+                                        </Form.Group>
+                                      </Form.Row>                
+                                    </Form>
+                                    <Row>
+                                      <Col><Button id="editExperienceButton" onClick={this.editExperience(index)}>Save</Button></Col>
+                                      <Col><Button id="cancelEditExperienceButton" onClick={this.toggleEditForm(false)}>Cancel</Button></Col>
+                                    </Row>
+                                  </div>
+                                  : ""
+                                }
+                             </Card.Body>
+                            </Accordion.Collapse>
+                          </Card>)
+                      })
+                    }
+                  </Accordion>
+                </Container>
+                <br />
+                </Col>
+              </Row>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -381,7 +634,7 @@ class CreateProfile extends Component {
             </Button>
           </div>    
           <br />    
-        </Container>
+        </Container>        
       </div>
     );
   }

@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 class Register extends Component {
   state = {
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     gender: "",
@@ -28,8 +28,8 @@ class Register extends Component {
   handleSubmit = async (e) => {
     //e.preventDefault();
     const data = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
       email: this.state.email,
       password: this.state.password,
       registration_type: this.state.registration_type,
@@ -99,18 +99,18 @@ class Register extends Component {
                   <Form.Row>                 
                     <Form.Group as={Col}>
                     <Form.Label>First Name</Form.Label>
-                    <Form.Control type="text" value={this.state.firstName}
-                        onChange={this.updateField("firstName")}
-                        id="firstName"
-                        name="firstName" placeholder="John"/>
+                    <Form.Control type="text" value={this.state.first_name}
+                        onChange={this.updateField("first_name")}
+                        id="first_name"
+                        name="first_name" placeholder="John"/>
                     </Form.Group>
 
                     <Form.Group as={Col}>
                     <Form.Label>Last Name</Form.Label>
-                    <Form.Control type="text" value={this.state.lastName}
-                        onChange={this.updateField("lastName")}
-                        id="lastName"
-                        name="lastName" placeholder="Doe"/>
+                    <Form.Control type="text" value={this.state.last_name}
+                        onChange={this.updateField("last_name")}
+                        id="last_name"
+                        name="last_name" placeholder="Doe"/>
                     </Form.Group>
                   </Form.Row>
 
