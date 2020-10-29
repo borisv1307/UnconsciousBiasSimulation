@@ -85,13 +85,13 @@ class Profile extends Component {
               <label>
                 <h5>First Name</h5>{" "}
               </label>
-              : <label id="firstname">{this.state.profile.firstName}</label>
+              : <label id="firstname">{this.state.profile.first_name}</label>
               <br />
               <br />
               <label>
                 <h5>Last Name</h5>{" "}
               </label>{" "}
-              : <label id="lastname">{this.state.profile.lastName}</label>
+              : <label id="lastname">{this.state.profile.last_name}</label>
               <br />
               <br />
               <label>
