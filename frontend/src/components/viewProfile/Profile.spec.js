@@ -54,6 +54,8 @@ describe("Profile", () => {
     ],
   };
 
+  var durations = ["2 months", "6 months"];
+
   beforeEach(() => (wrapper = shallow(<Profile profile={profile} />)));
 
   it("Profile should exist", () => {
@@ -102,6 +104,14 @@ describe("Profile", () => {
 
   it("Profile should include 6 Col tags", () => {
     expect(wrapper.find("Col").length).toEqual(6);
+  });
+
+  it("validate duration value", () => {
+    const htmldurations = wrapper.find("label#duration");
+
+    profile.experience.forEach((exp, i) => {
+      expect(htmldurations.get(i).props.children[1]).toEqual(durations[i]);
+    });
   });
 
   it("should include labels for personal details, education, and experience", () => {

@@ -23,7 +23,8 @@ class Profile extends Component {
   monthsDiff(d1, d2) {
     let date1 = new Date(d1);
     let date2 = new Date(d2);
-    let months = date2.getMonth() - date1.getMonth();
+    let yeardiff = this.yearsDiff(d1, d2);
+    let months = yeardiff * 12 + date2.getMonth() - date1.getMonth();
     return months;
   }
 
@@ -31,15 +32,13 @@ class Profile extends Component {
     var profile = this.state.profile;
     var exp = profile.experience;
     exp.forEach((e, i) => {
-      var yeardiff = this.yearsDiff(
+      var months = this.monthsDiff(
         e.expStartDate,
         e.expEndDate !== "" ? e.expEndDate : new Date().toString()
       );
-      var monthDiff = this.monthsDiff(
-        e.expStartDate,
-        e.expEndDate !== "" ? e.expEndDate : new Date().toString()
-      );
-      console.log(yeardiff + " year " + monthDiff + " months");
+      var yeardiff = parseInt(months / 12);
+      var monthDiff = months % 12;
+      // console.log(yeardiff + " year " + monthDiff + " months");
       exp[i]["duration"] =
         yeardiff > 1
           ? yeardiff + " years "
