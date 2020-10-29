@@ -28,8 +28,8 @@ describe("CreateProfile", () => {
 
   it("should include inputs for personal details, education, and experience", () => {
     expect(wrapper.find("#profileName").length).toEqual(1);
-    expect(wrapper.find("#firstName").length).toEqual(1);
-    expect(wrapper.find("#lastName").length).toEqual(1);
+    expect(wrapper.find("#first_name").length).toEqual(1);
+    expect(wrapper.find("#last_name").length).toEqual(1);
     expect(wrapper.find("#position").length).toEqual(1);
     expect(wrapper.find("#aboutMe").length).toEqual(1);
     expect(wrapper.find("#school").length).toEqual(1);
@@ -47,8 +47,8 @@ describe("CreateProfile", () => {
 
   it("update input forms ", () => {
     const profileNameInput = simulateChangeOnInput(wrapper, "#profileName", "Profile 1");
-    const firstNameInput = simulateChangeOnInput(wrapper, "#firstName", "John");
-    const lastNameInput = simulateChangeOnInput(wrapper, "#lastName", "Doe");
+    const firstNameInput = simulateChangeOnInput(wrapper, "#first_name", "John");
+    const lastNameInput = simulateChangeOnInput(wrapper, "#last_name", "Doe");
     const positionInput = simulateChangeOnInput(wrapper, "#position", "Worker");
     const aboutMeInput = simulateChangeOnInput(wrapper, "#aboutMe", "Good");
     const schoolInput = simulateChangeOnInput(
@@ -107,8 +107,8 @@ describe("CreateProfile", () => {
 
   it("should reset form when submit button is clicked", () => {
     wrapper.setState({ "profileName": "Profile 1", 
-                       "firstName": "John",
-                       "lastName": "Doe",
+                       "first_name": "John",
+                       "last_name": "Doe",
                        "position": "Worker",
                        "aboutMe": "Good",
                        "school": "Drexel University",
@@ -128,8 +128,8 @@ describe("CreateProfile", () => {
       wrapper.update();
 
       expect(wrapper.state("profileName")).toEqual("");
-      expect(wrapper.state("firstName")).toEqual("");
-      expect(wrapper.state("lastName")).toEqual("");
+      expect(wrapper.state("first_name")).toEqual("");
+      expect(wrapper.state("last_name")).toEqual("");
       expect(wrapper.state("position")).toEqual("");
       expect(wrapper.state("aboutMe")).toEqual("");
       expect(wrapper.state("school")).toEqual("");
