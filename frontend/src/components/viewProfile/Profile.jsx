@@ -94,9 +94,35 @@ class Profile extends Component {
               <br />
               <br />
               <label>
-                <h5>Position</h5>
+                <h5>Position Sought</h5>
               </label>{" "}
               : <label id="position">{this.state.profile.position}</label>
+              <br />
+              <br />
+              <label>
+                <h5>State</h5>
+              </label>{" "}
+              : <label id="state">{this.state.profile.state}</label>
+              <br />
+              <br />
+              <label>
+                <h5>Zip</h5>
+              </label>{" "}
+              : <label id="zip">{this.state.profile.zip}</label>
+              <br />
+              <br />
+              <label>
+                <h5>City</h5>
+              </label>{" "}
+              : <label id="city">{this.state.profile.city}</label>
+              <br />
+              <br />
+              <label>
+                <h5>Email</h5>
+              </label>{" "}
+              : <label id="user_email">{this.state.profile.email}</label>
+              <br />
+              <br />
             </Col>
           </Row>
           <br />
@@ -138,16 +164,6 @@ class Profile extends Component {
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          <label>
-                            <h6>School</h6>
-                          </label>{" "}
-                          : <label id="school">{edu.school}</label>
-                          <br />
-                          <label>
-                            <h6>Degree</h6>
-                          </label>{" "}
-                          : <label id="degree">{edu.degree}</label>
-                          <br />
                           <label>
                             <h6>Major</h6>
                           </label>{" "}
@@ -201,11 +217,6 @@ class Profile extends Component {
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          <label>
-                            <h6>Title</h6>
-                          </label>{" "}
-                          : <label id="title">{exp.title}</label>
-                          <br />
                           <label>
                             <h6>Company</h6>
                           </label>{" "}

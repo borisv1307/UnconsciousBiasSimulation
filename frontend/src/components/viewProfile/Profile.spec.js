@@ -12,6 +12,10 @@ describe("Profile", () => {
     profileName: "Profile J",
     profile_id: 1,
     user_id: 1,
+    state: "PA",
+    zip: "19104",
+    city: "Philadelphia",
+    email: "test4@gmail.com",
     profileImg:
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     first_name: "Jimmy",
@@ -84,17 +88,17 @@ describe("Profile", () => {
 
   it("Profile should include labels", () => {
     expect(wrapper.find("label").length).toEqual(
-      7 + profile.education.length * 16 + profile.experience.length * 14
+      15 + profile.education.length * 12 + profile.experience.length * 12
     );
   });
 
   it("Profile should include h5 tags", () => {
-    expect(wrapper.find("h5").length).toEqual(3);
+    expect(wrapper.find("h5").length).toEqual(7);
   });
 
   it("Profile should include  h6 tags", () => {
     expect(wrapper.find("h6").length).toEqual(
-      profile.education.length * 8 + profile.experience.length * 7
+      profile.education.length * 6 + profile.experience.length * 6
     );
   });
 
@@ -118,13 +122,18 @@ describe("Profile", () => {
     expect(wrapper.find("label#firstname").length).toEqual(1);
     expect(wrapper.find("label#lastname").length).toEqual(1);
     expect(wrapper.find("label#position").length).toEqual(1);
+    expect(wrapper.find("label#state").length).toEqual(1);
+    expect(wrapper.find("label#zip").length).toEqual(1);
+    expect(wrapper.find("label#city").length).toEqual(1);
+    expect(wrapper.find("label#user_email").length).toEqual(1);
     expect(wrapper.find("label#aboutMe").length).toEqual(1);
     expect(wrapper.find("label#school").length).toEqual(
-      profile.education.length * 2
+      profile.education.length
     );
     expect(wrapper.find("label#degree").length).toEqual(
-      profile.education.length * 2
+      profile.education.length
     );
+
     expect(wrapper.find("label#major").length).toEqual(
       profile.education.length
     );
@@ -136,8 +145,12 @@ describe("Profile", () => {
     );
     expect(wrapper.find("label#gpa").length).toEqual(profile.education.length);
     expect(wrapper.find("label#title").length).toEqual(
-      profile.experience.length * 2
+      profile.experience.length
     );
+    expect(wrapper.find("label#duration").length).toEqual(
+      profile.experience.length
+    );
+
     expect(wrapper.find("label#company").length).toEqual(
       profile.experience.length
     );
