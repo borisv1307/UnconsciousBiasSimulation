@@ -1,16 +1,21 @@
 import React, { Component } from "react";
+import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import { Container } from "react-bootstrap";
 
 class Header extends Component {
   render() {
     return (
       <>
-        <Nav defaultActiveKey="/home" className="justify-content-end header">
-          <h4>Unconscious Bias Simulation</h4>
-          <Nav.Link href="/home">Home</Nav.Link>
-          <Nav.Link href="/createProfile">Create Profile</Nav.Link>
-          <Nav.Link href="/viewProfile">View Profile</Nav.Link>
-        </Nav>
+        <Navbar className="header">
+          <Navbar.Brand href="/home">Unconscious Bias Simulation</Navbar.Brand>
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end">
+            {/* <Nav.Link href="/home">Home</Nav.Link> */}
+            <Nav.Link href="/createProfile">Create Profile</Nav.Link>
+            <Nav.Link href="/viewProfile">View Profile</Nav.Link>
+          </Navbar.Collapse>
+        </Navbar>
         <br />
         <br />
       </>
