@@ -2,10 +2,14 @@
 This file (test_profile.py) contains the functional tests which
 test create profile and view profile.
 
+Command to run tests:- pytest --setup-show tests/functional
+
 """
 import pytest
 import os
 import sys
+import datetime
+import random
 from faker import Faker
 from flask import jsonify, request, json
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -37,16 +41,23 @@ class TestSomething:
         WHEN the '/api/v1/createUser/' page is requested (POST)
         THEN check that the response is valid
         """
+        start_date = datetime.date(1980, 1, 1)
+        end_date = datetime.date(2020, 2, 1)
+
+        time_between_dates = end_date - start_date
+        days_between_dates = time_between_dates.days
+        random_number_of_days = random.randrange(days_between_dates)
+        random_date = start_date + datetime.timedelta(days=random_number_of_days)
 
 
         data = {
-        "first_name":"testFName",
-        "last_name":"testLName",
+        "first_name":fake.first_name(),
+        "last_name":fake.last_name(),
         "email":fake.email(),
         "password": "Hello",
         "registration_type": "jobSeeker",
         "gender": "Male",
-        "date_of_birth": "1992-10-01",
+        "date_of_birth": random_date,
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
@@ -74,7 +85,7 @@ class TestSomething:
         "registrationType": "jobSeeker",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
-        "contactDetails": {
+        "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
             "city": "Philadelphia",
@@ -103,7 +114,7 @@ class TestSomething:
         "registration_type": "",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
-        "contactDetails": {
+        "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
             "city": "Philadelphia",
@@ -118,21 +129,20 @@ class TestSomething:
 
 
     def test_for_existing_email(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
-        THEN check that the response is valid
-        """
+        fake = Faker()
+        users = mongo.db.user
+        user_id = 1
+        getemail = users.find_one( { "user_id": int(user_id) },{ 'email': 1, '_id': 0 })
 
         data = {
-        "first_name":"testFName",
-        "last_name":"testLName",
-        "email":"jasonmax@gmail.com",
+        "first_name":fake.first_name(),
+        "last_name":fake.last_name(),
+        "email":getemail['email'],
         "password": "Hello",
         "registration_type": "jobSeeker",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
-        "contactDetails": {
+        "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
             "city": "Philadelphia",
@@ -266,11 +276,32 @@ class TestSomething:
         assert response.data == b'{"code":5,"error":"id must be numerical"}\n'
 
     def test_delete_one_user(self, test_client):
+        fake = Faker()
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/createUser/' page is requested (POST)
         THEN check that the response is valid
         """
+
+
+        data = {
+        "first_name":fake.first_name(),
+        "last_name":fake.last_name(),
+        "email":fake.email(),
+        "password": "Hello",
+        "registration_type": "jobSeeker",
+        "gender": "Male",
+        "date_of_birth": "1992-10-01",
+        "contact_details": {
+            "address": "test Street",
+            "address2": "test Street 2",
+            "city": "Philadelphia",
+            "state":"PA",
+            "zip":"19104",
+            "contact_number":"12345678"
+        }
+        }
+        test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         users = mongo.db.user
         user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id'])
         convert_to_str= str(user_id)
@@ -301,16 +332,23 @@ class TestSomething:
         WHEN the '/api/v1/createUser/' page is requested (POST)
         THEN check that the response is valid
         """
+        fake = Faker()
+        start_date = datetime.date(1980, 1, 1)
+        end_date = datetime.date(2020, 2, 1)
 
+        time_between_dates = end_date - start_date
+        days_between_dates = time_between_dates.days
+        random_number_of_days = random.randrange(days_between_dates)
+        random_date = start_date + datetime.timedelta(days=random_number_of_days)
 
         data = {
-        "first_name":"testFName_update",
-        "last_name":"testLName_update",
+        "first_name":fake.first_name(),
+        "last_name":fake.last_name(),
         "email":"update@gmail.com",
         "password": "Hello",
         "registration_type": "jobSeeker",
         "gender": "Male",
-        "date_of_birth": "1992-10-01",
+        "date_of_birth": random_date,
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
