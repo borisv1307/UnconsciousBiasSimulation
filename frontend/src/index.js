@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import Home from "./components/Home/Home";
 import Register from "./components/register/register";
 import CreateProfile from "./components/createProfile/createProfile";
 import ViewProfile from "./components/viewProfile/viewProfiles";
@@ -22,7 +23,7 @@ ReactDOM.render(
         <Register />
       </Route>
       <Route exact path="/home">
-        <CreateProfile />
+        <Home />
       </Route>
       <Route path="/createProfile">
         <CreateProfile />
