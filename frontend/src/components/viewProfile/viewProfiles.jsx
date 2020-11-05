@@ -18,7 +18,6 @@ class ViewProfiles extends Component {
       .then((response) => response.json())
       .then((res) => {
         this.setState({ profiles: res["results"] });
-        // console.log(res["results"]);
       });
   }
 

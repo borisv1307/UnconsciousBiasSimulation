@@ -14,6 +14,10 @@ let profiles = {
       profile_id: 1,
       profileName: "Profile J",
       user_id: 1,
+      state: "PA",
+      zip: "19104",
+      city: "Philadelphia",
+      email: "test4@gmail.com",
       profileImg:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
       first_name: "Jimmy",
@@ -59,6 +63,10 @@ let profiles = {
       profile_id: 2,
       profileName: "Profile M",
       user_id: 1,
+      state: "PA",
+      zip: "19104",
+      city: "Philadelphia",
+      email: "test4@gmail.com",
       profileImg:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
       firstName: "Test",
@@ -89,6 +97,10 @@ let profiles = {
       profile_id: 3,
       profileName: "Profile N",
       user_id: 1,
+      state: "PA",
+      zip: "19104",
+      city: "Philadelphia",
+      email: "test4@gmail.com",
       profileImg:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
       firstName: "Test",
@@ -137,7 +149,7 @@ describe("ViewProfiles", () => {
     expect(container.length).toEqual(1);
   });
 
-  it("ViewProfiles should include Accordion", () => {
+  it("ViewProfiles should include profile name on the Accordion", () => {
     const container = wrapper.find("Accordion.Toggle");
     expect(container.toBe).toEqual(profiles.profileName);
   });

@@ -92,16 +92,22 @@ def create_user_profile():
 @profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
 def get_user_profiles():
     user_id = 1
+    
+    userdb= mongo.db.user
     profile = mongo.db.profile
     output = []
     try:
+        user = loads(dumps(userdb.find({"user_id": user_id})))
         profiles = loads(dumps(profile.find({"user_id": user_id})))
         for profile in profiles:
-
             output.append({
                 "profile_id": profile['profile_id'],
                 "profileName" : profile['profileName'],
                 "user_id": profile['user_id'],
+                "state":user[0]['contact_details']['state'],
+                "zip":user[0]['contact_details']['zip'],
+                "city":user[0]['contact_details']['city'],
+                "email":user[0]['email'],
                 "profileImg": profile['profileImg'],
                 "first_name": profile['first_name'],
                 "last_name": profile['last_name'],
@@ -116,4 +122,6 @@ def get_user_profiles():
             output = {"count": len(output), "results": output}
     except:
         output = {'code': 2, "error": "Error fetching details from DB"}
+    
+    
     return output
