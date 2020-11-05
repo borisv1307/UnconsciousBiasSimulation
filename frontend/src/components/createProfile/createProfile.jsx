@@ -3,49 +3,56 @@ import { Container, Button, Row, Col, Form, Accordion, Card } from "react-bootst
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+const initialState = {
+  profileName: "",
+  email: "",
+  profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+  first_name: "",
+  last_name: "",
+  position: "",
+  aboutMe: "",
+  school: "",
+  degree: "",
+  major: "",
+  eduStartDate: "",
+  eduEndDate: "",
+  gpa: "",
+  title: "",
+  company: "",
+  location: "",
+  expStartDate: "",
+  expEndDate: "",
+  education: [],
+  experience: [],
+  editState: false,
+  editSchool: "",
+  editDegree: "",
+  editMajor: "",
+  editEduStartDate: "",
+  editEduEndDate: "",
+  editGpa: "",
+  editTitle: "",
+  editCompany: "",
+  editLocation: "",
+  editExpStartDate: "",
+  editExpEndDate: "",
+};
+
 class CreateProfile extends Component {
-  state = {
-    profileName: "",
-    email: "",
-    profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-    first_name: "",
-    last_name: "",
-    position: "",
-    aboutMe: "",
-    school: "",
-    degree: "",
-    major: "",
-    eduStartDate: "",
-    eduEndDate: "",
-    gpa: "",
-    title: "",
-    company: "",
-    location: "",
-    expStartDate: "",
-    expEndDate: "",
-    education: [],
-    experience: [],
-    editState: false,
-    editSchool: "",
-    editDegree: "",
-    editMajor: "",
-    editEduStartDate: "",
-    editEduEndDate: "",
-    editGpa: "",
-    editTitle: "",
-    editCompany: "",
-    editLocation: "",
-    editExpStartDate: "",
-    editExpEndDate: "",
-  };
+  constructor(props) {
+    super(props)
+    this.state = initialState;
+  }
+
+  reset() {
+    this.setState(initialState);
+  }
+
 
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
   };
 
-  editField = (stateKey, value) => (e) => {
-    this.setState({ [stateKey]: value });
-  }
 
   handleSubmit = (e) => {
     const data = {
@@ -72,40 +79,7 @@ class CreateProfile extends Component {
       .then((res) => res.json())
       .then((res) => console.log(res));  
       
-    this.setState({ 
-      profileName: "",
-      email: "",
-      profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-      first_name: "",
-      last_name: "",
-      position: "",
-      aboutMe: "",
-      school: "",
-      degree: "",
-      major: "",
-      eduStartDate: "",
-      eduEndDate: "",
-      gpa: "",
-      title: "",
-      company: "",
-      location: "",
-      expStartDate: "",
-      expEndDate: "",
-      education: [],
-      experience: [],
-      editState: false,
-      editSchool: "",
-      editDegree: "",
-      editMajor: "",
-      editEduStartDate: "",
-      editEduEndDate: "",
-      editGpa: "",
-      editTitle: "",
-      editCompany: "",
-      editLocation: "",
-      editExpStartDate: "",
-      editExpEndDate: "",
-    });  
+    this.reset();
   };
 
   addEducation = (e) => {
