@@ -43,6 +43,10 @@ class CreateProfile extends Component {
     this.setState({ [stateKey]: e.target.value });
   };
 
+  editField = (stateKey, value) => (e) => {
+    this.setState({ [stateKey]: value });
+  }
+
   handleSubmit = (e) => {
     const data = {
       email: this.state.email,
@@ -69,8 +73,8 @@ class CreateProfile extends Component {
       .then((res) => console.log(res));  
       
     this.setState({ 
-      email: "",
       profileName: "",
+      email: "",
       profileImg:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
       first_name: "",
       last_name: "",
@@ -87,6 +91,20 @@ class CreateProfile extends Component {
       location: "",
       expStartDate: "",
       expEndDate: "",
+      education: [],
+      experience: [],
+      editState: false,
+      editSchool: "",
+      editDegree: "",
+      editMajor: "",
+      editEduStartDate: "",
+      editEduEndDate: "",
+      editGpa: "",
+      editTitle: "",
+      editCompany: "",
+      editLocation: "",
+      editExpStartDate: "",
+      editExpEndDate: "",
     });  
   };
 
@@ -209,7 +227,7 @@ class CreateProfile extends Component {
         <Header />
 
         <Container className="containbody justify-content-center">
-        <br/><h1 className="text-center">Create Profile</h1> <br/>
+        <br/><h1 className="text-center">Create Applicaiton</h1> <br/>
         
         <Row>
           <Col>
@@ -432,6 +450,7 @@ class CreateProfile extends Component {
                                           onChange={this.updateField("editEduEndDate")}
                                           id="editEduEndDate"
                                           name="editEduEndDate"
+                                          
                                           defaultValue={edu.eduEndDate} />
                                       </Form.Group>
                                     </Form.Row>
@@ -442,7 +461,9 @@ class CreateProfile extends Component {
                                         step="0.01"
                                         onChange={this.updateField("editGpa")}
                                         id="editGpa"
-                                        name="editGpa" defaultValue={edu.gpa}/>
+                                        name="editGpa" 
+                                        value={edu.gpa}
+                                        />
                                     </Form.Group>
                                     <div className="text-center">
                                       
