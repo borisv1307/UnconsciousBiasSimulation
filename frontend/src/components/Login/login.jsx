@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Form from "react-bootstrap/Form";
 
 class Login extends Component {
   state = {
