@@ -68,19 +68,4 @@ describe("Register", () => {
     expect(phoneNumberInput.props().value).toEqual("000000000");
   });
 
-  it("should insert address and number details in contact details when button is clicked", () => {
-    const collectContactDetailsButton = wrapper.find("#collectContactDetailsButton")
-
-    simulateChangeOnInput(wrapper, "#address", "1234 Test Street");
-    simulateChangeOnInput(wrapper, "#address2", "Apartment 1");
-    simulateChangeOnInput(wrapper, "#city", "Philadelphia");
-    simulateChangeOnInput(wrapper, "#state", "Pennsylvania");
-    simulateChangeOnInput(wrapper, "#zip", "00000");
-    simulateChangeOnInput(wrapper, "#contact_number", "000000000");
-
-    collectContactDetailsButton.simulate('click');
-    wrapper.update();
-    expect(wrapper.state("contact_details")).toEqual([{"address": "1234 Test Street", "address2": "Apartment 1", "city": "Philadelphia", "state": "Pennsylvania", "zip": "00000", "contact_number": "000000000"}]);
-  });
-
 });
