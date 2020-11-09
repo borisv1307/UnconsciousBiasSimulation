@@ -32,7 +32,7 @@ def create_user():
         user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 1
     except:
         user_id = 1
-    
+
     date_joined = datetime.utcnow()
 
     # check if email is already in database
@@ -60,7 +60,7 @@ def create_user():
             access_token = create_access_token(identity={'user_id': user_id, 'date_joined': date_joined})
             tokens = mongo.db.authtoken
             tokens.insert_one({"user_id": user_id, "key": access_token, 'created': datetime.utcnow()})
-            output = {'token': access_token, 'user': {'user_id': user_id, 'first_name': first_name, 'email': email}}
+            output = {'token': access_token, 'user': {'user_id': user_id, 'first_name': first_name, 'email': email, 'registration_type': registration_type}}
 
     return output
 
@@ -85,16 +85,16 @@ def user_login():
     # Check if password matches
     if bcrypt.checkpw(password.encode('utf-8'), user['password']):
         access_token = create_access_token(identity={'id': int(user['user_id']), 'date_joined': user['date_joined']})
-        
+
         tokens = mongo.db.authtoken
          # Create token and update token into authtoken collection, this is to maintain session considering future logout scenario
         tokens.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
         user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
-        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token}
+        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token, "registration_type" : user['registration_type'], "first_name" : user['first_name'], "last_name":user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth']}
 
     else:
         return {'code': 4, "error": "Invalid password"},403
-    
+
     return output
 
 
@@ -104,27 +104,27 @@ def user_login():
 def get_all_users():
     if request.method == 'GET':
         users = mongo.db.user
-     
+
         output = []
         try:
             for user in users.find():
-                                
+
                 output.append({
-                    'user_id': int(user['user_id']), 
-                    'first_name': user['first_name'], 
+                    'user_id': int(user['user_id']),
+                    'first_name': user['first_name'],
                     'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
                     'gender': user['gender'],
                     'date_of_birth':user['date_of_birth'],
-                    'contact_details': user['contact_details']   
+                    'contact_details': user['contact_details']
                     })
-                
+
             return {'count': len(output), 'results': output}
         except:
             return {'code': 4, 'error':"No users found"}, 403
-                
+
 
 ### GET, EDIT, DELETE USER
 @user_blueprint.route('/api/v1/users/<user_id>/', methods=['GET', 'PATCH', 'DELETE'])
@@ -136,24 +136,24 @@ def edit_one_user(user_id):
         user_id = int(user_id)
     except:
         return {'code': 5, 'error':"id must be numerical"}, 403
-    
+
     # Get request
     if request.method == 'GET':
         user = mongo.db.user.find_one({'user_id': user_id})
 
-    # Delete request    
-    elif request.method == 'DELETE':        
-        user = mongo.db.user.find_one_and_delete({'user_id': user_id}) 
+    # Delete request
+    elif request.method == 'DELETE':
+        user = mongo.db.user.find_one_and_delete({'user_id': user_id})
         countprofile = mongo.db.profile.count_documents({'user_id': user_id})
 
-        
-        # Equivalent of cascaded delete in MongoDB. When user is deleted. Delete his/her profiles and tokens.    
+
+        # Equivalent of cascaded delete in MongoDB. When user is deleted. Delete his/her profiles and tokens.
         mongo.db.profile.delete_many({'user_id': user_id})
         mongo.db.authtoken.delete_many({'user_id': user_id})
         try:
             output = {
-                    'user_id': int(user['user_id']), 
-                    'first_name': user['first_name'], 
+                    'user_id': int(user['user_id']),
+                    'first_name': user['first_name'],
                     'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
@@ -162,8 +162,8 @@ def edit_one_user(user_id):
                     'date_of_birth':user['date_of_birth'],
                     'contact_details': user['contact_details'],
                     'count_of_profiles_deleted': countprofile
-                    
-            
+
+
             }
         except:
             output = {'code': 5, "error": "User does not exist"}, 403
@@ -186,18 +186,16 @@ def edit_one_user(user_id):
 
     try:
         output = {
-                    'user_id': int(user['user_id']), 
-                    'first_name': user['first_name'], 
+                    'user_id': int(user['user_id']),
+                    'first_name': user['first_name'],
                     'last_name': user['last_name'],
                     'email': user['email'],
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
                     'gender': user['gender'],
                     'date_of_birth':user['date_of_birth'],
-                    'contact_details': user['contact_details']       
+                    'contact_details': user['contact_details']
                   }
     except:
         output = {'code': 5, "error": "User does not exist"}, 403
     return output
-
-

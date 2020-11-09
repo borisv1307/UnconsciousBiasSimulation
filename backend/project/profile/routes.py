@@ -23,13 +23,9 @@ def profile_validation(func):
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-
         if get_email is None:
             return {"code": 4, "error": "Invalid email id"}, 403
 
-        if not re.search(regex, get_email):
-            return jsonify({'code': 4, "error": "Invalid email id"}), 403
 
         return func(*args, **kwargs)
     return decorated
