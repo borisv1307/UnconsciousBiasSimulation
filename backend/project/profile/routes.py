@@ -3,7 +3,7 @@ import re
 from json import loads
 from functools import wraps
 from bson.json_util import dumps
-from flask import request, jsonify
+from flask import request
 from project import mongo
 from . import profile_blueprint
 
@@ -23,9 +23,9 @@ def profile_validation(func):
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
-        if get_email is None:
-            return {"code": 4, "error": "Invalid email id"}, 403
 
+        if get_email is None or re.search("^\s*$", get_email):
+            return {"code": 4, "error": "Input fields cannot be blank or null"}, 403
 
         return func(*args, **kwargs)
     return decorated
