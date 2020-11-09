@@ -92,15 +92,15 @@ def create_user_profile():
     return output
 
 
-@profile_blueprint.route('/api/v1/getProfiles/', methods=['GET'])
-def get_user_profiles():
-    user_id = 1
+@profile_blueprint.route('/api/v1/getProfiles/<user_id>/', methods=['GET'])
+def get_user_profiles(user_id):
+    int_user_id = int(user_id)
     userdb = mongo.db.user
     profile = mongo.db.profile
     output = []
     try:
-        user = loads(dumps(userdb.find({"user_id": user_id})))
-        profiles = loads(dumps(profile.find({"user_id": user_id})))
+        user = loads(dumps(userdb.find({"user_id": int_user_id})))
+        profiles = loads(dumps(profile.find({"user_id": int_user_id})))
         for profile in profiles:
             output.append({
                 "profile_id": profile['profile_id'],

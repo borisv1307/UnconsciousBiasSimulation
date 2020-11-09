@@ -230,10 +230,17 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-        data = {
-        "user_id":1
-        }
-
-        response = test_client.get('/api/v1/getProfiles/',data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getProfiles/1/',headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response != 'null'
+        assert response.data != 'null'
+
+    def test_get_profiles_with_invalid_userid(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/getProfileCount' page is requested (GET)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get('/api/v1/getProfiles/999/',headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data != b'{"code":4,"error": "User not found"}\n'
