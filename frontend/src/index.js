@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import Home from "./components/Home/Home";
+import HomeHR from "./components/Home/HomeHR";
 import Register from "./components/register/register";
 import CreateProfile from "./components/createProfile/createProfile";
 import ViewProfile from "./components/viewProfile/viewProfiles";
@@ -24,6 +25,9 @@ ReactDOM.render(
       </Route>
       <Route exact path="/home">
         <Home />
+      </Route>
+      <Route exact path="/homehr">
+        <HomeHR />
       </Route>
       <Route path="/createProfile">
         <CreateProfile />

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Card from "react-bootstrap/Card";
-import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
+import Figure from "react-bootstrap/Figure";
 
 class Profile extends Component {
   constructor(props) {
@@ -58,75 +58,22 @@ class Profile extends Component {
       <>
         <style type="text/css">
           {`
-    .card-title {
-      margin-bottom: 0rem;
-    }
-    .h5 {
-      margin-bottom: 0rem;
-    }
-    `}
+            .card-title {
+              margin-bottom: 0rem;
+            }
+            .h5 {
+              margin-bottom: 0rem;
+            }
+          `}
         </style>
+        
         <Container className="containbody justify-content-center">
-          <br />
-          <br />
-          <Row>
-            <Col sm={6}>
-              {" "}
-              <Image
-                className="image-style"
-                src={this.state.profile.profileImg}
-                roundedCircle
-              />
-            </Col>
-            <br />
-            <Col>
-              <br />
-              <label>
-                <h5>First Name</h5>{" "}
-              </label>
-              : <label id="firstname">{this.state.profile.first_name}</label>
-              <br />
-              <br />
-              <label>
-                <h5>Last Name</h5>{" "}
-              </label>{" "}
-              : <label id="lastname">{this.state.profile.last_name}</label>
-              <br />
-              <br />
-              <label>
-                <h5>Position Sought</h5>
-              </label>{" "}
-              : <label id="position">{this.state.profile.position}</label>
-              <br />
-              <br />
-              <label>
-                <h5>State</h5>
-              </label>{" "}
-              : <label id="state">{this.state.profile.state}</label>
-              <br />
-              <br />
-              <label>
-                <h5>Zip</h5>
-              </label>{" "}
-              : <label id="zip">{this.state.profile.zip}</label>
-              <br />
-              <br />
-              <label>
-                <h5>City</h5>
-              </label>{" "}
-              : <label id="city">{this.state.profile.city}</label>
-              <br />
-              <br />
-              <label>
-                <h5>Email</h5>
-              </label>{" "}
-              : <label id="user_email">{this.state.profile.email}</label>
-              <br />
-              <br />
-            </Col>
-          </Row>
-          <br />
-          <br />
+          <div>
+            <h1> {this.state.profile.first_name} {this.state.profile.last_name}</h1>
+            <h5> Position sought: {this.state.profile.position}</h5>
+            <h5> Email: {this.state.profile.email} </h5>
+          </div>
+          
           <Row>
             <Col>
               <Card.Title className="card-heading card-title h5">
@@ -134,12 +81,28 @@ class Profile extends Component {
               </Card.Title>
               <Card bg="Light">
                 <Card.Body>
-                  <label id="aboutMe">{this.state.profile.aboutMe}</label>
+                  <Row>
+                    <Col sm={8}>
+                      <h5> Location: {this.state.profile.city}, {this.state.profile.state}, {this.state.profile.zip}</h5>
+                      <br/>
+                      <label id="aboutMe">{this.state.profile.aboutMe}</label>
+                    </Col>
+                    <Col sm={3}>
+                      <Figure>
+                        <Figure.Image
+                          width={100}
+                          height={100}
+                          className="image-style"
+                          src={this.state.profile.profileImg}
+                          roundedCircle
+                        />
+                      </Figure>
+                    </Col>
+                  </Row>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
-          <br />
           <br />
           <Row>
             <Col>
@@ -148,41 +111,13 @@ class Profile extends Component {
                 {this.state.profile.education.map((edu, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <label>
-                        <h6>School</h6>
-                      </label>{" "}
-                      :{" "}
-                      <label id="school">
-                        {edu.school} &nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                      </label>
-                      <label>
-                        <h6>Degree</h6>
-                      </label>{" "}
-                      : <label id="degree">{edu.degree}</label>
+                      <strong> {edu.school} </strong>  <br /> {edu.degree} in {edu.major}
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          <label>
-                            <h6>Major</h6>
-                          </label>{" "}
-                          : <label id="major">{edu.major}</label>
-                          <br />
-                          <label>
-                            <h6>Start Date</h6>
-                          </label>{" "}
-                          : <label id="eduStartDate">{edu.eduStartDate}</label>
-                          <br />
-                          <label>
-                            <h6>End Date</h6>
-                          </label>{" "}
-                          : <label id="eduEndDate">{edu.eduEndDate}</label>
-                          <br />
-                          <label>
-                            <h6>GPA</h6>
-                          </label>{" "}
-                          :<label id="gpa">{edu.gpa}</label>
+                          {edu.eduStartDate} to {edu.eduEndDate} <br/>
+                          GPA: {edu.gpa}
                         </Card.Text>
                       </Card.Body>
                     </Accordion.Collapse>
@@ -190,62 +125,34 @@ class Profile extends Component {
                 ))}
               </Accordion>
             </Col>
-          </Row>
-          <br />
-          <br />
-          <Row>
+            
             <Col>
+
               <Accordion defaultActiveKey="0">
                 <Card.Title className="card-heading">EXPERIENCE</Card.Title>
                 {this.state.profile.experience.map((exp, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <label>
-                        <h6>Title</h6>
-                      </label>{" "}
-                      :{" "}
-                      <label id="title">
-                        {exp.title}{" "}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      </label>
-                      <label>
-                        {" "}
-                        <h6>Duration</h6>
-                      </label>{" "}
-                      : <label id="duration"> {exp.duration}</label>
+                      <strong> {exp.company} {exp.title} </strong> <br />
+                      {exp.duration}
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          <label>
-                            <h6>Company</h6>
-                          </label>{" "}
-                          : <label id="company">{exp.company}</label>
-                          <br />
-                          <label>
-                            <h6>Location</h6>
-                          </label>{" "}
-                          : <label id="location">{exp.location}</label>
-                          <br />
-                          <label>
-                            <h6>Start Date</h6>
-                          </label>{" "}
-                          : <label id="expStartDate">{exp.expStartDate}</label>
-                          <br />
-                          <label>
-                            <h6>End Date</h6>
-                          </label>{" "}
-                          : <label id="expEndDate">{exp.expEndDate}</label>
-                          <br /> <br />
+                          {exp.expStartDate} to {exp.expEndDate} <br />
+                          Location: {exp.location}
                         </Card.Text>
                       </Card.Body>
                     </Accordion.Collapse>
                   </Card>
                 ))}
               </Accordion>
+            
             </Col>
+
           </Row>
           <br />
+
           <Row className="justify-content-center">
             <Col>
               <Button id="Send" variant="success">

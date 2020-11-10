@@ -14,7 +14,11 @@ class ViewProfiles extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/api/v1/getProfiles/")
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId')
+
+    fetch("http://localhost:5000/api/v1/getProfiles/"+userId+"/")
       .then((response) => response.json())
       .then((res) => {
         this.setState({ profiles: res["results"] });

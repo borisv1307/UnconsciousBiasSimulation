@@ -2,26 +2,54 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ls from 'local-storage'
 
 class Login extends Component {
+  
   state = {
     email: "",
     password: "",
   };
+  user_details = {
+    get user_id() {
+      return this._userid;
+    },
+  
+    set user_id(value) {
+      this._userid = value;
+    },
+  
+    // set name(value) {
+    //   [this.name] = value;
+    // },
+    // get name() {
+    //   return `${this.name}`;
+    // },
+    // set user_id(value) {
+    //   [this.user_id] = value;
+    // },
+    // get user_id() {
+    //   return `${this.user_id}`;
+    // },
+    // set registration_type(value) {
+    //   [this.registration_type] = value;
+    // },
+    // get registration_type() {
+    //   return `${this.registration_type}`;
+    // }
+  };
+  
+  
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
   };
   handleLogin = async (e) => {
     //e.preventDefault();
-    const redirectToHome = () => {
-      window.location.href = "./home";
-    };
 
     const data = {
       email: this.state.email,
       password: this.state.password,
     };
-
     fetch("http://localhost:5000/api/v1/login/", {
       method: "POST",
       headers: {
@@ -32,19 +60,26 @@ class Login extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.user_id) {
-          redirectToHome();
+          // this.user_details.name=res.first_name;
+          this.user_details.user_id=res.user_id;
+          console.log("user="+this.user_details.user_id);
+          window.topicText=this.user_details.user_id;
+          ls.set("userid", this.user_details.user_id);
+          // this.user_details.registration_type=res.registration_type;
+          if(res.registration_type==='jobSeeker'){
+          window.location.href = `./home/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
+        }
+        else{
+          window.location.href = `./homehr/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
+        }
         } else {
           alert(res.error);
         }
       });
-
-    this.setState({
-      email: "",
-      password: "",
-    });
   };
   render() {
     return (
+
       <div className="justify-content-end header">
         {/* <br /> */}
         <h4>Unconscious Bias Simulation</h4>
@@ -94,7 +129,7 @@ class Login extends Component {
               <Button
                 id="register"
                 variant="link"
-                onClick={(event) => (window.location.href = "./register")}
+                onClick={(_event) => (window.location.href = "./register")}
               >
                 Register
               </Button>
