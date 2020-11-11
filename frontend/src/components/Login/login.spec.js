@@ -22,11 +22,6 @@ describe("Login", () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it("Login should include h4", () => {
-    const container = wrapper.find("h4");
-    expect(container.length).toEqual(1);
-  });
-
   it("Login should include container", () => {
     const container = wrapper.find("Container");
     expect(container.length).toEqual(1);

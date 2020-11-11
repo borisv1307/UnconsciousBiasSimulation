@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ls from 'local-storage'
+import Navbar from "react-bootstrap/Navbar";
 
 class Login extends Component {
   
@@ -82,16 +83,17 @@ class Login extends Component {
 
       <div className="justify-content-end header">
         {/* <br /> */}
-        <h4>Unconscious Bias Simulation</h4>
+        <Navbar.Brand >Unconscious Bias Simulation</Navbar.Brand >
         <br />
         <br />
-        <Container className="containbody justify-content-center">
-          <nav class="navbar navbar-dark">
+        
+        <nav class="navbar navbar-dark">
             <div className="row col-12 d-flex justify-content-left text-black">
-              <span className="h3">Login</span>
+              <span className="login-heading">Login</span>
             </div>
           </nav>
-          <br />
+        
+        <Container className="containbody justify-content-center">
           <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
             <form id="Form">
               <div className="form-group text-left">

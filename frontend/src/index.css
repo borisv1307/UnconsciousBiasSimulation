@@ -36,3 +36,14 @@ code {
   width: 18rem;
   height: 18rem;
 }
+
+.login-heading {
+  background-color: #84dad5;
+  height: 40px;
+  width: 366px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 1.5%;
+  margin-left: 70px;
+  color: #212529;
+}

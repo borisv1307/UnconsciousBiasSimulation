@@ -155,10 +155,10 @@ class Profile extends Component {
 
           <Row className="justify-content-center">
             <Col>
-              <Button id="Send" variant="success">
+              <Button id="Send">
                 Send
               </Button>{" "}
-              <Button id="Edit" variant="warning">
+              <Button id="Edit">
                 Edit
               </Button>{" "}
             </Col>
