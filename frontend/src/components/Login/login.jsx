@@ -11,35 +11,6 @@ class Login extends Component {
     email: "",
     password: "",
   };
-  user_details = {
-    get user_id() {
-      return this._userid;
-    },
-  
-    set user_id(value) {
-      this._userid = value;
-    },
-  
-    // set name(value) {
-    //   [this.name] = value;
-    // },
-    // get name() {
-    //   return `${this.name}`;
-    // },
-    // set user_id(value) {
-    //   [this.user_id] = value;
-    // },
-    // get user_id() {
-    //   return `${this.user_id}`;
-    // },
-    // set registration_type(value) {
-    //   [this.registration_type] = value;
-    // },
-    // get registration_type() {
-    //   return `${this.registration_type}`;
-    // }
-  };
-  
   
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
@@ -61,11 +32,8 @@ class Login extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.user_id) {
-          // this.user_details.name=res.first_name;
-          this.user_details.user_id=res.user_id;
-          console.log("user="+this.user_details.user_id);
-          window.topicText=this.user_details.user_id;
-          ls.set("userid", this.user_details.user_id);
+          ls.set("userid", res.user_id);
+          ls.set("name", res.first_name);
           // this.user_details.registration_type=res.registration_type;
           if(res.registration_type==='jobSeeker'){
           window.location.href = `./home/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;

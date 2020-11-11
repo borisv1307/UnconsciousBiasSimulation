@@ -8,6 +8,7 @@ class Header extends Component {
 
   render() {
     let user= ls.get('userid');
+    let name= ls.get('name');
     return (
       
       <>
@@ -21,6 +22,9 @@ class Header extends Component {
             <Nav.Link href={'/viewProfile?userId=' + user}>View Profile</Nav.Link>
           </Navbar.Collapse>
         </Navbar>
+        <div>
+        <label id="name" className="name-header">{"Welcome " +name}</label>
+        </div>
         <br />
         <br />
       </>
