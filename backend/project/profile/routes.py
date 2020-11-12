@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long,cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 import re
 from json import loads
 from functools import wraps
@@ -106,10 +106,10 @@ def get_user_profiles(user_id):
                 for getprofile in profiles:
                     # Check if contact_details is an array or object
                     try:
-                        user[0]['contact_details']['state']
+                        validate_user = user[0]['contact_details']['state']
                         value = True
-                    except Exception as e:
-                        print("Unhandled Error inside the check condition:- %s" % e)
+                    except Exception as exception_msg:
+                        print("Unhandled Error inside the check condition:- %s" % exception_msg)
                         value = False
                     if value:
                         output.append({
@@ -153,7 +153,7 @@ def get_user_profiles(user_id):
             output = {"error": "User not found"}
         else:
             output = {"count": len(output), "results": output}
-    except Exception as e:
-        print("Unhandled Error is:- %s" % e)
+    except Exception as exception_msg:
+        print("Unhandled Error is:- %s" % exception_msg)
         output = {'code': 2, "error": "Error fetching details from DB"}
     return output
