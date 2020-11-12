@@ -109,7 +109,7 @@ def get_user_profiles(user_id):
                         validate_user = user[0]['contact_details']['state']
                         value = True
                     except Exception as exception_msg:
-                        print("Unhandled Error inside the check condition:- %s" % exception_msg,validate_user)
+                        print("Unhandled Error inside the check condition:- %s" % exception_msg)
                         value = False
                     if value:
                         output.append({
