@@ -49,7 +49,7 @@ class Login extends Component {
           ls.set("userid", res.user_id);
           ls.set("name", res.first_name);
           // this.user_details.registration_type=res.registration_type;
-          if(res.registration_type==='jobSeeker'){
+          if(res.registration_type==='jobSeeker' || res.registration_type==='Job Seeker'){
             this.handleClose()
             window.location.href = `./home/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
         }
