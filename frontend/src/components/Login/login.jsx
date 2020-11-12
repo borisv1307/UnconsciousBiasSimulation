@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
+import { Container, Button, Alert, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ls from 'local-storage'
 import Navbar from "react-bootstrap/Navbar";
@@ -10,7 +9,17 @@ class Login extends Component {
   state = {
     email: "",
     password: "",
+    error_show: false,
+    error_message: ""
   };
+
+  handleClose = () => {
+    this.setState({ error_show: false })
+  }
+  handleShow = (message) => {
+    this.setState({ error_show: true })
+    this.setState({ error_message: message})
+  }
   
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
@@ -22,7 +31,12 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    fetch("http://localhost:5000/api/v1/login/", {
+
+    if(!this.state.email || !this.state.password){
+      this.handleShow("Field/s cannot be blank");
+    }
+    else{
+      fetch("http://localhost:5000/api/v1/login/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -36,15 +50,19 @@ class Login extends Component {
           ls.set("name", res.first_name);
           // this.user_details.registration_type=res.registration_type;
           if(res.registration_type==='jobSeeker'){
-          window.location.href = `./home/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
+            this.handleClose()
+            window.location.href = `./home/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
         }
         else{
+          this.handleClose()
           window.location.href = `./homehr/?id=${+res.user_id}&registration_type=${res.registration_type}&Name=${res.first_name}`;
         }
-        } else {
-          alert(res.error);
+        }
+        else {
+          this.handleShow("User not found");
         }
       });
+    }
   };
   render() {
     return (
@@ -55,14 +73,13 @@ class Login extends Component {
         <br />
         <br />
         
-        <nav class="navbar navbar-dark">
-            <div className="row col-12 d-flex justify-content-left text-black">
-              <span className="login-heading">Login</span>
-            </div>
-          </nav>
         
-        <Container className="containbody justify-content-center">
-          <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+        
+        <Container className="containbody">
+            <div className="login-heading hv-center col-12 col-lg-4">
+              Login
+            </div>
+            <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
             <form id="Form">
               <div className="form-group text-left">
                 <label htmlFor="exampleInputEmail1">Email address</label>
@@ -85,6 +102,7 @@ class Login extends Component {
                   placeholder="Password"
                 />
               </div>
+              { this.state.error_show ? <Alert variant="danger">{this.state.error_message}</Alert> : " "}
               <div className="form-check"></div>
               <Button
                 id="submit"
@@ -105,6 +123,7 @@ class Login extends Component {
               </Button>
             </div>
           </div>
+            
         </Container>
       </div>
     );

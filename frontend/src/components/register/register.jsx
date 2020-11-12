@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Col, Row, Form } from "react-bootstrap";
+import { Container, Button, Col, Row, Form, Alert, Modal } from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -22,7 +22,32 @@ class Register extends Component {
     state: "",
     zip: "",
     contact_number: "",
+    error_message: "",
+    error_show: false,
+    modal_message: "",
+    modal_show: false
   };
+
+  redirectToLogin = () => {
+    window.location.href = "/login";
+  }
+
+
+  modalHide = () => {
+    this.setState({modal_show: false})
+  }
+
+  modalShow = (message) => {
+    this.setState({modal_show: true, modal_message: message})
+  }
+
+  handleClose = () => {
+    this.setState({ error_show: false })
+  }
+  handleShow = (message) => {
+    this.setState({ error_show: true, error_message: message })
+  }
+
 
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
@@ -38,7 +63,6 @@ class Register extends Component {
         contact_number: this.state.contact_number
     };
 
-    console.log("adding address", contactDetailsData)
 
     this.setState({
       contact_details:[...this.state.contact_details, contactDetailsData]
@@ -62,52 +86,66 @@ class Register extends Component {
     return data
   };
 
+  checkIfInvalidInput = (input) => {
+    var invalid_Input = [null, undefined]
+    if( invalid_Input.includes(input) || this.state[input].trim().length == 0){
+      return true
+    }
+    return false
+  }
+
   handleSubmit = (e) => {
 
     var contactInfo = this.collectContactDetails();
-
     var data = this.stitchData(contactInfo);
-    
+    var containsLetters = /[a-zA-Z]/g;
 
-    
-    console.log("THIS IS DATA")
-    console.log(data)
-    console.log("THIS IS DATA BUT JSON")
-    console.log(JSON.stringify(data));
+    if(!this.state.first_name || !this.state.last_name || !this.state.email ||
+       !this.state.password || !this.state.gender || !this.state.date_of_birth ||
+       !this.state.registration_type || !this.state.address || !this.state.address2 || 
+       !this.state.city || !this.state.state || !this.state.zip || !this.state.contact_number){
+      this.handleShow("Incomplete input")
+    }
+    else if(containsLetters.test(this.state.contact_number) || this.state.contact_number.length < 10){
+      this.handleShow("Invalid phone number")
+    }
+    else if(containsLetters.test(this.state.zip) ){
+      this.handleShow("Invalid zip code")
+    }
+    else if(!this.state.email.includes("@") || !this.state.email.includes(".")){
+      this.handleShow("Invalid email")
+    }
+    else{
+      this.handleClose()
+      fetch("http://localhost:5000/api/v1/createUser/", {
+        method: "POST",
+        action: "/login",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then(this.modalShow("Successfully Registered an Account!"));
 
-    fetch("http://localhost:5000/api/v1/createUser/", {
-      method: "POST",
-      action: "/login",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
-
-    setTimeout(() => { window.location.href = "/login"}, 1000);
-
-
-
-      this.setState({ 
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-        gender: "",
-        date_of_birth: "",
-        registration_type: "",
-        contact_details: [],
-        address: "",
-        address2: "",
-        city: "",
-        state: "",
-        zip: "",
-        contact_number: "",
-      });
+        this.setState({ 
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          gender: "",
+          date_of_birth: "",
+          registration_type: "",
+          contact_details: [],
+          address: "",
+          address2: "",
+          city: "",
+          state: "",
+          zip: "",
+          contact_number: "",
+        });
+    }
   };
-
   
 
   render() {
@@ -188,7 +226,7 @@ class Register extends Component {
                           id="registration_type"
                           name="registration_type" >
                             <option value="" selected disabled hidden> Type </option>
-                            <option value="Job Seeker">Job Seeker</option>
+                            <option value="jobSeeker">Job Seeker</option>
                             <option value="HR Professional">HR Professional</option>
                     </Form.Control>
                     </Form.Group>
@@ -284,7 +322,7 @@ class Register extends Component {
 
             <br />
             <div className="text-center">
-            
+            { this.state.error_show ? <Alert variant="danger">{this.state.error_message}</Alert> : " "}
             <Row>
               <Col></Col>
               <Col><Button id="submitButton" className="submit" onClick={this.handleSubmit}>Submit</Button></Col>
@@ -293,11 +331,18 @@ class Register extends Component {
             </Row>
             </div>    
             <br />  
-
+                      
         </Container>
+        <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static"
+        keyboard={false}>
+        <Modal.Body>{this.state.modal_message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={this.redirectToLogin}>
+            Continue to Login
+          </Button>
+        </Modal.Footer>
+        </Modal>
       </div>
-
-      
     );
   }
 }

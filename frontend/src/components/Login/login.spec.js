@@ -52,4 +52,34 @@ describe("Login", () => {
     expect(button).toHaveLength(1);
     expect(button.text()).toEqual("Register");
   });
+
+  describe("Alerts", () => {
+    it("should login when a valid email and password is submitted", () => {
+      wrapper.setState({ "email": "jmaxino@gmail.com",
+                         "password": "Hello3", }, () => {
+
+        wrapper.find("#submit").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("");
+        expect(wrapper.state("error_show")).toEqual(false);
+      });
+    });
+
+    it("should show an error message when form input is incomplete", () => {
+      wrapper.setState({ "email": "",
+                         "password": "", }, () => {
+
+        wrapper.find("#submit").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Field/s cannot be blank");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+  });
 });
+
+

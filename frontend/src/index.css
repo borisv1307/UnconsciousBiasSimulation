@@ -40,14 +40,15 @@ code {
 .login-heading {
   background-color: #84dad5;
   height: 40px;
-  width: 366px;
+  width: 100%;
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 1.5%;
-  margin-left: 70px;
+  align-content: initial;
   color: #212529;
 }
 
 .name-header {
   margin-left: 1100px;
 }
+
