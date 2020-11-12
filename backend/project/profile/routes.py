@@ -90,34 +90,70 @@ def create_user_profile():
 
 @profile_blueprint.route('/api/v1/getProfiles/<user_id>/', methods=['GET'])
 def get_user_profiles(user_id):
+    # Get user_id
     int_user_id = int(user_id)
+    # Get collections
     userdb = mongo.db.user
     profile = mongo.db.profile
     output = []
     try:
         user = loads(dumps(userdb.find({"user_id": int_user_id})))
         profiles = loads(dumps(profile.find({"user_id": int_user_id})))
-        for profile in profiles:
-            output.append({
-                "profile_id": profile['profile_id'],
-                "profileName": profile['profileName'],
-                "user_id": profile['user_id'],
-                "state": user[0]['contact_details']['state'],
-                "zip": user[0]['contact_details']['zip'],
-                "city": user[0]['contact_details']['city'],
-                "email": user[0]['email'],
-                "profileImg": profile['profileImg'],
-                "first_name": profile['first_name'],
-                "last_name": profile['last_name'],
-                "position": profile['position'],
-                "aboutMe":  profile['aboutMe'],
-                "education": profile['education'],
-                "experience": profile['experience']
-            })
+        # Check if user and profile exists if not display error message accordingly
+        if user:
+            if profiles:
+                get_contact = user[0]['contact_details']
+                for getprofile in profiles:
+                    # Check if contact_details is an array or object
+                    try:
+                        user[0]['contact_details']['state']
+                        value = True
+                    except Exception as e:
+                        print("Unhandled Error inside the check condition:- %s" % e)
+                        value = False
+                    if value:
+                        output.append({
+                        "profile_id": getprofile['profile_id'],
+                        "profileName": getprofile['profileName'],
+                        "user_id": getprofile['user_id'],
+                        "state": user[0]['contact_details']['state'],
+                        "zip": user[0]['contact_details']['zip'],
+                        "city": user[0]['contact_details']['city'],
+                        "email": user[0]['email'],
+                        "profileImg": getprofile['profileImg'],
+                        "first_name": getprofile['first_name'],
+                        "last_name": getprofile['last_name'],
+                        "position": getprofile['position'],
+                        "aboutMe":  getprofile['aboutMe'],
+                        "education": getprofile['education'],
+                        "experience": getprofile['experience']
+                        })
+                    else:
+                        output.append({
+                        "profile_id": getprofile['profile_id'],
+                        "profileName": getprofile['profileName'],
+                        "user_id": getprofile['user_id'],
+                        "state": get_contact[0]['state'],
+                        "zip": get_contact[0]['zip'],
+                        "city": get_contact[0]['city'],
+                        "email": user[0]['email'],
+                        "profileImg": getprofile['profileImg'],
+                        "first_name": getprofile['first_name'],
+                        "last_name": getprofile['last_name'],
+                        "position": getprofile['position'],
+                        "aboutMe":  getprofile['aboutMe'],
+                        "education": getprofile['education'],
+                        "experience": getprofile['experience']
+                        }) 
+            else:
+                output = {"error": "Profiles not found"}   
+        else:
+            output = {"error": "User not found"}
         if len(output) == 0:
-            output = {'code': 2, "error": "User not found"}
+            output = {"error": "User not found"}
         else:
             output = {"count": len(output), "results": output}
-    except:
+    except Exception as e:
+        print("Unhandled Error is:- %s" % e)
         output = {'code': 2, "error": "Error fetching details from DB"}
     return output

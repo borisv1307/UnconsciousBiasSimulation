@@ -244,4 +244,16 @@ class TestSomething:
 
         response = test_client.get('/api/v1/getProfiles/999/',headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response.data != b'{"code":4,"error": "User not found"}\n'
+        assert response.data == b'{"count":1,"results":{"error":"User not found"}}\n'
+
+    def test_get_profiles_when_profile_does_not_exist(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/getProfileCount' page is requested (GET)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get('/api/v1/getProfiles/15/',headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        print('response check****************',response.data)
+        assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'
