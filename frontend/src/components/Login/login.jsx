@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Alert, Modal } from "react-bootstrap";
+import { Container, Button, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ls from 'local-storage'
 import Navbar from "react-bootstrap/Navbar";

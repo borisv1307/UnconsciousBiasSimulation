@@ -1,16 +1,24 @@
 import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
+import { Container, Card, Accordion, Modal, Button} from "react-bootstrap";
 import Header from "../Header/Header";
 import Profile from "../viewProfile/Profile";
-import Accordion from "react-bootstrap/Accordion";
-import Container from "react-bootstrap/Container";
 
 class ViewProfiles extends Component {
   constructor() {
     super();
     this.state = {
       profiles: [],
+      modal_show: false,
+      modal_message: ""
     };
+  }
+
+  modalHide = () => {
+    this.setState({ modal_show: false })
+  }
+  modalShow = (message) => {
+    this.setState({ modal_show: true })
+    this.setState({ modal_message: message})
   }
 
   componentDidMount() {
@@ -26,7 +34,7 @@ class ViewProfiles extends Component {
         this.setState({ profiles: res["results"] });
         }
         else{
-          alert(res["results"].error);
+          this.modalShow(res["results"].error)
         }
       });
   }
@@ -35,7 +43,6 @@ class ViewProfiles extends Component {
     return (
       <>
         <Header />
-
         <Container className="justify-content-center">
           <Accordion defaultActiveKey="0">
             {this.state.profiles.map((profile, i) => (
@@ -52,6 +59,16 @@ class ViewProfiles extends Component {
             ))}
           </Accordion>
         </Container>
+
+        <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static"
+        keyboard={false}>
+        <Modal.Body>{this.state.modal_message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={this.modalHide}>
+            Continue
+          </Button>
+        </Modal.Footer>
+        </Modal>
       </>
     );
   }
