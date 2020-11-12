@@ -109,8 +109,10 @@ describe("CreateProfile", () => {
     wrapper.setState({ "profileName": "Profile 1", 
                        "first_name": "John",
                        "last_name": "Doe",
+                       "email": "jdoe@test.com",
                        "position": "Worker",
                        "aboutMe": "Good",
+                       "profileImg": "test.com",
                        "school": "Drexel University",
                        "degree": "BS",
                        "major": "Science",
@@ -277,29 +279,301 @@ describe("CreateProfile", () => {
 
   describe("Edit array", () => {
     it("should have an edit button after submitting and turn editState to true when Edit button is clicked for education", () => {
-      wrapper.find("#addEducationButton").simulate('click'), () => { //add education
-        wrapper.update();
-        wrapper.find("#toggleEditEducationButton").simulate('click'), () => { //display edit
-          wrapper.update();
-        };
-      };
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-09",
+                       "eduEndDate": "2020-09",
+                       "gpa": "3.50" }, () => {
 
-      expect(wrapper.find("#toggleEditEducationButton").length).toEqual(1);
-      wrapper.find("#toggleEditEducationButton").simulate('click');
-      expect(wrapper.state("editState")).toEqual(true);
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+          wrapper.find("#toggleEditEducationButton").simulate('click'), () => { //display edit
+            wrapper.update();
+          };
+        };
+  
+        expect(wrapper.find("#toggleEditEducationButton").length).toEqual(1);
+        wrapper.find("#toggleEditEducationButton").simulate('click');
+        expect(wrapper.state("editState")).toEqual(true);
+      
+      });
     });
 
     it("should have an edit button after submitting and turn editState to true when Edit button is clicked for experience", () => {
-      wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
-        wrapper.update();
-        wrapper.find("#toggleEditExperienceButton").simulate('click'), () => { //display edit
+      wrapper.setState({ "title": "Intern",
+                       "company": "DXC",
+                       "location": "Philadelphia",
+                       "expStartDate": "2020-09",
+                       "expEndDate": "2020-09" }, () => {
+
+        wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
+          wrapper.update();
+          wrapper.find("#toggleEditExperienceButton").simulate('click'), () => { //display edit
+            wrapper.update();
+          };
+        };
+
+        expect(wrapper.find("#toggleEditExperienceButton").length).toEqual(1);
+        wrapper.find("#toggleEditExperienceButton").simulate('click');
+        expect(wrapper.state("editState")).toEqual(true);
+      });
+    });
+  });
+
+  describe("Alerts", () => {
+    it("Submit form: should show success message when inputs are valid", () => {
+      wrapper.setState({ "profileName": "Profile 1", 
+                       "first_name": "John",
+                       "last_name": "Doe",
+                       "email": "jdoe@test.com",
+                       "position": "Worker",
+                       "aboutMe": "Good",
+                       "profileImg": "test.com" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
           wrapper.update();
         };
-      };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Successfully submitted");
+        expect(wrapper.state("allErrorState")).toEqual(false);
+        expect(wrapper.state("allSuccessState")).toEqual(true);
+      });
+    });
 
-      expect(wrapper.find("#toggleEditExperienceButton").length).toEqual(1);
-      wrapper.find("#toggleEditExperienceButton").simulate('click');
-      expect(wrapper.state("editState")).toEqual(true);
+    it("Submit form: should show error for incomplete input", () => {
+      wrapper.setState({ "profileName": "", 
+                       "first_name": "",
+                       "last_name": "",
+                       "email": "",
+                       "position": "",
+                       "aboutMe": "",
+                       "profileImg": "" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Incomplete input");
+        expect(wrapper.state("allErrorState")).toEqual(true);
+        expect(wrapper.state("allSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Submit form: should show error for email without @", () => {
+      wrapper.setState({ "profileName": "Profile 1", 
+                       "first_name": "John",
+                       "last_name": "Doe",
+                       "email": "jdoetest.com",
+                       "position": "Worker",
+                       "aboutMe": "Good",
+                       "profileImg": "test.com" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Invalid email");
+        expect(wrapper.state("allErrorState")).toEqual(true);
+        expect(wrapper.state("allSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Submit form: should show error for email without .", () => {
+      wrapper.setState({ "profileName": "Profile 1", 
+                       "first_name": "John",
+                       "last_name": "Doe",
+                       "email": "jdoe@testcom",
+                       "position": "Worker",
+                       "aboutMe": "Good",
+                       "profileImg": "test.com" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Invalid email");
+        expect(wrapper.state("allErrorState")).toEqual(true);
+        expect(wrapper.state("allSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Submit form: should show error for not uploading profileImg", () => {
+      wrapper.setState({ "profileName": "Profile 1", 
+                       "first_name": "John",
+                       "last_name": "Doe",
+                       "email": "jdoe@test.com",
+                       "position": "Worker",
+                       "aboutMe": "Good",
+                       "profileImg": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("No image added");
+        expect(wrapper.state("allErrorState")).toEqual(true);
+        expect(wrapper.state("allSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Education: should show error for incomplete input", () => {
+      wrapper.setState({ "school": "",
+                       "degree": "",
+                       "major": "",
+                       "eduStartDate": "",
+                       "eduEndDate": "",
+                       "gpa": "" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Incomplete input");
+        expect(wrapper.state("eduErrorState")).toEqual(true);
+        expect(wrapper.state("eduSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Education: should show error for invalid date", () => {
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-10",
+                       "eduEndDate": "2020-09",
+                       "gpa": "3.50" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Invalid dates: End date precedes start date");
+        expect(wrapper.state("eduErrorState")).toEqual(true);
+        expect(wrapper.state("eduSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Education: should show error GPA higher than 4", () => {
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-05",
+                       "eduEndDate": "2020-09",
+                       "gpa": "5" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Invalid GPA: should be between 0 and 4");
+        expect(wrapper.state("eduErrorState")).toEqual(true);
+        expect(wrapper.state("eduSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Education: should show error GPA lower than 0", () => {
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-05",
+                       "eduEndDate": "2020-09",
+                       "gpa": "-1" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Invalid GPA: should be between 0 and 4");
+        expect(wrapper.state("eduErrorState")).toEqual(true);
+        expect(wrapper.state("eduSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Education: should show success message when inputs are valid", () => {
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-05",
+                       "eduEndDate": "2020-09",
+                       "gpa": "3.5" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Successfully submitted");
+        expect(wrapper.state("eduErrorState")).toEqual(false);
+        expect(wrapper.state("eduSuccessState")).toEqual(true);
+      });
+    });
+
+    it("Education: should show success message when inputs are valid even if gpa is empty", () => {
+      wrapper.setState({ "school": "Drexel University",
+                       "degree": "BS",
+                       "major": "Science",
+                       "eduStartDate": "2020-05",
+                       "eduEndDate": "2020-09",
+                       "gpa": "" }, () => {
+
+        wrapper.find("#addEducationButton").simulate('click'), () => { //add education
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("alertMessage")).toEqual("Successfully submitted");
+        expect(wrapper.state("eduErrorState")).toEqual(false);
+        expect(wrapper.state("eduSuccessState")).toEqual(true);
+      });
+    });
+
+    it("Experience: should show error for incomplete input", () => {
+      wrapper.setState({ "title": "",
+                       "company": "",
+                       "location": "",
+                       "expStartDate": "",
+                       "expEndDate": "" }, () => {
+
+        wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
+          wrapper.update();
+        };
+
+        expect(wrapper.state("alertMessage")).toEqual("Incomplete input");
+        expect(wrapper.state("expErrorState")).toEqual(true);
+        expect(wrapper.state("expSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Experience: should show error for invalid date", () => {
+      wrapper.setState({ "title": "Intern",
+                       "company": "DXC",
+                       "location": "Philadelphia",
+                       "expStartDate": "2020-10",
+                       "expEndDate": "2020-09" }, () => {
+
+        wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
+          wrapper.update();
+        };
+
+        expect(wrapper.state("alertMessage")).toEqual("Invalid dates: End date precedes start date");
+        expect(wrapper.state("expErrorState")).toEqual(true);
+        expect(wrapper.state("expSuccessState")).toEqual(false);
+      });
+    });
+
+    it("Experience: should show success message when inputs are valid", () => {
+      wrapper.setState({ "title": "Intern",
+                       "company": "DXC",
+                       "location": "Philadelphia",
+                       "expStartDate": "2020-05",
+                       "expEndDate": "2020-09" }, () => {
+
+        wrapper.find("#addExperienceButton").simulate('click'), () => { //add experience
+          wrapper.update();
+        };
+
+        expect(wrapper.state("alertMessage")).toEqual("Successfully submitted");
+        expect(wrapper.state("expErrorState")).toEqual(false);
+        expect(wrapper.state("expSuccessState")).toEqual(true);
+      });
     });
   });
 

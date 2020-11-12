@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Row, Col, Form, Accordion, Card } from "react-bootstrap";
+import { Container, Button, Row, Col, Form, Accordion, Card, Alert } from "react-bootstrap";
 import Header from "../Header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -36,6 +36,13 @@ const initialState = {
   editLocation: "",
   editExpStartDate: "",
   editExpEndDate: "",
+  alertMessage: "", 
+  eduErrorState: false,
+  expErrorState: false, 
+  allErrorState: false, 
+  eduSuccessState: false,
+  expSuccessState: false,
+  allSuccessState: false
 };
 
 class CreateProfile extends Component {
@@ -48,78 +55,186 @@ class CreateProfile extends Component {
     this.setState(initialState);
   }
 
-
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
   };
 
+  validateSubmit = () => {
+    var message = "";
+    var isError = false;
+    var isValid = true;
+
+    if(!this.state.profileName || !this.state.email || !this.state.first_name ||
+      !this.state.last_name || !this.state.position || !this.state.aboutMe) {
+      message = "Incomplete input";
+      isError = true;
+      isValid = false;
+    }
+
+    else if(!this.state.email.includes("@") || !this.state.email.includes(".")) {
+      message = "Invalid email";
+      isError = true;
+      isValid = false;
+    }
+
+    else if(this.state.profileImg === 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png') {
+      message = "No image added";
+      isError = true;
+      isValid = false;
+    }
+    
+    else {
+      this.setState({ alertMessage: "Successfully submitted", allErrorState: false, allSuccessState: true })
+    }
+
+    if(isError){
+      this.setState({ alertMessage: message, allErrorState: isError, allSuccessState: false});
+    }
+
+    return isValid;
+  };
 
   handleSubmit = (e) => {
-    const data = {
-      email: this.state.email,
-      profileName: this.state.profileName,
-      profileImg: this.state.profileImg,
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      position: this.state.position,
-      aboutMe: this.state.aboutMe,
-      education: this.state.education,
-      experience: this.state.experience
-    };
+    const isValid = this.validateSubmit();
+    if(isValid) {
+      const data = {
+        email: this.state.email,
+        profileName: this.state.profileName,
+        profileImg: this.state.profileImg,
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        position: this.state.position,
+        aboutMe: this.state.aboutMe,
+        education: this.state.education,
+        experience: this.state.experience
+      };
+  
+      console.log(JSON.stringify(data));
+  
+      fetch("http://localhost:5000/api/v1/createProfile/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res));  
+        
+      this.reset();
+      this.setState({ alertMessage: "Successfully submitted", allSuccessState: true });
+    }
+  };
 
-    console.log(JSON.stringify(data));
+  validateAddingEducation = () => {
+    var message = "";
+    var isError = false;
+    var isValid = true;
 
-    fetch("http://localhost:5000/api/v1/createProfile/", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));  
-      
-    this.reset();
+    if(!this.state.school || !this.state.degree || !this.state.major ||
+      !this.state.eduStartDate || !this.state.eduEndDate) {
+      message = "Incomplete input";
+      isError = true;
+      isValid = false;
+    }
+
+    else if(this.state.gpa > 4 || this.state.gpa < 0){
+      message = "Invalid GPA: should be between 0 and 4";
+      isError = true;
+      isValid = false;
+    }
+
+    else if(this.state.eduEndDate < this.state.eduStartDate) {
+      message = "Invalid dates: End date precedes start date";
+      isError = true;
+      isValid = false;
+    }
+    
+    else {
+      this.setState({ alertMessage: "Successfully submitted", eduErrorState: false, eduSuccessState: true })
+    }
+
+    if(isError){
+      this.setState({ alertMessage: message, eduErrorState: isError, eduSuccessState: false});
+    }
+
+    return isValid;
   };
 
   addEducation = (e) => {
-    const educationData = {
-      school: this.state.school,
-      degree: this.state.degree,
-      major: this.state.major,
-      eduStartDate: this.state.eduStartDate,
-      eduEndDate: this.state.eduEndDate,
-      gpa: this.state.gpa,
-    };
+    const isValid = this.validateAddingEducation();
+    if(isValid) {
+      const educationData = {
+        school: this.state.school,
+        degree: this.state.degree,
+        major: this.state.major,
+        eduStartDate: this.state.eduStartDate,
+        eduEndDate: this.state.eduEndDate,
+        gpa: this.state.gpa,
+      };
+  
+      this.setState({
+        education:[...this.state.education, educationData],
+        school: "",
+        degree: "",
+        major: "",
+        eduStartDate: "",
+        eduEndDate: "",
+        gpa: "",
+      });
+    }
+  };
 
-    this.setState({
-      education:[...this.state.education, educationData],
-      school: "",
-      degree: "",
-      major: "",
-      eduStartDate: "",
-      eduEndDate: "",
-      gpa: "",
-    });
+  validateAddingExperience = () => {
+    var message = "";
+    var isError = false;
+    var isValid = true;
+
+    if(!this.state.title || !this.state.company || !this.state.location ||
+       !this.state.expStartDate || !this.state.expEndDate){
+      message = "Incomplete input";
+      isError = true;
+      isValid = false;
+    }
+
+    else if(this.state.expEndDate < this.state.expStartDate) {
+      message = "Invalid dates: End date precedes start date";
+      isError = true;
+      isValid = false;
+    }
+
+    else {
+      this.setState({ alertMessage: "Successfully submitted", expErrorState: false, expSuccessState: true })
+    }
+
+    if(isError){
+      this.setState({ alertMessage: message, expErrorState: isError, expSuccessState: false});
+    }
+
+    return isValid;
   };
 
   addExperience = (e) => {
-    const experienceData = {
-      title: this.state.title,
-      company: this.state.company,
-      location: this.state.location,
-      expStartDate: this.state.expStartDate,
-      expEndDate: this.state.expEndDate,
-    };
-
-    this.setState({
-      experience:[...this.state.experience, experienceData],
-      title: "",
-      company: "",
-      location: "",
-      expStartDate: "",
-      expEndDate: "",
-    });
+    const isValid = this.validateAddingExperience();
+    if(isValid) {
+      const experienceData = {
+        title: this.state.title,
+        company: this.state.company,
+        location: this.state.location,
+        expStartDate: this.state.expStartDate,
+        expEndDate: this.state.expEndDate,
+      };
+  
+      this.setState({
+        experience:[...this.state.experience, experienceData],
+        title: "",
+        company: "",
+        location: "",
+        expStartDate: "",
+        expEndDate: "",
+      });
+    }
+    //this.setState({expErrorState: false, expSuccessState: false});
   };
 
   toggleEditForm = (input) => (e) => {
@@ -201,7 +316,7 @@ class CreateProfile extends Component {
         <Header />
 
         <Container className="containbody justify-content-center">
-        <br/><h1 className="text-center">Create Applicaiton</h1> <br/>
+        <br/><h1 className="text-center">Create Applicaton</h1> <br/>
         
         <Row>
           <Col>
@@ -351,6 +466,8 @@ class CreateProfile extends Component {
                       name="gpa" placeholder="4"/>
                   </Form.Group>
                   <div className="text-center">
+                    { this.state.eduErrorState ? <Alert variant="danger">{this.state.alertMessage}</Alert> : " "}
+                    { this.state.eduSuccessState ? <Alert variant="success">{this.state.alertMessage}</Alert> : " "}
                     <Button id="addEducationButton" onClick={this.addEducation}>
                       Add Education
                     </Button>
@@ -377,7 +494,7 @@ class CreateProfile extends Component {
                           <Accordion.Collapse eventKey={"edu"+index+1}>
                             <Card.Body> 
                               {edu.eduStartDate} to {edu.eduEndDate} <br />
-                              GPA: {edu.gpa} <br />
+                              { edu.gpa ? <div>GPA: {edu.gpa}</div> : ""} <br />
                               { !this.state.editState ? <Button id="toggleEditEducationButton" onClick={this.toggleEditForm(true)}>Edit</Button> : ""}
                               { this.state.editState ? 
                                 <div>
@@ -522,6 +639,8 @@ class CreateProfile extends Component {
                     </Form.Group>
                   </Form.Row>
                   <div className="text-center">
+                    { this.state.expErrorState ? <Alert variant="danger">{this.state.alertMessage}</Alert> : " "}
+                    { this.state.expSuccessState ? <Alert variant="success">{this.state.alertMessage}</Alert> : " "}
                     <Button id="addExperienceButton" onClick={this.addExperience}>
                       Add Experience
                     </Button>
@@ -624,6 +743,8 @@ class CreateProfile extends Component {
         </Container>
           <br />
           <div className="text-center">
+            { this.state.allErrorState ? <Alert variant="danger">{this.state.alertMessage}</Alert> : " "}
+            { this.state.allSuccessState ? <Alert variant="success">{this.state.alertMessage}</Alert> : " "}
             <Button id="submitButton" className="submit" onClick={this.handleSubmit}>
               Submit
             </Button>
