@@ -134,7 +134,7 @@ class Profile extends Component {
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
                       <strong> {exp.company} {exp.title} </strong> <br />
-                      {exp.duration}
+                      <label id="duration">{exp.duration}</label>
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>

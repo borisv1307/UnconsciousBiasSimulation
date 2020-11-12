@@ -129,7 +129,6 @@ let profiles = {
     },
   ],
 };
-
 describe("ViewProfiles", () => {
   let wrapper;
 
