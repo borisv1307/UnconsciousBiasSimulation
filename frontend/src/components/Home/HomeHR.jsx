@@ -10,7 +10,7 @@ class HomeHR extends Component {
         <Navbar.Brand >Unconscious Bias Simulation</Navbar.Brand >
         <br/><br/>
         <div>
-      <label id="name" className="name-header">{"Welcome " +name}</label>
+      <label id="name" className="name-header">{"Welcome HR  " +name}</label>
     </div>
     </div>
     

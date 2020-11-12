@@ -21,7 +21,13 @@ class ViewProfiles extends Component {
     fetch("http://localhost:5000/api/v1/getProfiles/"+userId+"/")
       .then((response) => response.json())
       .then((res) => {
+
+        if (res["results"].error!=='Profiles not found'){
         this.setState({ profiles: res["results"] });
+        }
+        else{
+          alert(res["results"].error);
+        }
       });
   }
 

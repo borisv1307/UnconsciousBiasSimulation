@@ -23,7 +23,7 @@ class Header extends Component {
           </Navbar.Collapse>
         </Navbar>
         <div>
-        <label id="name" className="name-header">{"Welcome " +name}</label>
+        <label id="name" className="name-header">{"Welcome Job Seeker  " +name}</label>
         </div>
         <br />
         <br />
