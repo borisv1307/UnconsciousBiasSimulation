@@ -201,7 +201,6 @@ class TestSomething:
 
         response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        print('res*********',response)
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
 
@@ -367,3 +366,102 @@ class TestSomething:
 
         assert response.status_code == 200
         assert response.data != 'null'
+
+    def test_for_logout_for_user_id_without_token(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        number_list = []
+        user_list = []
+
+        tokens = mongo.db.authtoken
+        users = mongo.db.user
+
+        get_user_id = tokens.find({},{"user_id":1})
+        for user in get_user_id:
+            number_list.append(user['user_id'])
+
+        users_without_token = users.find( { 'user_id': { '$nin': number_list } } )
+        for user_without_tok in users_without_token:
+            user_list.append(user_without_tok['user_id'])
+
+        data = {
+        "user_id":random.choice(user_list)
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"User_id does not have existing token"}\n'
+
+
+    def test_for_logout_when_user_exists(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        tokens = mongo.db.authtoken
+        get_user_id = tokens.find({},{"user_id":1})
+        number_list = []
+        for user in get_user_id:
+            number_list.append(user['user_id'])
+        
+        data = {
+        "user_id":random.choice(number_list)
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"success":"Successfully logged out"}\n'
+
+    def test_for_logout_when_user_does_not_exist(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        try:
+            users = mongo.db.user
+            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id'])+10
+        except:
+            user_id= 100000
+        
+        data = {
+        "user_id":user_id
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
+
+    def test_for_logout_without_passing_user_id(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"Missing user_id"}\n'
+        
+    def test_for_logout_when_user_id_not_an_integer(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        "user_id":"one"
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"user_id must be numerical"}\n'
