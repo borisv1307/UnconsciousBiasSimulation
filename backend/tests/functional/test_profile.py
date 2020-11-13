@@ -103,17 +103,18 @@ class TestSomething:
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        assert response.data == b'{"code":4,"error":"Invalid email id"}\n'
+        assert response.data == b'{"code":4,"error":"Input fields cannot be blank or null"}\n'
 
-    def test_checking_a_valid_email(self,test_client):
+
+    def test_checking_a_valid_email_with_whitespace(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
-        THEN check email address is valid
+        THEN check email address is valid (None, Whilespaces and not following pattern)
         """
 
         data = {
-        "email":"testtest.com",
+        "email": ' ',
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "first_name": "Test",
@@ -142,7 +143,7 @@ class TestSomething:
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        assert response.data == b'{"code":4,"error":"Invalid email id"}\n'
+        assert response.data == b'{"code":4,"error":"Input fields cannot be blank or null"}\n'
 
 
     def test_create_profile(self,test_client):
@@ -230,10 +231,29 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-        data = {
-        "user_id":1
-        }
-
-        response = test_client.get('/api/v1/getProfiles/',data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getProfiles/1/',headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response != 'null'
+        assert response.data != 'null'
+
+    def test_get_profiles_with_invalid_userid(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/getProfileCount' page is requested (GET)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get('/api/v1/getProfiles/999/',headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"count":1,"results":{"error":"User not found"}}\n'
+
+    def test_get_profiles_when_profile_does_not_exist(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/getProfileCount' page is requested (GET)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get('/api/v1/getProfiles/15/',headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        print('response check****************',response.data)
+        assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'

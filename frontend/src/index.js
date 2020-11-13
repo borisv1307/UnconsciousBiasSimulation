@@ -3,22 +3,31 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import Home from "./components/Home/Home";
+import HomeHR from "./components/Home/HomeHR";
 import Register from "./components/register/register";
 import CreateProfile from "./components/createProfile/createProfile";
 import ViewProfile from "./components/viewProfile/viewProfiles";
+import Login from "./components/Login/login";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
   <Router>
     <div>
       <Route exact path="/">
-        <CreateProfile />
+        <Login />
+      </Route>
+      <Route path="/login">
+        <Login />
       </Route>
       <Route path="/register">
         <Register />
       </Route>
       <Route exact path="/home">
-        <CreateProfile />
+        <Home />
+      </Route>
+      <Route exact path="/homehr">
+        <HomeHR />
       </Route>
       <Route path="/createProfile">
         <CreateProfile />

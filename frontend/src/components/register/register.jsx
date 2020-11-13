@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Container, Button, Col, Row, Form } from "react-bootstrap";
-import Header from "../Header/Header";
+import { Container, Button, Col, Row, Form, Alert, Modal } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 class Register extends Component {
+
+
   state = {
     first_name: "",
     last_name: "",
@@ -19,36 +22,35 @@ class Register extends Component {
     state: "",
     zip: "",
     contact_number: "",
+    error_message: "",
+    error_show: false,
+    modal_message: "",
+    modal_show: false
   };
+
+  redirectToLogin = () => {
+    window.location.href = "/login";
+  }
+
+
+  modalHide = () => {
+    this.setState({modal_show: false})
+  }
+
+  modalShow = (message) => {
+    this.setState({modal_show: true, modal_message: message})
+  }
+
+  handleClose = () => {
+    this.setState({ error_show: false })
+  }
+  handleShow = (message) => {
+    this.setState({ error_show: true, error_message: message })
+  }
+
 
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
-  };
-
-  handleSubmit = async (e) => {
-    //e.preventDefault();
-    const data = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      email: this.state.email,
-      password: this.state.password,
-      registration_type: this.state.registration_type,
-      gender: this.state.gender,
-      date_of_birth: this.state.date_of_birth,
-      contact_details: this.state.contact_details,
-    };
-
-    console.log(JSON.stringify(data));
-
-    fetch("http://localhost:5000/api/v1/createUser/", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));  
   };
 
   collectContactDetails = (e) => {
@@ -61,12 +63,90 @@ class Register extends Component {
         contact_number: this.state.contact_number
     };
 
-    console.log("adding address", contactDetailsData)
 
     this.setState({
       contact_details:[...this.state.contact_details, contactDetailsData]
     });
+
+    return contactDetailsData
   };
+
+  stitchData = (contactInfo) => {
+    const data = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+      password: this.state.password,
+      registration_type: this.state.registration_type,
+      gender: this.state.gender,
+      date_of_birth: this.state.date_of_birth,
+      contact_details: [contactInfo],
+    };
+
+    return data
+  };
+
+  checkIfInvalidInput = (input) => {
+    var invalid_Input = [null, undefined]
+    if( invalid_Input.includes(input) || this.state[input].trim().length == 0){
+      return true
+    }
+    return false
+  }
+
+  handleSubmit = (e) => {
+
+    var contactInfo = this.collectContactDetails();
+    var data = this.stitchData(contactInfo);
+    var containsLetters = /[a-zA-Z]/g;
+
+    if(!this.state.first_name || !this.state.last_name || !this.state.email ||
+       !this.state.password || !this.state.gender || !this.state.date_of_birth ||
+       !this.state.registration_type || !this.state.address || !this.state.address2 || 
+       !this.state.city || !this.state.state || !this.state.zip || !this.state.contact_number){
+      this.handleShow("Incomplete input")
+    }
+    else if(containsLetters.test(this.state.contact_number) || this.state.contact_number.length < 10){
+      this.handleShow("Invalid phone number")
+    }
+    else if(containsLetters.test(this.state.zip) ){
+      this.handleShow("Invalid zip code")
+    }
+    else if(!this.state.email.includes("@") || !this.state.email.includes(".")){
+      this.handleShow("Invalid email")
+    }
+    else{
+      this.handleClose()
+      fetch("http://localhost:5000/api/v1/createUser/", {
+        method: "POST",
+        action: "/login",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then(this.modalShow("Successfully Registered an Account!"));
+
+        this.setState({ 
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          gender: "",
+          date_of_birth: "",
+          registration_type: "",
+          contact_details: [],
+          address: "",
+          address2: "",
+          city: "",
+          state: "",
+          zip: "",
+          contact_number: "",
+        });
+    }
+  };
+  
 
   render() {
     const options = [{abbr: 'AL', name: 'Alabama'}, {abbr: 'AK', name: 'Alaska'}, {abbr: 'AS', name: 'American Samoa'}, {abbr: 'AZ', name: 'Arizona'},
@@ -88,7 +168,16 @@ class Register extends Component {
 
     return (
       <div>
-        <Header />
+        <Navbar className="header">
+          <Navbar.Brand href="/home">Unconscious Bias Simulation</Navbar.Brand>
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end">
+            {/* <Nav.Link href="/home">Home</Nav.Link> */}
+            <Nav.Link href="/login">Login</Nav.Link>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+        <br />
 
         <Container className="containbody justify-content-center">
 
@@ -136,7 +225,8 @@ class Register extends Component {
                           onChange={this.updateField("registration_type")}
                           id="registration_type"
                           name="registration_type" >
-                            <option value="Job Seeker">Job Seeker</option>
+                            <option value="" selected disabled hidden> Type </option>
+                            <option value="jobSeeker">Job Seeker</option>
                             <option value="HR Professional">HR Professional</option>
                     </Form.Control>
                     </Form.Group>
@@ -149,6 +239,7 @@ class Register extends Component {
                           onChange={this.updateField("gender")}
                           id="gender"
                           name="gender" >
+                            <option value="" selected disabled hidden> Gender </option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
@@ -199,6 +290,7 @@ class Register extends Component {
                         onChange={this.updateField("state")}
                         id="state"
                         name="state" >
+                      <option value="" selected disabled hidden> State  </option>
                       {
                         options.map((option, index) => {
                             return (<option key={index} value={option.abbr}>{option.name}</option>)
@@ -228,21 +320,28 @@ class Register extends Component {
                 </Form>
             </Container>
 
-            <div className="text-center">
-            <Button id="collectContactDetailsButton" onClick={this.collectContactDetails}>
-              Add Contact Details
-            </Button>
-            </div>
-
             <br />
             <div className="text-center">
-            <Button id="submitButton" className="submit" onClick={this.handleSubmit}>
-                Submit
-            </Button>
+            { this.state.error_show ? <Alert variant="danger">{this.state.error_message}</Alert> : " "}
+            <Row>
+              <Col></Col>
+              <Col><Button id="submitButton" className="submit" onClick={this.handleSubmit}>Submit</Button></Col>
+              <Col><Button id="cancelButton" className="cancel" href="/login" variant="danger">Cancel</Button></Col>
+              <Col></Col>
+            </Row>
             </div>    
             <br />  
-
+                      
         </Container>
+        <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static"
+        keyboard={false}>
+        <Modal.Body>{this.state.modal_message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={this.redirectToLogin}>
+            Continue to Login
+          </Button>
+        </Modal.Footer>
+        </Modal>
       </div>
     );
   }

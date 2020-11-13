@@ -51,7 +51,7 @@ describe("Register", () => {
     const cityInput = simulateChangeOnInput(wrapper, "#city", "Philadelphia");
     const stateInput = simulateChangeOnInput(wrapper, "#state", "Pennsylvania");
     const zipInput = simulateChangeOnInput(wrapper, "#zip", "00000");
-    const phoneNumberInput = simulateChangeOnInput(wrapper, "#contact_number", "000000000");
+    const phoneNumberInput = simulateChangeOnInput(wrapper, "#contact_number", "1234567890");
 
     expect(firstNameInput.props().value).toEqual("John");
     expect(lastNameInput.props().value).toEqual("Doe");
@@ -65,22 +65,179 @@ describe("Register", () => {
     expect(cityInput.props().value).toEqual("Philadelphia");
     expect(stateInput.props().value).toEqual("Pennsylvania");
     expect(zipInput.props().value).toEqual("00000");
-    expect(phoneNumberInput.props().value).toEqual("000000000");
+    expect(phoneNumberInput.props().value).toEqual("1234567890");
   });
 
-  it("should insert address and number details in contact details when button is clicked", () => {
-    const collectContactDetailsButton = wrapper.find("#collectContactDetailsButton")
+  describe("Alerts", () => {
+    it("should show success message when inputs are valid", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@test.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "10000",
+                        "contact_number": "1234567890" }, () => {
 
-    simulateChangeOnInput(wrapper, "#address", "1234 Test Street");
-    simulateChangeOnInput(wrapper, "#address2", "Apartment 1");
-    simulateChangeOnInput(wrapper, "#city", "Philadelphia");
-    simulateChangeOnInput(wrapper, "#state", "Pennsylvania");
-    simulateChangeOnInput(wrapper, "#zip", "00000");
-    simulateChangeOnInput(wrapper, "#contact_number", "000000000");
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("");
+        expect(wrapper.state("error_show")).toEqual(false);
+        expect(wrapper.state("modal_message")).toEqual("Successfully Registered an Account!");
+        expect(wrapper.state("modal_show")).toEqual(true);
+      });
+    });
 
-    collectContactDetailsButton.simulate('click');
-    wrapper.update();
-    expect(wrapper.state("contact_details")).toEqual([{"address": "1234 Test Street", "address2": "Apartment 1", "city": "Philadelphia", "state": "Pennsylvania", "zip": "00000", "contact_number": "000000000"}]);
+    it("should show error when form in incomplete", () => {
+      wrapper.setState({ "first_name": "",
+                        "last_name": "",
+                        "email": "",
+                        "password": "",
+                        "gender": "",
+                        "date_of_birth": "",
+                        "registration_type": "",
+                        "address": "",
+                        "address2": "",
+                        "city": "",
+                        "state": "",
+                        "zip": "",
+                        "contact_number": "" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Incomplete input");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
+    it("should show error when phone number is not the right amount of digits", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@test.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "10000",
+                        "contact_number": "1" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Invalid phone number");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
+    it("should show error when phone number includes letters", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@test.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "10000",
+                        "contact_number": "a" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Invalid phone number");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
+    it("should show error when zip code includes letters", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@test.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "a",
+                        "contact_number": "1234567890" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Invalid zip code");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
+    it("should show error when email does not have @", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoetest.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "10000",
+                        "contact_number": "1234567890" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Invalid email");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
+    it("should show error when email does not have .", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@testcom",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "Job Seeker",
+                        "address": "1234 Test Street",
+                        "address2": "Apartment 1",
+                        "city": "Philadelphia",
+                        "state": "Pennsylvania",
+                        "zip": "10000",
+                        "contact_number": "1234567890" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("Invalid email");
+        expect(wrapper.state("error_show")).toEqual(true);
+      });
+    });
+
   });
-
 });
