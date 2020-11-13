@@ -1,6 +1,6 @@
 #pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
-import bcrypt,re
+import bcrypt
 from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo
@@ -127,9 +127,8 @@ def logout():
         if not db_token:
             output = {'code': 4, "error": "User_id does not have existing token"}, 403
             return output
-        else:            
-            tokens.find_one_and_delete({'user_id': user_id})
-            output = {"success": "Successfully logged out"}
+        tokens.find_one_and_delete({'user_id': user_id})
+        output = {"success": "Successfully logged out"}
     else:
         output = {'code': 4, "error": "User_id does not exist"}, 403
     return output
