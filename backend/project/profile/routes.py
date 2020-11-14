@@ -70,7 +70,7 @@ def create_user_profile():
         if create_profile:
             output = {
                 "profile_id": profile_id,
-                "user_id": user_id,
+                "user_id": user_id_exists,
                 "profileName": profile_data['profileName'],
                 "profileImg": profile_data['profileImg'],
                 "first_name": profile_data['first_name'],
