@@ -85,12 +85,14 @@ class Login extends Component {
           </Navbar.Brand>
           <br />
           <br />
-
           <br />
           <br />
-          <Container className="containbody">
-            <div className="login-heading hv-center col-12 col-lg-4">Login</div>
-            <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+          <Container className="containbody justify-content-center">
+            <br />
+            <h1 className="text-center">Login</h1> <br />
+            <Container>
+              {/* <div className="login-heading hv-center col-12 col-lg-4">Login</div> */}
+              {/* <div className="card col-12 col-lg-4 login-card mt-2 hv-center"> */}
               <form id="Form">
                 <div className="form-group text-left">
                   <label htmlFor="exampleInputEmail1">Email address</label>
@@ -137,7 +139,7 @@ class Login extends Component {
                   Register
                 </Button>
               </div>
-            </div>
+            </Container>
           </Container>
         </div>
       </>
