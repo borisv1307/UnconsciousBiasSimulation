@@ -5,7 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
-import Figure from "react-bootstrap/Figure";
+
+import Image from "react-bootstrap/Image";
 
 class Profile extends Component {
   constructor(props) {
@@ -38,7 +39,6 @@ class Profile extends Component {
       );
       var yeardiff = parseInt(months / 12);
       var monthDiff = months % 12;
-      // console.log(yeardiff + " year " + monthDiff + " months");
       exp[i]["duration"] =
         yeardiff > 1
           ? yeardiff + " years "
@@ -95,15 +95,11 @@ class Profile extends Component {
                       <label id="aboutMe">{this.state.profile.aboutMe}</label>
                     </Col>
                     <Col sm={3}>
-                      <Figure>
-                        <Figure.Image
-                          width={100}
-                          height={100}
-                          className="image-style"
-                          src={this.state.profile.profileImg}
-                          roundedCircle
-                        />
-                      </Figure>
+                      <Image
+                        className="image-style"
+                        src={this.state.profile.profileImg}
+                        roundedCircle
+                      ></Image>
                     </Col>
                   </Row>
                 </Card.Body>
@@ -161,10 +157,11 @@ class Profile extends Component {
             </Col>
           </Row>
           <br />
-
+          <br />
           <Row className="justify-content-center">
-            <Col>
-              <Button id="Send">Send</Button> <Button id="Edit">Edit</Button>{" "}
+            <Col sm={2}>
+              <Button id="Send">Send</Button>
+              &nbsp;&nbsp; <Button id="Edit">Edit</Button>{" "}
             </Col>
           </Row>
           <br />

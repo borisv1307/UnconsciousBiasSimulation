@@ -71,20 +71,29 @@ describe("Profile", () => {
     expect(container.length).toEqual(1);
   });
 
-  // it("Profile should include image", () => {
-  //   const container = wrapper.find("Image");
-  //   expect(container.length).toEqual(1);
-  // });
-    
-  it("Profile should include figure", () => {
-      const container = wrapper.find("Figure");
-      expect(container.length).toEqual(1);
-    });
+  it("Profile should include card", () => {
+    const container = wrapper.find("Card");
+    expect(container.length).toEqual(5);
+  });
 
-  // it("renders the respective image", () => {
-  //   const container = wrapper.find("Image");
-  //   expect(container.prop("src")).toEqual(profile.profileImg);
-  // });
+  it("Profile should include image", () => {
+    const container = wrapper.find("Image");
+    expect(container.length).toEqual(1);
+  });
+
+  it("Profile should include row", () => {
+    const container = wrapper.find("Row");
+    expect(container.length).toEqual(4);
+  });
+
+  it("Profile should include Col", () => {
+    const container = wrapper.find("Col");
+    expect(container.length).toEqual(6);
+  });
+  it("renders the respective image", () => {
+    const fig = wrapper.find("Image");
+    expect(fig.prop("src")).toEqual(profile.profileImg);
+  });
 
   it("ViewProfiles should include Accordion", () => {
     const accordian = wrapper.find("Accordion");
@@ -98,12 +107,6 @@ describe("Profile", () => {
   it("Profile should include h5 tags", () => {
     expect(wrapper.find("h5").length).toEqual(3);
   });
-
-  // it("Profile should include  h6 tags", () => {
-  //   expect(wrapper.find("h6").length).toEqual(
-  //     profile.education.length * 6 + profile.experience.length * 6
-  //   );
-  // });
 
   it("Profile should include 4 Row tags", () => {
     expect(wrapper.find("Row").length).toEqual(4);
@@ -119,53 +122,6 @@ describe("Profile", () => {
       expect(htmldurations.get(i).props.children[0]).toEqual(durations[i]);
     });
   });
-
-  // it("should include labels for personal details, education, and experience", () => {
-  //   expect(wrapper.find("label#firstname").length).toEqual(1);
-  //   expect(wrapper.find("label#lastname").length).toEqual(1);
-  //   expect(wrapper.find("label#position").length).toEqual(1);
-  //   expect(wrapper.find("label#state").length).toEqual(1);
-  //   expect(wrapper.find("label#zip").length).toEqual(1);
-  //   expect(wrapper.find("label#city").length).toEqual(1);
-  //   expect(wrapper.find("label#user_email").length).toEqual(1);
-  //   expect(wrapper.find("label#aboutMe").length).toEqual(1);
-  //   expect(wrapper.find("label#school").length).toEqual(
-  //     profile.education.length
-  //   );
-  //   expect(wrapper.find("label#degree").length).toEqual(
-  //     profile.education.length
-  //   );
-
-  //   expect(wrapper.find("label#major").length).toEqual(
-  //     profile.education.length
-  //   );
-  //   expect(wrapper.find("label#eduStartDate").length).toEqual(
-  //     profile.education.length
-  //   );
-  //   expect(wrapper.find("label#eduEndDate").length).toEqual(
-  //     profile.education.length
-  //   );
-  //   expect(wrapper.find("label#gpa").length).toEqual(profile.education.length);
-  //   expect(wrapper.find("label#title").length).toEqual(
-  //     profile.experience.length
-  //   );
-  //   expect(wrapper.find("label#duration").length).toEqual(
-  //     profile.experience.length
-  //   );
-
-  //   expect(wrapper.find("label#company").length).toEqual(
-  //     profile.experience.length
-  //   );
-  //   expect(wrapper.find("label#location").length).toEqual(
-  //     profile.experience.length
-  //   );
-  //   expect(wrapper.find("label#expStartDate").length).toEqual(
-  //     profile.experience.length
-  //   );
-  //   expect(wrapper.find("label#expEndDate").length).toEqual(
-  //     profile.experience.length
-  //   );
-  // });
 
   it("should include buttons for send and edit profile", () => {
     expect(wrapper.find("Button#Send").length).toEqual(1);
