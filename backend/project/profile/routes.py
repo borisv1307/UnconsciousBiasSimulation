@@ -37,7 +37,7 @@ def create_user_profile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
-    get_email = profile_data['email']
+    get_user_id = profile_data['user_id']
 
     # Get collections
     profile = mongo.db.profile
@@ -49,14 +49,14 @@ def create_user_profile():
         profile_id = 1
 
     # check if email is already in database
-    email_exists = user.count_documents({'email': get_email})
-    if email_exists:
-        get_user_id = user.find_one({"email": get_email}, {
-                                    'user_id': 1, '_id': 0})
-        user_id = get_user_id['user_id']
+    user_id_exists = user.count_documents({'user_id': get_user_id})
+    if user_id_exists:
+        #get_user_id = user.find_one({"user_id": get_user_id}, {
+                                    #'user_id': 1, '_id': 0})
+        #user_id = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
-            "user_id": user_id,
+            "user_id": user_id_exists,
             "profileName": profile_data['profileName'],
             "profileImg": profile_data['profileImg'],
             "first_name": profile_data['first_name'],

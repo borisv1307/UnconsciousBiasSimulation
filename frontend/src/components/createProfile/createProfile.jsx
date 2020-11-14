@@ -42,7 +42,7 @@ const initialState = {
   allErrorState: false, 
   eduSuccessState: false,
   expSuccessState: false,
-  allSuccessState: false
+  allSuccessState: false,
 };
 
 class CreateProfile extends Component {
@@ -95,6 +95,10 @@ class CreateProfile extends Component {
   };
 
   handleSubmit = (e) => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId')
+
     const isValid = this.validateSubmit();
     if(isValid) {
       const data = {
@@ -106,7 +110,8 @@ class CreateProfile extends Component {
         position: this.state.position,
         aboutMe: this.state.aboutMe,
         education: this.state.education,
-        experience: this.state.experience
+        experience: this.state.experience,
+        user_id: userId
       };
   
       console.log(JSON.stringify(data));
