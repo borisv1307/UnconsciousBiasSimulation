@@ -19,13 +19,16 @@ def profile_validation(func):
     def decorated(*args, **kwargs):
         try:
             profile_data = request.get_json()
-            get_email = profile_data['email']
+            get_user_id = profile_data['user_id']
+            #get_email = profile_data['email']
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
 
-        if get_email is None or re.search("^\s*$", get_email):
+        if get_user_id is None or re.search("^\s*$", get_user_id):
             return {"code": 4, "error": "Input fields cannot be blank or null"}, 403
+        if not get_user_id.isdigit():
+            return {"code": 4, "error": "Input user ID is not a digit"}, 403
 
         return func(*args, **kwargs)
     return decorated
@@ -38,10 +41,7 @@ def create_user_profile():
 
     profile_data = request.get_json()
 
-    if profile_data['user_id'].isdigit():
-        get_user_id = int(profile_data['user_id'])
-    else:
-        get_user_id = 0
+    get_user_id = int(profile_data['user_id'])
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
