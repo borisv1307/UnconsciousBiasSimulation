@@ -28,6 +28,8 @@ def register_blueprints(app):
     from project.home import home_blueprint
     from project.profile import profile_blueprint
     from project.user import user_blueprint
+    from project.presence import presence_blueprint
     app.register_blueprint(home_blueprint)
     app.register_blueprint(profile_blueprint)
     app.register_blueprint(user_blueprint)
+    app.register_blueprint(presence_blueprint)
