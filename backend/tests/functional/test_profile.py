@@ -29,13 +29,14 @@ def test_client():
 
 class TestSomething:
 
-    def test_for_email(self,test_client):
+    def test_for_user_id(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
-        THEN check that request has email address
+        THEN check that request has user_id
         """
         data = {
+        "email": "email",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "first_name": "Test",
@@ -66,11 +67,11 @@ class TestSomething:
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
-    def test_checking_a_valid_email_when_null(self,test_client):
+    def test_checking_a_valid_user_id_when_null(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
-        THEN check email address is valid (None, Whilespaces and not following pattern)
+        THEN check if user_id is valid (None, Whilespaces and not following pattern)
         """
 
         data = {
@@ -107,11 +108,11 @@ class TestSomething:
         assert response.data == b'{"code":4,"error":"Input fields cannot be blank or null"}\n'
 
 
-    def test_checking_a_valid_email_with_whitespace(self,test_client):
+    def test_checking_a_valid_user_id_with_whitespace(self,test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/createProfile' page is requested (POST)
-        THEN check email address is valid (None, Whilespaces and not following pattern)
+        THEN check if user_id is valid (None, Whilespaces and not following pattern)
         """
 
         data = {
@@ -222,7 +223,7 @@ class TestSomething:
             "expEndDate": "0001-01"
             }
         ],
-        "user_id": "999"
+        "user_id": "99999"
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
