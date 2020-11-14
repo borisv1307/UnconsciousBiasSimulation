@@ -37,7 +37,7 @@ def create_user_profile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
-    get_user_id = profile_data['user_id']
+    get_user_id = int(profile_data['user_id'])
 
     # Get collections
     profile = mongo.db.profile
@@ -56,7 +56,7 @@ def create_user_profile():
         #user_id = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
-            "user_id": user_id_exists,
+            "user_id": get_user_id,
             "profileName": profile_data['profileName'],
             "profileImg": profile_data['profileImg'],
             "first_name": profile_data['first_name'],
@@ -70,7 +70,7 @@ def create_user_profile():
         if create_profile:
             output = {
                 "profile_id": profile_id,
-                "user_id": user_id_exists,
+                "user_id": get_user_id,
                 "profileName": profile_data['profileName'],
                 "profileImg": profile_data['profileImg'],
                 "first_name": profile_data['first_name'],
