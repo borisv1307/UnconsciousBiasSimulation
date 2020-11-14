@@ -37,8 +37,8 @@ def create_user_profile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
-    
-    if(profile_data['user_id'].isdigit()):
+
+    if profile_data['user_id'].isdigit():
         get_user_id = int(profile_data['user_id'])
     else:
         get_user_id = 0
