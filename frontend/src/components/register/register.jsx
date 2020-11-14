@@ -1,12 +1,18 @@
 import React, { Component } from "react";
-import { Container, Button, Col, Row, Form, Alert, Modal } from "react-bootstrap";
+import {
+  Container,
+  Button,
+  Col,
+  Row,
+  Form,
+  Alert,
+  Modal,
+} from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import 'bootstrap/dist/css/bootstrap.min.css'
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class Register extends Component {
-
-
   state = {
     first_name: "",
     last_name: "",
@@ -25,29 +31,27 @@ class Register extends Component {
     error_message: "",
     error_show: false,
     modal_message: "",
-    modal_show: false
+    modal_show: false,
   };
 
   redirectToLogin = () => {
     window.location.href = "/login";
-  }
-
+  };
 
   modalHide = () => {
-    this.setState({modal_show: false})
-  }
+    this.setState({ modal_show: false });
+  };
 
   modalShow = (message) => {
-    this.setState({modal_show: true, modal_message: message})
-  }
+    this.setState({ modal_show: true, modal_message: message });
+  };
 
   handleClose = () => {
-    this.setState({ error_show: false })
-  }
+    this.setState({ error_show: false });
+  };
   handleShow = (message) => {
-    this.setState({ error_show: true, error_message: message })
-  }
-
+    this.setState({ error_show: true, error_message: message });
+  };
 
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
@@ -55,20 +59,19 @@ class Register extends Component {
 
   collectContactDetails = (e) => {
     const contactDetailsData = {
-        address: this.state.address,
-        address2: this.state.address2,
-        city: this.state.city,
-        state: this.state.state,
-        zip: this.state.zip,
-        contact_number: this.state.contact_number
+      address: this.state.address,
+      address2: this.state.address2,
+      city: this.state.city,
+      state: this.state.state,
+      zip: this.state.zip,
+      contact_number: this.state.contact_number,
     };
 
-
     this.setState({
-      contact_details:[...this.state.contact_details, contactDetailsData]
+      contact_details: [...this.state.contact_details, contactDetailsData],
     });
 
-    return contactDetailsData
+    return contactDetailsData;
   };
 
   stitchData = (contactInfo) => {
@@ -83,40 +86,55 @@ class Register extends Component {
       contact_details: [contactInfo],
     };
 
-    return data
+    return data;
   };
 
   checkIfInvalidInput = (input) => {
-    var invalid_Input = [null, undefined]
-    if( invalid_Input.includes(input) || this.state[input].trim().length == 0){
-      return true
+    var invalid_Input = [null, undefined];
+    if (
+      invalid_Input.includes(input) ||
+      this.state[input].trim().length === 0
+    ) {
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   handleSubmit = (e) => {
-
     var contactInfo = this.collectContactDetails();
     var data = this.stitchData(contactInfo);
     var containsLetters = /[a-zA-Z]/g;
 
-    if(!this.state.first_name || !this.state.last_name || !this.state.email ||
-       !this.state.password || !this.state.gender || !this.state.date_of_birth ||
-       !this.state.registration_type || !this.state.address || !this.state.address2 || 
-       !this.state.city || !this.state.state || !this.state.zip || !this.state.contact_number){
-      this.handleShow("Incomplete input")
-    }
-    else if(containsLetters.test(this.state.contact_number) || this.state.contact_number.length < 10){
-      this.handleShow("Invalid phone number")
-    }
-    else if(containsLetters.test(this.state.zip) ){
-      this.handleShow("Invalid zip code")
-    }
-    else if(!this.state.email.includes("@") || !this.state.email.includes(".")){
-      this.handleShow("Invalid email")
-    }
-    else{
-      this.handleClose()
+    if (
+      !this.state.first_name ||
+      !this.state.last_name ||
+      !this.state.email ||
+      !this.state.password ||
+      !this.state.gender ||
+      !this.state.date_of_birth ||
+      !this.state.registration_type ||
+      !this.state.address ||
+      !this.state.address2 ||
+      !this.state.city ||
+      !this.state.state ||
+      !this.state.zip ||
+      !this.state.contact_number
+    ) {
+      this.handleShow("Incomplete input");
+    } else if (
+      containsLetters.test(this.state.contact_number) ||
+      this.state.contact_number.length < 10
+    ) {
+      this.handleShow("Invalid phone number");
+    } else if (containsLetters.test(this.state.zip)) {
+      this.handleShow("Invalid zip code");
+    } else if (
+      !this.state.email.includes("@") ||
+      !this.state.email.includes(".")
+    ) {
+      this.handleShow("Invalid email");
+    } else {
+      this.handleClose();
       fetch("http://localhost:5000/api/v1/createUser/", {
         method: "POST",
         action: "/login",
@@ -128,221 +146,365 @@ class Register extends Component {
         .then((res) => res.json())
         .then(this.modalShow("Successfully Registered an Account!"));
 
-        this.setState({ 
-          first_name: "",
-          last_name: "",
-          email: "",
-          password: "",
-          gender: "",
-          date_of_birth: "",
-          registration_type: "",
-          contact_details: [],
-          address: "",
-          address2: "",
-          city: "",
-          state: "",
-          zip: "",
-          contact_number: "",
-        });
+      this.setState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        gender: "",
+        date_of_birth: "",
+        registration_type: "",
+        contact_details: [],
+        address: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        contact_number: "",
+      });
     }
   };
-  
 
   render() {
-    const options = [{abbr: 'AL', name: 'Alabama'}, {abbr: 'AK', name: 'Alaska'}, {abbr: 'AS', name: 'American Samoa'}, {abbr: 'AZ', name: 'Arizona'},
-                      {abbr: 'AR', name: 'Arkansas'}, {abbr: 'CA', name: 'California'}, {abbr: 'CO', name: 'Colorado'}, {abbr: 'CT', name: 'Connecticut'},
-                      {abbr: 'DE', name: 'Delaware'}, {abbr: 'DC', name: 'District Of Columbia'}, {abbr: 'FM', name: 'Federated States Of Micronesia'},
-                      {abbr: 'FL', name: 'Florida'}, {abbr: 'GA', name: 'Georgia'}, {abbr: 'GU', name: 'Guam'}, {abbr: 'HI', name: 'Hawaii'},
-                      {abbr: 'ID', name: 'Idaho'}, {abbr: 'IL', name: 'Illinois'}, {abbr: 'IN', name: 'Indiana'}, {abbr: 'IA', name: 'Iowa'},
-                      {abbr: 'KS', name: 'Kansas'}, {abbr: 'KY', name: 'Kentucky'}, {abbr: 'LA', name: 'Louisiana'}, {abbr: 'ME', name: 'Maine'},
-                      {abbr: 'MH', name: 'Marshall Islands'}, {abbr: 'MD', name: 'Maryland'}, {abbr: 'MA', name: 'Massachusetts'},
-                      {abbr: 'MI', name: 'Michigan'}, {abbr: 'MN', name: 'Minnesota'}, {abbr: 'MS', name: 'Mississippi'}, {abbr: 'MO', name: 'Missouri'},
-                      {abbr: 'MT', name: 'Montana'}, {abbr: 'NE', name: 'Nebraska'}, {abbr: 'NV', name: 'Nevada'}, {abbr: 'NH', name: 'New Hampshire'},
-                      {abbr: 'NJ', name: 'New Jersey'}, {abbr: 'NM', name: 'New Mexico'}, {abbr: 'NY', name: 'New York'}, {abbr: 'NC', name: 'North Carolina'},
-                      {abbr: 'ND', name: 'North Dakota'}, {abbr: 'MP', name: 'Northern Mariana Islands'}, {abbr: 'OH', name: 'Ohio'}, {abbr: 'OK', name: 'Oklahoma'},
-                      {abbr: 'OR', name: 'Oregon'}, {abbr: 'PW', name: 'Palau'}, {abbr: 'PA', name: 'Pennsylvania'}, {abbr: 'PR', name: 'Puerto Rico'},
-                      {abbr: 'RI', name: 'Rhode Island'}, {abbr: 'SC', name: 'South Carolina'}, {abbr: 'SD', name: 'South Dakota'}, {abbr: 'TN', name: 'Tennessee'},
-                      {abbr: 'TX', name: 'Texas'}, {abbr: 'UT', name: 'Utah'}, {abbr: 'VT', name: 'Vermont'}, {abbr: 'VI', name: 'Virgin Islands'},
-                      {abbr: 'VA', name: 'Virginia'}, {abbr: 'WA', name: 'Washington'}, {abbr: 'WV', name: 'West Virginia'}, {abbr: 'WI', name: 'Wisconsin'},
-                      {abbr: 'WY', name: 'Wyoming'},]
+    const options = [
+      { abbr: "AL", name: "Alabama" },
+      { abbr: "AK", name: "Alaska" },
+      { abbr: "AS", name: "American Samoa" },
+      { abbr: "AZ", name: "Arizona" },
+      { abbr: "AR", name: "Arkansas" },
+      { abbr: "CA", name: "California" },
+      { abbr: "CO", name: "Colorado" },
+      { abbr: "CT", name: "Connecticut" },
+      { abbr: "DE", name: "Delaware" },
+      { abbr: "DC", name: "District Of Columbia" },
+      { abbr: "FM", name: "Federated States Of Micronesia" },
+      { abbr: "FL", name: "Florida" },
+      { abbr: "GA", name: "Georgia" },
+      { abbr: "GU", name: "Guam" },
+      { abbr: "HI", name: "Hawaii" },
+      { abbr: "ID", name: "Idaho" },
+      { abbr: "IL", name: "Illinois" },
+      { abbr: "IN", name: "Indiana" },
+      { abbr: "IA", name: "Iowa" },
+      { abbr: "KS", name: "Kansas" },
+      { abbr: "KY", name: "Kentucky" },
+      { abbr: "LA", name: "Louisiana" },
+      { abbr: "ME", name: "Maine" },
+      { abbr: "MH", name: "Marshall Islands" },
+      { abbr: "MD", name: "Maryland" },
+      { abbr: "MA", name: "Massachusetts" },
+      { abbr: "MI", name: "Michigan" },
+      { abbr: "MN", name: "Minnesota" },
+      { abbr: "MS", name: "Mississippi" },
+      { abbr: "MO", name: "Missouri" },
+      { abbr: "MT", name: "Montana" },
+      { abbr: "NE", name: "Nebraska" },
+      { abbr: "NV", name: "Nevada" },
+      { abbr: "NH", name: "New Hampshire" },
+      { abbr: "NJ", name: "New Jersey" },
+      { abbr: "NM", name: "New Mexico" },
+      { abbr: "NY", name: "New York" },
+      { abbr: "NC", name: "North Carolina" },
+      { abbr: "ND", name: "North Dakota" },
+      { abbr: "MP", name: "Northern Mariana Islands" },
+      { abbr: "OH", name: "Ohio" },
+      { abbr: "OK", name: "Oklahoma" },
+      { abbr: "OR", name: "Oregon" },
+      { abbr: "PW", name: "Palau" },
+      { abbr: "PA", name: "Pennsylvania" },
+      { abbr: "PR", name: "Puerto Rico" },
+      { abbr: "RI", name: "Rhode Island" },
+      { abbr: "SC", name: "South Carolina" },
+      { abbr: "SD", name: "South Dakota" },
+      { abbr: "TN", name: "Tennessee" },
+      { abbr: "TX", name: "Texas" },
+      { abbr: "UT", name: "Utah" },
+      { abbr: "VT", name: "Vermont" },
+      { abbr: "VI", name: "Virgin Islands" },
+      { abbr: "VA", name: "Virginia" },
+      { abbr: "WA", name: "Washington" },
+      { abbr: "WV", name: "West Virginia" },
+      { abbr: "WI", name: "Wisconsin" },
+      { abbr: "WY", name: "Wyoming" },
+    ];
 
     return (
-      <div>
-        <Navbar className="header">
-          <Navbar.Brand href="/home">Unconscious Bias Simulation</Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
-            {/* <Nav.Link href="/home">Home</Nav.Link> */}
-            <Nav.Link href="/login">Login</Nav.Link>
-          </Navbar.Collapse>
-        </Navbar>
-        <br />
-        <br />
+      <>
+        <style type="text/css">
+          {`
 
-        <Container className="containbody justify-content-center">
+    .nav-style-title {
+      font-size: xx-large;
+    }
+    .nav-style {
+      font-size: x-large;
+    }
+        `}
+        </style>
+        <div>
+          <Navbar className="header">
+            <Navbar.Brand
+              className="nav-style-title font-weight-bold "
+              href="/home"
+            >
+              Unconscious Bias Simulation
+            </Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+              {/* <Nav.Link href="/home">Home</Nav.Link> */}
+              <Nav.Link className="justify-content-end nav-style" href="/login">
+                Login
+              </Nav.Link>
+            </Navbar.Collapse>
+          </Navbar>
+          <br />
+          <br />
 
-            <br/><h1 className="text-center">Register</h1> <br/>
-
+          <Container className="containbody justify-content-center">
+            <br />
+            <h1 className="text-center">Register</h1> <br />
             <Container>
-                <Form>
-                  <Form.Row>                 
-                    <Form.Group as={Col}>
+              <Form>
+                <Form.Row>
+                  <Form.Group as={Col}>
                     <Form.Label>First Name</Form.Label>
-                    <Form.Control type="text" value={this.state.first_name}
-                        onChange={this.updateField("first_name")}
-                        id="first_name"
-                        name="first_name" placeholder="John"/>
-                    </Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={this.state.first_name}
+                      onChange={this.updateField("first_name")}
+                      id="first_name"
+                      name="first_name"
+                      placeholder="John"
+                    />
+                  </Form.Group>
 
-                    <Form.Group as={Col}>
+                  <Form.Group as={Col}>
                     <Form.Label>Last Name</Form.Label>
-                    <Form.Control type="text" value={this.state.last_name}
-                        onChange={this.updateField("last_name")}
-                        id="last_name"
-                        name="last_name" placeholder="Doe"/>
-                    </Form.Group>
-                  </Form.Row>
+                    <Form.Control
+                      type="text"
+                      value={this.state.last_name}
+                      onChange={this.updateField("last_name")}
+                      id="last_name"
+                      name="last_name"
+                      placeholder="Doe"
+                    />
+                  </Form.Group>
+                </Form.Row>
 
-                    <Form.Group>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" value={this.state.email}
-                        onChange={this.updateField("email")}
-                        id="email"
-                        name="email" placeholder="test@test.com"/>
-                    </Form.Group>
+                <Form.Group>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    value={this.state.email}
+                    onChange={this.updateField("email")}
+                    id="email"
+                    name="email"
+                    placeholder="test@test.com"
+                  />
+                </Form.Group>
 
-                    <Form.Group>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" value={this.state.password}
-                        onChange={this.updateField("password")}
-                        id="password"
-                        name="password" placeholder="Password"/>
-                    </Form.Group>
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={this.state.password}
+                    onChange={this.updateField("password")}
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
 
-                    <Form.Group>
-                    <Form.Label>Registration Type</Form.Label>
-                    <Form.Control as="select" value={this.state.registration_type}
-                          onChange={this.updateField("registration_type")}
-                          id="registration_type"
-                          name="registration_type" >
-                            <option value="" selected disabled hidden> Type </option>
-                            <option value="jobSeeker">Job Seeker</option>
-                            <option value="HR Professional">HR Professional</option>
-                    </Form.Control>
-                    </Form.Group>
+                <Form.Group>
+                  <Form.Label>Registration Type</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.registration_type}
+                    onChange={this.updateField("registration_type")}
+                    id="registration_type"
+                    name="registration_type"
+                  >
+                    <option value="" selected disabled hidden>
+                      {" "}
+                      Type{" "}
+                    </option>
+                    <option value="jobSeeker">Job Seeker</option>
+                    <option value="HR Professional">HR Professional</option>
+                  </Form.Control>
+                </Form.Group>
 
-                    <Row>
-                    <Col>
+                <Row>
+                  <Col>
                     <Form.Group>
                       <Form.Label>Gender</Form.Label>
-                      <Form.Control as="select" value={this.state.gender}
-                          onChange={this.updateField("gender")}
-                          id="gender"
-                          name="gender" >
-                            <option value="" selected disabled hidden> Gender </option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                            <option value="Prefer Not To Say">Prefer Not To Say</option>
+                      <Form.Control
+                        as="select"
+                        value={this.state.gender}
+                        onChange={this.updateField("gender")}
+                        id="gender"
+                        name="gender"
+                      >
+                        <option value="" selected disabled hidden>
+                          {" "}
+                          Gender{" "}
+                        </option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer Not To Say">
+                          Prefer Not To Say
+                        </option>
                       </Form.Control>
                     </Form.Group>
-                    </Col>
-                    <Col>
+                  </Col>
+                  <Col>
                     <Form.Group>
                       <Form.Label>Birth Date</Form.Label>
-                      <Form.Control type="date"
+                      <Form.Control
+                        type="date"
                         value={this.state.date_of_birth}
                         onChange={this.updateField("date_of_birth")}
                         id="date_of_birth"
-                        name="date_of_birth"/>
+                        name="date_of_birth"
+                      />
                     </Form.Group>
-                    </Col>
-                    </Row>
+                  </Col>
+                </Row>
 
-                    <Form.Group>
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control type="text" value={this.state.address}
-                        onChange={this.updateField("address")}
-                        id="address"
-                        name="address" placeholder="1234 Test Street"/>
-                    </Form.Group>
+                <Form.Group>
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.address}
+                    onChange={this.updateField("address")}
+                    id="address"
+                    name="address"
+                    placeholder="1234 Test Street"
+                  />
+                </Form.Group>
 
-                    <Form.Group>
-                    <Form.Label>Address 2</Form.Label>
-                    <Form.Control type="text" value={this.state.address2}
-                        onChange={this.updateField("address2")}
-                        id="address2"
-                        name="address2" placeholder="Apartment, studio, or floor"/>
-                    </Form.Group>
+                <Form.Group>
+                  <Form.Label>Address 2</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.address2}
+                    onChange={this.updateField("address2")}
+                    id="address2"
+                    name="address2"
+                    placeholder="Apartment, studio, or floor"
+                  />
+                </Form.Group>
 
-                  <Form.Row>
-                    <Form.Group as={Col}>
+                <Form.Row>
+                  <Form.Group as={Col}>
                     <Form.Label>City</Form.Label>
-                    <Form.Control type="text" value={this.state.city}
-                        onChange={this.updateField("city")}
-                        id="city"
-                        name="city" placeholder=""/>
-                    </Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={this.state.city}
+                      onChange={this.updateField("city")}
+                      id="city"
+                      name="city"
+                      placeholder=""
+                    />
+                  </Form.Group>
 
-                    <Form.Group as={Col}>
+                  <Form.Group as={Col}>
                     <Form.Label>State</Form.Label>
-                    <Form.Control as="select" value={this.state.state}
-                        onChange={this.updateField("state")}
-                        id="state"
-                        name="state" >
-                      <option value="" selected disabled hidden> State  </option>
-                      {
-                        options.map((option, index) => {
-                            return (<option key={index} value={option.abbr}>{option.name}</option>)
-                        })
-                      }
+                    <Form.Control
+                      as="select"
+                      value={this.state.state}
+                      onChange={this.updateField("state")}
+                      id="state"
+                      name="state"
+                    >
+                      <option value="" selected disabled hidden>
+                        {" "}
+                        State{" "}
+                      </option>
+                      {options.map((option, index) => {
+                        return (
+                          <option key={index} value={option.abbr}>
+                            {option.name}
+                          </option>
+                        );
+                      })}
                     </Form.Control>
-                    </Form.Group>
+                  </Form.Group>
 
-                    <Form.Group as={Col}>
+                  <Form.Group as={Col}>
                     <Form.Label>Zip</Form.Label>
-                    <Form.Control type="numeric" value={this.state.zip}
-                        onChange={this.updateField("zip")}
-                        id="zip"
-                        name="zip" placeholder="00000"/>
-                    </Form.Group>
+                    <Form.Control
+                      type="numeric"
+                      value={this.state.zip}
+                      onChange={this.updateField("zip")}
+                      id="zip"
+                      name="zip"
+                      placeholder="00000"
+                    />
+                  </Form.Group>
+                </Form.Row>
 
-                  </Form.Row>
-
-                    <Form.Group>
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control type="tel" value={this.state.contact_number}
-                        onChange={this.updateField("contact_number")}
-                        id="contact_number"
-                        name="contact_number" placeholder="contact_number"/>
-                    </Form.Group>
-                    
-                </Form>
+                <Form.Group>
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="tel"
+                    value={this.state.contact_number}
+                    onChange={this.updateField("contact_number")}
+                    id="contact_number"
+                    name="contact_number"
+                    placeholder="contact_number"
+                  />
+                </Form.Group>
+              </Form>
             </Container>
-
             <br />
             <div className="text-center">
-            { this.state.error_show ? <Alert variant="danger">{this.state.error_message}</Alert> : " "}
-            <Row>
-              <Col></Col>
-              <Col><Button id="submitButton" className="submit" onClick={this.handleSubmit}>Submit</Button></Col>
-              <Col><Button id="cancelButton" className="cancel" href="/login" variant="danger">Cancel</Button></Col>
-              <Col></Col>
-            </Row>
-            </div>    
-            <br />  
-                      
-        </Container>
-        <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static"
-        keyboard={false}>
-        <Modal.Body>{this.state.modal_message}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={this.redirectToLogin}>
-            Continue to Login
-          </Button>
-        </Modal.Footer>
-        </Modal>
-      </div>
+              {this.state.error_show ? (
+                <Alert variant="danger">{this.state.error_message}</Alert>
+              ) : (
+                " "
+              )}
+              <Row>
+                <Col></Col>
+                <Col>
+                  <Button
+                    id="submitButton"
+                    className="submit"
+                    onClick={this.handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    id="cancelButton"
+                    className="cancel"
+                    href="/login"
+                    variant="danger"
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+                <Col></Col>
+              </Row>
+            </div>
+            <br />
+          </Container>
+          <Modal
+            show={this.state.modal_show}
+            onHide={this.modalHide}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Body>{this.state.modal_message}</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.redirectToLogin}>
+                Continue to Login
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      </>
     );
   }
 }
