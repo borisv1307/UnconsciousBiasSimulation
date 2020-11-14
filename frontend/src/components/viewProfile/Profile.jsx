@@ -56,7 +56,6 @@ class Profile extends Component {
   handleSubmit = (e) => {
     var profile = this.state.profile;
     const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
 
     const data = {
       profile: profile,
