@@ -66,14 +66,17 @@ class Profile extends Component {
             }
           `}
         </style>
-        
+
         <Container className="containbody justify-content-center">
           <div>
-            <h1> {this.state.profile.first_name} {this.state.profile.last_name}</h1>
+            <h1>
+              {" "}
+              {this.state.profile.first_name} {this.state.profile.last_name}
+            </h1>
             <h5> Position sought: {this.state.profile.position}</h5>
             <h5> Email: {this.state.profile.email} </h5>
           </div>
-          
+
           <Row>
             <Col>
               <Card.Title className="card-heading card-title h5">
@@ -83,8 +86,12 @@ class Profile extends Component {
                 <Card.Body>
                   <Row>
                     <Col sm={8}>
-                      <h5> Location: {this.state.profile.city}, {this.state.profile.state}, {this.state.profile.zip}</h5>
-                      <br/>
+                      <h5>
+                        {" "}
+                        Location: {this.state.profile.city},{" "}
+                        {this.state.profile.state}, {this.state.profile.zip}
+                      </h5>
+                      <br />
                       <label id="aboutMe">{this.state.profile.aboutMe}</label>
                     </Col>
                     <Col sm={3}>
@@ -111,12 +118,13 @@ class Profile extends Component {
                 {this.state.profile.education.map((edu, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong> {edu.school} </strong>  <br /> {edu.degree} in {edu.major}
+                      <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
+                      {edu.major}
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          {edu.eduStartDate} to {edu.eduEndDate} <br/>
+                          {edu.eduStartDate} to {edu.eduEndDate} <br />
                           GPA: {edu.gpa}
                         </Card.Text>
                       </Card.Body>
@@ -125,15 +133,18 @@ class Profile extends Component {
                 ))}
               </Accordion>
             </Col>
-            
-            <Col>
 
+            <Col>
               <Accordion defaultActiveKey="0">
                 <Card.Title className="card-heading">EXPERIENCE</Card.Title>
                 {this.state.profile.experience.map((exp, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong> {exp.company} {exp.title} </strong> <br />
+                      <strong>
+                        {" "}
+                        {exp.company} {exp.title}{" "}
+                      </strong>{" "}
+                      <br />
                       <label id="duration">{exp.duration}</label>
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
@@ -147,20 +158,13 @@ class Profile extends Component {
                   </Card>
                 ))}
               </Accordion>
-            
             </Col>
-
           </Row>
           <br />
 
           <Row className="justify-content-center">
             <Col>
-              <Button id="Send">
-                Send
-              </Button>{" "}
-              <Button id="Edit">
-                Edit
-              </Button>{" "}
+              <Button id="Send">Send</Button> <Button id="Edit">Edit</Button>{" "}
             </Col>
           </Row>
           <br />
