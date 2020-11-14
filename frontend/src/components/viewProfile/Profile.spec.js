@@ -60,6 +60,14 @@ describe("Profile", () => {
 
   var durations = ["2", "6"];
 
+  const simulateChangeOnInput = (wrapper, inputSelector, newValue) => {
+    const input = wrapper.find(inputSelector);
+    input.simulate("change", {
+      target: { value: newValue },
+    });
+    return wrapper.find(inputSelector);
+  };
+
   beforeEach(() => (wrapper = shallow(<Profile profile={profile} />)));
 
   it("Profile should exist", () => {
@@ -120,6 +128,19 @@ describe("Profile", () => {
     const htmldurations = wrapper.find("label#duration");
     profile.experience.forEach((exp, i) => {
       expect(htmldurations.get(i).props.children[0]).toEqual(durations[i]);
+    });
+  });
+
+  it("Submit presence: should show success message", () => {
+    wrapper.setState({ profile }, () => {
+      wrapper.find("#Send").simulate("click"),
+        () => {
+          wrapper.update();
+        };
+
+      expect(wrapper.state("alertMessage")).toEqual("Successfully Sent");
+      expect(wrapper.state("allErrorState")).toEqual(false);
+      expect(wrapper.state("allSuccessState")).toEqual(true);
     });
   });
 

@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
-
+import { Alert } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 
 class Profile extends Component {
@@ -53,6 +53,33 @@ class Profile extends Component {
     this.setState({ profile });
   }
 
+  handleSubmit = (e) => {
+    var profile = this.state.profile;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get("userId");
+
+    const data = {
+      profile: profile,
+    };
+
+    fetch("http://localhost:5000/api/v1/addPresence", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => res);
+
+    this.setState({
+      alertMessage: "Successfully Sent",
+      allSuccessState: true,
+      allErrorState: false,
+    });
+  };
+
   render() {
     return (
       <>
@@ -67,6 +94,18 @@ class Profile extends Component {
           `}
         </style>
 
+        <div className="text-center">
+          {this.state.allErrorState ? (
+            <Alert variant="danger">{this.state.alertMessage}</Alert>
+          ) : (
+            " "
+          )}
+          {this.state.allSuccessState ? (
+            <Alert variant="success">{this.state.alertMessage}</Alert>
+          ) : (
+            " "
+          )}
+        </div>
         <Container className="containbody justify-content-center">
           <div>
             <h1>
@@ -79,7 +118,7 @@ class Profile extends Component {
 
           <Row>
             <Col>
-              <Card.Title className="card-heading card-title h5">
+              <Card.Title className="card-heading card-title h5 font-weight-bold">
                 ABOUT ME
               </Card.Title>
               <Card bg="Light">
@@ -160,7 +199,9 @@ class Profile extends Component {
           <br />
           <Row className="justify-content-center">
             <Col sm={2}>
-              <Button id="Send">Send</Button>
+              <Button id="Send" className="submit" onClick={this.handleSubmit}>
+                Send
+              </Button>
               &nbsp;&nbsp; <Button id="Edit">Edit</Button>{" "}
             </Col>
           </Row>
