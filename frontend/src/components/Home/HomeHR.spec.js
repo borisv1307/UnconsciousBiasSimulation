@@ -12,4 +12,8 @@ describe("HomeHR", () => {
   it("Home HR page should exist", () => {
     expect(wrapper.exists()).toBe(true);
   });
+
+  it("should have a Navbar", () => {
+    expect(wrapper.find("Navbar").length).toEqual(1);
+  });
 });
