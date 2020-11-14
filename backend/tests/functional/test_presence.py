@@ -18,7 +18,7 @@ from project import mongo
 from bson.objectid import ObjectId
 from random import randint
 
-profilename = "Profile A"
+profilename = "Profile B"
 
 
 @pytest.fixture
