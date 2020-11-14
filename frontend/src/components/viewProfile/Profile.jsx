@@ -206,7 +206,6 @@ class Profile extends Component {
             </Col>
           </Row>
           <br />
-          <br />
         </Container>
       </>
     );

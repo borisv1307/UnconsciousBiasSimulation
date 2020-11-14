@@ -60,14 +60,6 @@ describe("Profile", () => {
 
   var durations = ["2", "6"];
 
-  const simulateChangeOnInput = (wrapper, inputSelector, newValue) => {
-    const input = wrapper.find(inputSelector);
-    input.simulate("change", {
-      target: { value: newValue },
-    });
-    return wrapper.find(inputSelector);
-  };
-
   beforeEach(() => (wrapper = shallow(<Profile profile={profile} />)));
 
   it("Profile should exist", () => {
