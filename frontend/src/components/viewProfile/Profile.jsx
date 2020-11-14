@@ -57,7 +57,6 @@ class Profile extends Component {
     var profile = this.state.profile;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const userId = urlParams.get("userId");
 
     const data = {
       profile: profile,
