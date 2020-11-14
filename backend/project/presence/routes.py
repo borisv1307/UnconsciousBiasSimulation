@@ -37,24 +37,24 @@ def add_presence_to_pool():
     else:
         output = {'code': 2, "error": "User account does not exist"}, 403
 
-def insert_data(profile_data):
+def insert_data(profile_information):
     date_joined = datetime.utcnow()
     presence = mongo.db.presence
     create_presence = presence.insert_one({
-        "profile_id": profile_data['profile_id'],
-        "user_id": profile_data['user_id'],
-        "profileName": profile_data['profileName'],
-        "profileImg": profile_data['profileImg'],
-        "first_name": profile_data['first_name'],
-        "last_name": profile_data['last_name'],
-        "position": profile_data['position'],
-        "aboutMe":  profile_data['aboutMe'],
-        "education": profile_data['education'],
-        "experience": profile_data['experience'],
+        "profile_id": profile_information['profile_id'],
+        "user_id": profile_information['user_id'],
+        "profileName": profile_information['profileName'],
+        "profileImg": profile_information['profileImg'],
+        "first_name": profile_information['first_name'],
+        "last_name": profile_information['last_name'],
+        "position": profile_information['position'],
+        "aboutMe":  profile_information['aboutMe'],
+        "education": profile_information['education'],
+        "experience": profile_information['experience'],
         "status":"submitted",
         "addedOn": date_joined,
         "reviewedOn": "",
         "reviewedBy": ""
     })
     if create_presence:
-        return profile_data
+        return profile_information
