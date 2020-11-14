@@ -33,9 +33,9 @@ def add_presence_to_pool():
             "reviewedOn": "",
             "reviewedBy": ""
             }
-        return output
     else:
-        output = {'code': 2, "error": "User account does not exist"}, 403
+        result = {'code': 2, "error": "User account does not exist"}, 403
+    return output
 
 def insert_data(profile_information):
     date_joined = datetime.utcnow()
