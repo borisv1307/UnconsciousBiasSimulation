@@ -74,7 +74,7 @@ class TestSomething:
         """
 
         data = {
-        "email": None,
+        "email": "email",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "first_name": "Test",
@@ -99,7 +99,8 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]
+        ],
+        "user_id": None
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -114,7 +115,7 @@ class TestSomething:
         """
 
         data = {
-        "email": ' ',
+        "email": "email",
         "profileName":profilename,
         "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
         "first_name": "Test",
@@ -139,7 +140,8 @@ class TestSomething:
             "expStartDate": "0001-01",
             "expEndDate": "0001-01"
             }
-        ]
+        ],
+        "user_id": ' '
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
@@ -220,7 +222,7 @@ class TestSomething:
             "expEndDate": "0001-01"
             }
         ],
-        "user_id": ""
+        "user_id": "999"
         }
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
