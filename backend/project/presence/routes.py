@@ -16,7 +16,7 @@ def add_presence_to_pool():
     profile_data = request.get_json()
     output = insert_data(profile_data)
 
-    if output:
+    if output != "ERROR":
         result = {
             "profile_id": profile_data['profile_id'],
             "position": profile_data['position'],
@@ -35,7 +35,7 @@ def add_presence_to_pool():
             }
     else:
         result = {'code': 2, "error": "User account does not exist"}, 403
-    return output
+    return result
 
 def insert_data(profile_information):
     date_joined = datetime.utcnow()
@@ -58,3 +58,4 @@ def insert_data(profile_information):
     })
     if create_presence:
         return profile_information
+    return "ERROR"
