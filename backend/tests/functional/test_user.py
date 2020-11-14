@@ -10,6 +10,8 @@ import os
 import sys
 import datetime
 import random
+from json import loads
+from bson.json_util import dumps
 from faker import Faker
 from flask import jsonify, request, json
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -20,7 +22,7 @@ from project import create_app
 from project import mongo
 from bson.objectid import ObjectId
 
-
+SET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDUzMzkxNjksIm5iZiI6MTYwNTMzOTE2OSwianRpIjoiNzAyMzczOGYtNjc2OS00NzdkLWFhN2ItYjAzOTcyMWQwZWJlIiwiZXhwIjoxNjA1MzQwMDY5LCJpZGVudGl0eSI6eyJpZCI6MywiZGF0ZV9qb2luZWQiOiJUaHUsIDI5IE9jdCAyMDIwIDA0OjA0OjI2IEdNVCJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.6NR0py5qQ49bI6Lt1GIp_INnlXeCgasid9NndXJuslk"
 
 
 
@@ -242,11 +244,27 @@ class TestSomething:
         WHEN the '/api/v1/createUser/' page is requested (POST)
         THEN check that the response is valid
         """
-
-
-        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json'})
+        data = {
+        "email":"jasonmax@gmail.com",
+        "password": "Hello3"
+        }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != 'null'
+
+    def test_get_all_users_with_invalid_token(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        get_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
+        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json','Authorization':get_token})
+        assert response.status_code == 403
+        assert response.data == b'{"message":"Token is Invalid!"}\n'
 
 
 
@@ -386,9 +404,11 @@ class TestSomething:
         users_without_token = users.find( { 'user_id': { '$nin': number_list } } )
         for user_without_tok in users_without_token:
             user_list.append(user_without_tok['user_id'])
+        set_user_id = random.choice(user_list)
 
         data = {
-        "user_id":random.choice(user_list)
+        "user_id":set_user_id,
+        "token":SET_TOKEN
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
@@ -407,9 +427,13 @@ class TestSomething:
         number_list = []
         for user in get_user_id:
             number_list.append(user['user_id'])
-        
+        set_user_id = random.choice(number_list)
+        get_token = tokens.find_one( { "user_id": set_user_id },{ 'key': 1, '_id': 0 })
+        get_corresponding_token = get_token['key']
+
         data = {
-        "user_id":random.choice(number_list)
+        "user_id":set_user_id,
+        "token":get_corresponding_token
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
@@ -429,7 +453,8 @@ class TestSomething:
             user_id= 100000
         
         data = {
-        "user_id":user_id
+        "user_id":user_id,
+        "token":SET_TOKEN
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
@@ -449,7 +474,7 @@ class TestSomething:
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        assert response.data == b'{"error":"Missing user_id"}\n'
+        assert response.data == b'{"error":"Missing fields in request body"}\n'
         
     def test_for_logout_when_user_id_not_an_integer(self, test_client):
         """
@@ -459,9 +484,44 @@ class TestSomething:
         """
         
         data = {
-        "user_id":"one"
+        "user_id":"one",
+        "token":SET_TOKEN
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"user_id must be numerical"}\n'
+
+    def test_for_logout_when_token_is_blank(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        "user_id":"6",
+        "token":"  "
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        print('response_check:---------',response.data)
+        assert response.data == b'{"error":"Token cannot be blank or null"}\n'
+
+    def test_for_logout_when_token_is_null(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        setnull = None
+        data = {
+        "user_id":"6",
+        "token": setnull
+        }
+
+        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        print('response_check:---------',response.data)
+        assert response.data == b'{"error":"Token cannot be blank or null"}\n'

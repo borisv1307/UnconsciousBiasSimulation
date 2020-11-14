@@ -1,9 +1,9 @@
 #pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
-import bcrypt
+import bcrypt, re
 from flask_jwt_extended import create_access_token
 from flask import request
-from project import mongo
+from project import mongo, token_required
 from pymongo import ReturnDocument
 from . import user_blueprint
 
@@ -93,33 +93,37 @@ def user_login():
         output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token, "registration_type" : user['registration_type'], "first_name" : user['first_name'], "last_name":user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth']}
 
     else:
-        return {'code': 4, "error": "Invalid password"},403
+        return {'code': 4, "error": "Invalid password"}, 403
 
     return output
 
 ### LOGOUT
 @user_blueprint.route('/api/v1/logout/', methods=['POST'])
-### In future when session managment is implemented, UI should send the same token to logout API, Verify whether the token sent matches the one in DB
 def logout():
     # Initialize variables to be inserted and displayed
     try:
         user_id = request.get_json()['user_id']
+        token = request.get_json()['token']
     except:
-        return {"error": "Missing user_id"}, 403
-
+        return {"error": "Missing fields in request body"}, 403
+ 
     # Convert id to integer
     try:
         user_id = int(user_id)
     except:
         return {"error": "user_id must be numerical"}, 403
-
+    
+    # Check if any of the fields are empty
+    if token is None or re.search("^\s*$", token):
+        return {"error": "Token cannot be blank or null"}, 403
+ 
     # Get collections
     users = mongo.db.users_customuser
-
+ 
     # Check if user exists in users collection
     users = mongo.db.user
     user = users.find_one({"user_id" : user_id})
-
+ 
     if user:
         # Check if user exists in tokens collection
         tokens = mongo.db.authtoken
@@ -127,15 +131,18 @@ def logout():
         if not db_token:
             output = {'code': 4, "error": "User_id does not have existing token"}, 403
             return output
-        tokens.find_one_and_delete({'user_id': user_id})
-        output = {"success": "Successfully logged out"}
+        if token == db_token['key']:
+            tokens.find_one_and_delete({'user_id': user_id})
+            output = {"success": "Successfully logged out"}
+        else:
+            output = {'code': 4, "error": "User_id and token mismatch"}, 403
     else:
         output = {'code': 4, "error": "User_id does not exist"}, 403
     return output
 
 ### GET ALL USERS
 @user_blueprint.route('/api/v1/users/', methods=['GET'])
-# @token_required
+@token_required
 def get_all_users():
     if request.method == 'GET':
         users = mongo.db.user
