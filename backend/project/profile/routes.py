@@ -54,9 +54,6 @@ def create_user_profile():
     # check if email is already in database
     user_id_exists = user.count_documents({'user_id': get_user_id})
     if user_id_exists:
-        #get_user_id = user.find_one({"user_id": get_user_id}, {
-                                    #'user_id': 1, '_id': 0})
-        #user_id = get_user_id['user_id']
         create_profile = profile.insert_one({
             "profile_id": profile_id,
             "user_id": get_user_id,
@@ -147,9 +144,9 @@ def get_user_profiles(user_id):
                         "aboutMe":  getprofile['aboutMe'],
                         "education": getprofile['education'],
                         "experience": getprofile['experience']
-                        }) 
+                        })
             else:
-                output = {"error": "Profiles not found"}   
+                output = {"error": "Profiles not found"}
         else:
             output = {"error": "User not found"}
         if len(output) == 0:

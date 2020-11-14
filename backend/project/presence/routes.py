@@ -1,5 +1,4 @@
 # pylint: disable = line-too-long, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
-
 from datetime import datetime
 from flask import request
 from project import mongo
@@ -17,7 +16,6 @@ def add_presence_to_pool():
     date_joined = datetime.utcnow()
     profile_data = request.get_json()
 
-    profile = mongo.db.profile
     user = mongo.db.user
     presence = mongo.db.presence
 
@@ -42,15 +40,15 @@ def add_presence_to_pool():
         if create_presence:
             output = {
                 "profile_id": profile_data['profile_id'],
+                "position": profile_data['position'],
+                "aboutMe":  profile_data['aboutMe'],
+                "education": profile_data['education'],
+                "experience": profile_data['experience'],
                 "user_id": profile_data['user_id'],
                 "profileName": profile_data['profileName'],
                 "profileImg": profile_data['profileImg'],
                 "first_name": profile_data['first_name'],
                 "last_name": profile_data['last_name'],
-                "position": profile_data['position'],
-                "aboutMe":  profile_data['aboutMe'],
-                "education": profile_data['education'],
-                "experience": profile_data['experience'],
                 "status":"submitted",
                 "addedOn": date_joined,
                 "reviewedOn": "",
