@@ -35,6 +35,9 @@ ReactDOM.render(
       <Route path="/viewProfile">
         <ViewProfile />
       </Route>
+      <Route path="/viewApplications">
+        <ViewProfile />
+      </Route>
     </div>
   </Router>,
   document.getElementById("root")
