@@ -266,6 +266,16 @@ class TestSomething:
         assert response.status_code == 403
         assert response.data == b'{"message":"Token is Invalid!"}\n'
 
+    def test_get_all_users_when_token_not_provided(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/createUser/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"message":"Token is missing!"}\n'
+
 
 
     def test_get_one_user(self, test_client):
