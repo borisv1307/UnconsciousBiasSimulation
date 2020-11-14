@@ -30,7 +30,7 @@ class Header extends Component {
               Create Presence
             </Nav.Link>
             <Nav.Link href={"/viewProfile?userId=" + user}>
-              View Application
+              View Presence
             </Nav.Link>
           </Navbar.Collapse>
         </Navbar>
