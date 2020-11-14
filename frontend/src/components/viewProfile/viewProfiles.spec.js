@@ -148,6 +148,11 @@ describe("ViewProfiles", () => {
     expect(container.length).toEqual(1);
   });
 
+  it("ViewProfiles should include Modal", () => {
+    const Modal = wrapper.find("Modal");
+    expect(Modal.length).toEqual(1);
+  });
+
   it("ViewProfiles should include profile name on the Accordion", () => {
     const container = wrapper.find("Accordion.Toggle");
     expect(container.toBe).toEqual(profiles.profileName);
