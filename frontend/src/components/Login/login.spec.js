@@ -28,7 +28,7 @@ describe("Login", () => {
   });
 
   it("should have a form", () => {
-    expect(wrapper.find("form").length).toEqual(1);
+    expect(wrapper.find("Form").length).toEqual(1);
   });
 
   it("should include inputs for login", () => {
