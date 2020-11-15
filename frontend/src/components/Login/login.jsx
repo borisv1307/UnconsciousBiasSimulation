@@ -24,8 +24,6 @@ class Login extends Component {
     this.setState({ [stateKey]: e.target.value });
   };
   handleLogin = async (e) => {
-    //e.preventDefault();
-
     const data = {
       email: this.state.email,
       password: this.state.password,
@@ -46,7 +44,6 @@ class Login extends Component {
           if (res.user_id) {
             ls.set("userid", res.user_id);
             ls.set("name", res.first_name);
-            // this.user_details.registration_type=res.registration_type;
             if (
               res.registration_type === "jobSeeker" ||
               res.registration_type === "Job Seeker"
