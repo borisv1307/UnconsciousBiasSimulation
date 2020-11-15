@@ -43,8 +43,8 @@ class Profile extends Component {
         yeardiff > 1
           ? yeardiff + " years "
           : yeardiff === 0
-          ? ""
-          : yeardiff + " year ";
+            ? ""
+            : yeardiff + " year ";
       exp[i]["duration"] +=
         monthDiff > 1 ? monthDiff + " months" : monthDiff + " month";
     });
@@ -56,16 +56,14 @@ class Profile extends Component {
   handleSubmit = (e) => {
     var profile = this.state.profile;
 
-    const data = {
-      profile: profile,
-    };
 
+    console.log(profile)
     fetch("http://localhost:5000/api/v1/addPresence/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(profile),
     })
       .then((res) => res.json())
       .then((res) => res);
@@ -95,13 +93,13 @@ class Profile extends Component {
           {this.state.allErrorState ? (
             <Alert variant="danger">{this.state.alertMessage}</Alert>
           ) : (
-            " "
-          )}
+              " "
+            )}
           {this.state.allSuccessState ? (
             <Alert variant="success">{this.state.alertMessage}</Alert>
           ) : (
-            " "
-          )}
+              " "
+            )}
         </div>
         <Container className="containbody justify-content-center">
           <div>
