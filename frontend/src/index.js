@@ -9,6 +9,7 @@ import Register from "./components/register/register";
 import CreateProfile from "./components/createProfile/createProfile";
 import ViewProfile from "./components/viewProfile/viewProfiles";
 import Login from "./components/Login/login";
+import ViewApplications from "./components/ViewApplications/viewApplications";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
@@ -36,7 +37,7 @@ ReactDOM.render(
         <ViewProfile />
       </Route>
       <Route path="/viewApplications">
-        <ViewProfile />
+        <ViewApplications />
       </Route>
     </div>
   </Router>,
