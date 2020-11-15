@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import Navbar from "react-bootstrap/Navbar";
+
 import ls from "local-storage";
 import { Container } from "react-bootstrap";
-import Nav from "react-bootstrap/Nav";
+
+import HeaderHR from "../Header/HeaderHR";
 
 class HomeHR extends Component {
   render() {
@@ -21,22 +22,8 @@ class HomeHR extends Component {
         `}
         </style>
         <div>
-          <div className="justify-content-end header">
-            <Navbar className=" header font-weight-bold">
-              <Navbar.Brand className="nav-style-title font-weight-bold ">
-                Unconscious Bias Simulation
-              </Navbar.Brand>
-              <Navbar.Collapse className="justify-content-end">
-                {/* <Nav.Link href="/home">Home</Nav.Link> */}
-                <Nav.Link
-                  className="justify-content-end nav-style"
-                  href="/ViewApplications"
-                >
-                  View Applications
-                </Nav.Link>
-              </Navbar.Collapse>
-            </Navbar>
-          </div>
+          <HeaderHR />
+
           <br />
           <br />
           <Container className="containbody justify-content-center">
