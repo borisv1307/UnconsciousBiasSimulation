@@ -6,13 +6,19 @@ import Button from "react-bootstrap/Button";
 
 class Header extends Component {
   handleSubmit = (e) => {
-    fetch("http://localhost:5000/api/v1/logout/")
+    const data = {
+      userId: ls.get("userid"),
+      token: ls.get("token"),
+    }
+    fetch("http://localhost:5000/api/v1/logout/", {
+      methods: 'POST',
+      body: JSON.stringify(data)
+    })
       .then((res) => res.json())
-      .then((res) => res);
-
-    this.setState({
-      _event: (window.location.href = "/login"),
-    });
+      .then((res) => res,
+        ls.set("token", ""),
+        window.location.href = "/login"
+      )
   };
 
   render() {

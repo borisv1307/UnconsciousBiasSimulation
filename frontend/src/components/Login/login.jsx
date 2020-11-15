@@ -76,6 +76,10 @@ class Login extends Component {
       .nav-style-title {
         font-size: xx-large;
       }
+      .logincard {
+        width:600px;
+      
+        }
           `}
         </style>
         {/* <div className="justify-content-end header"> */}
@@ -94,7 +98,7 @@ class Login extends Component {
         <br />
         <br />
 
-        <Container className="containbody justify-content-center">
+        <Container className="containbody justify-content-center logincard">
           <br />
           <h1 className="text-center">Login</h1> <br />
           <Container>
@@ -103,6 +107,7 @@ class Login extends Component {
             {/* <div className="card col-12 col-lg-4 login-card mt-2 hv-center"> */}
 
             <Form id="Form">
+              <br />
               <div className="form-group text-left">
                 <label htmlFor="exampleInputEmail1">Email address</label>
                 <input
@@ -114,6 +119,7 @@ class Login extends Component {
                   placeholder="Enter email"
                 />
               </div>
+
               <div className="form-group text-left">
                 <label htmlFor="exampleInputPassword1">Password</label>
                 <input
@@ -130,6 +136,7 @@ class Login extends Component {
                   " "
                 )}
               <div className="form-check"></div>
+              <br />
               <Button
                 id="submit"
                 className="buttonnprimary"
@@ -137,7 +144,9 @@ class Login extends Component {
               >
                 Submit
                 </Button>
+
             </Form>
+
             <div className="registerMessage">
               <span>Dont have an account? </span>
               <Button
@@ -148,7 +157,6 @@ class Login extends Component {
                 Register
                 </Button>
             </div>
-
 
 
           </Container>
