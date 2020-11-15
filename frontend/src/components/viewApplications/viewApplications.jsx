@@ -1,6 +1,8 @@
 import { Component } from "react";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
-class viewApplications extends Component {}
+class viewApplications extends Component {
+  render() {
+    return null;
+  }
+}
 export default viewApplications;
