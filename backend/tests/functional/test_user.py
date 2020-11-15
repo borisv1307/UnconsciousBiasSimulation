@@ -458,7 +458,7 @@ class TestSomething:
         """
         try:
             users = mongo.db.user
-            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id'])+10
+            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 10
         except:
             user_id= 100000
         
@@ -466,7 +466,7 @@ class TestSomething:
         "user_id":user_id,
         "token":SET_TOKEN
         }
-
+        
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'

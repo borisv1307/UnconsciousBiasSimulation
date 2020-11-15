@@ -258,7 +258,7 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-        response = test_client.get('/api/v1/getProfiles/15/',headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getProfiles/10/',headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        print('response check****************',response.data)
+        print('*********************',response.data)
         assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'
