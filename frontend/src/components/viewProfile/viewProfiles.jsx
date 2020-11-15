@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Container, Card, Accordion, Modal, Button} from "react-bootstrap";
+import { Container, Card, Accordion, Modal, Button } from "react-bootstrap";
 import Header from "../Header/Header";
 import Profile from "../viewProfile/Profile";
+import ls from "local-storage";
 
 class ViewProfiles extends Component {
   constructor() {
@@ -18,22 +19,28 @@ class ViewProfiles extends Component {
   }
   modalShow = (message) => {
     this.setState({ modal_show: true })
-    this.setState({ modal_message: message})
+    this.setState({ modal_message: message })
   }
 
   componentDidMount() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const userId = urlParams.get('userId')
-
-    fetch("http://localhost:5000/api/v1/getProfiles/"+userId+"/")
+    const token = ls.get("token");
+    console.log(token)
+    fetch("http://localhost:5000/api/v1/getProfiles/" + userId + "/",
+      {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
       .then((response) => response.json())
       .then((res) => {
 
-        if (res["results"].error!=='Profiles not found'){
-        this.setState({ profiles: res["results"] });
+        if (res["results"].error !== 'Profiles not found') {
+          this.setState({ profiles: res["results"] });
         }
-        else{
+        else {
           this.modalShow(res["results"].error)
         }
       });
@@ -61,13 +68,13 @@ class ViewProfiles extends Component {
         </Container>
 
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static"
-        keyboard={false}>
-        <Modal.Body>{this.state.modal_message}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={this.modalHide}>
-            Continue
+          keyboard={false}>
+          <Modal.Body>{this.state.modal_message}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.modalHide}>
+              Continue
           </Button>
-        </Modal.Footer>
+          </Modal.Footer>
         </Modal>
       </>
     );
