@@ -60,7 +60,7 @@ class Profile extends Component {
       profile: profile,
     };
 
-    fetch("http://localhost:5000/api/v1/addPresence", {
+    fetch("http://localhost:5000/api/v1/addPresence/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
