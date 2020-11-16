@@ -85,4 +85,4 @@ class TestPool:
         response = test_client.get(
             '/api/v1/getAllPresence/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response.data != 'null'
+        assert response.data != b'{"code":4,"error":"No presence found"}\n'

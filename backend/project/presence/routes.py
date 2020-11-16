@@ -120,7 +120,9 @@ def get_all_presence():
                     'reviewed_on': presence['reviewedOn'],
                     'reviewed_by': presence['reviewedBy']
                 })
-
-            return {'count': len(output), 'results': output}
+            if len(output) > 0:
+                return {'count': len(output), 'results': output}
+            else:
+                return {'code': 4, 'error': "No presence found"}
         except:
             return {'code': 4, 'error': "No presence found"}, 403
