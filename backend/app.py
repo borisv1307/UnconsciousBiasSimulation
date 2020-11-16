@@ -1,4 +1,4 @@
-#pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
+# pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
 from flask_cors import CORS
 from flask_restful import Api
 from flask import Flask

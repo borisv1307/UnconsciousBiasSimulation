@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
 from flask import request
 from project import mongo
@@ -74,22 +74,22 @@ def get_user_presence(user_id):
 
     # Get request
     presence = mongo.db.presence
-    get_user_presence = presence.find_one({'user_id': user_id})
+    user_presence = presence.find_one({'user_id': user_id})
     if get_user_presence:
         output = {
-            'user_id': int(get_user_presence['user_id']),
-            'profile_id': get_user_presence['profile_id'],
-            'profile_name': get_user_presence['profileName'],
-            'profile_image': get_user_presence['profileImg'],
-            'first_name': get_user_presence['first_name'],
-            'last_name': get_user_presence['last_name'],
-            'about_me': get_user_presence['aboutMe'],
-            'position': get_user_presence['position'],
-            'education': get_user_presence['education'],
-            'experience': get_user_presence['experience'],
-            'status': get_user_presence['status'],
-            'reviewed_on': get_user_presence['reviewedOn'],
-            'reviewed_by': get_user_presence['reviewedBy']
+            'user_id': int(user_presence['user_id']),
+            'profile_id': user_presence['profile_id'],
+            'profile_name': user_presence['profileName'],
+            'profile_image': user_presence['profileImg'],
+            'first_name': user_presence['first_name'],
+            'last_name': user_presence['last_name'],
+            'about_me': user_presence['aboutMe'],
+            'position': user_presence['position'],
+            'education': user_presence['education'],
+            'experience': user_presence['experience'],
+            'status': user_presence['status'],
+            'reviewed_on': user_presence['reviewedOn'],
+            'reviewed_by': user_presence['reviewedBy']
         }
     else:
         output = {'code': 5, "error": "Presence not found"}, 403
@@ -122,7 +122,7 @@ def get_all_presence():
                 })
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
-            else:
-                return {'code': 4, 'error': "No presence found"}
+
+            return {'code': 4, 'error': "No presence found"}
         except:
             return {'code': 4, 'error': "No presence found"}, 403
