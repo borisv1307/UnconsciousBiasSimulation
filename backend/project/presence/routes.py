@@ -15,27 +15,32 @@ from . import presence_blueprint
 def add_presence_to_pool():
     date_joined = datetime.utcnow()
     profile_data = request.get_json()
-    output = insert_data(profile_data)
-
-    if output != "ERROR":
-        result = {
-            "profile_id": profile_data['profile_id'],
-            "position": profile_data['position'],
-            "aboutMe":  profile_data['aboutMe'],
-            "education": profile_data['education'],
-            "experience": profile_data['experience'],
-            "user_id": profile_data['user_id'],
-            "profileName": profile_data['profileName'],
-            "profileImg": profile_data['profileImg'],
-            "first_name": profile_data['first_name'],
-            "last_name": profile_data['last_name'],
-            "status": "submitted",
-            "addedOn": date_joined,
-            "reviewedOn": "",
-            "reviewedBy": ""
-        }
+    presence = mongo.db.presence
+    user_presence_count = presence.count_documents({ "$and": [{ "user_id": profile_data['user_id']},{ "profile_id": profile_data['profile_id']},{ "status": "submitted"}]})
+    if user_presence_count == 0:
+        output = insert_data(profile_data)
+        if output != "ERROR":
+            result = {
+                "profile_id": profile_data['profile_id'],
+                "position": profile_data['position'],
+                "aboutMe":  profile_data['aboutMe'],
+                "education": profile_data['education'],
+                "experience": profile_data['experience'],
+                "user_id": profile_data['user_id'],
+                "profileName": profile_data['profileName'],
+                "profileImg": profile_data['profileImg'],
+                "first_name": profile_data['first_name'],
+                "last_name": profile_data['last_name'],
+                "status": "submitted",
+                "addedOn": date_joined,
+                "reviewedOn": "",
+                "reviewedBy": ""
+            }
+        else:
+            result = {'code': 4, "error": "User account does not exist"}, 403
     else:
-        result = {'code': 2, "error": "User account does not exist"}, 403
+        result = {'code':4, "error":"User presence already exists"}, 403
+
     return result
 
 
