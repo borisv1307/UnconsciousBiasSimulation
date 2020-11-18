@@ -22,6 +22,10 @@ def add_presence_to_pool():
         if output != "ERROR":
             result = {
                 "profile_id": profile_data['profile_id'],
+                "state": profile_data['state'],
+                "zip": profile_data['zip'],
+                "city": profile_data['city'],
+                "email": profile_data['email'],
                 "position": profile_data['position'],
                 "aboutMe":  profile_data['aboutMe'],
                 "education": profile_data['education'],
@@ -49,6 +53,10 @@ def insert_data(profile_information):
     presence = mongo.db.presence
     create_presence = presence.insert_one({
         "profile_id": profile_information['profile_id'],
+        "state": profile_information['state'],
+        "zip": profile_information['zip'],
+        "city": profile_information['city'],
+        "email": profile_information['email'],
         "user_id": profile_information['user_id'],
         "profileName": profile_information['profileName'],
         "profileImg": profile_information['profileImg'],
@@ -82,6 +90,10 @@ def get_all_presence():
                     'profile_id': presence['profile_id'],
                     'profile_name': presence['profileName'],
                     'profile_image': presence['profileImg'],
+                    'state': presence['state'],
+                    'zip': presence['zip'],
+                    'city': presence['city'],
+                    'email': presence['email'],
                     'first_name': presence['first_name'],
                     'last_name': presence['last_name'],
                     'about_me': presence['aboutMe'],
