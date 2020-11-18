@@ -35,12 +35,14 @@ const initialState = {
   education: [],
   experience: [],
   editState: false,
+
   editSchool: "",
   editDegree: "",
   editMajor: "",
   editEduStartDate: "",
   editEduEndDate: "",
   editGpa: "",
+
   editTitle: "",
   editCompany: "",
   editLocation: "",
@@ -157,6 +159,7 @@ class CreateProfile extends Component {
       });
     }
   };
+
 
   validateAddingEducation = () => {
     var message = "";
@@ -286,18 +289,43 @@ class CreateProfile extends Component {
   };
 
   toggleEditForm = (input) => (e) => {
+    this.setState({
+      editSchool: "",
+      editDegree: "",
+      editMajor: "",
+      editEduStartDate: "",
+      editEduEndDate: "",
+      editGpa: "",
+
+      editTitle: "",
+      editCompany: "",
+      editLocation: "",
+      editExpStartDate: "",
+      editExpEndDate: "",
+    });
     this.setState({ editState: input });
   };
 
+  checkEditedValue = (value, Id) => {
+    if(value){
+      return value
+    }
+    else{
+      return document.getElementById(Id).value
+    }
+  };
+
+
   editEducation = (index) => (e) => {
     const editEducationData = {
-      school: this.state.editSchool,
-      degree: this.state.editDegree,
-      major: this.state.editMajor,
-      eduStartDate: this.state.editEduStartDate,
-      eduEndDate: this.state.editEduEndDate,
-      gpa: this.state.editGpa,
+      school: this.checkEditedValue(this.state.editSchool, this.setElementID("editSchool", index)),
+      degree: this.checkEditedValue(this.state.editDegree, this.setElementID("editDegree", index)),
+      major: this.checkEditedValue(this.state.editMajor, this.setElementID("editMajor", index)),
+      eduStartDate: this.checkEditedValue(this.state.editEduStartDate, this.setElementID("editEduStartDate", index)),
+      eduEndDate: this.checkEditedValue(this.state.editEduEndDate, this.setElementID("editEduEndDate", index)),
+      gpa: this.checkEditedValue(this.state.editGpa, this.setElementID("editGpa", index))
     };
+    
 
     const newEducation = this.state.education.slice();
     newEducation[index] = editEducationData;
@@ -315,11 +343,11 @@ class CreateProfile extends Component {
 
   editExperience = (index) => (e) => {
     const editExperienceData = {
-      title: this.state.editTitle,
-      company: this.state.editCompany,
-      location: this.state.editLocation,
-      expStartDate: this.state.editExpStartDate,
-      expEndDate: this.state.editExpEndDate,
+      title: this.checkEditedValue(this.state.editTitle, this.setElementID("editTitle", index)),
+      company: this.checkEditedValue(this.state.editCompany, this.setElementID("editCompany", index)),
+      location: this.checkEditedValue(this.state.editLocation, this.setElementID("editLocation", index)),
+      expStartDate: this.checkEditedValue(this.state.editExpStartDate, this.setElementID("editExpStartDate", index)),
+      expEndDate: this.checkEditedValue(this.state.editExpEndDate, this.setElementID("editExpEndDate", index))
     };
 
     const newExperience = this.state.experience.slice();
@@ -334,6 +362,19 @@ class CreateProfile extends Component {
         console.log(this.state.experience);
       }
     );
+  };
+
+  getOptionalValue = (value, check) => {
+    if(value){
+      return value
+    }
+    else{
+      return check
+    }
+  }
+
+  setElementID = (name, index) => {
+    return name + index
   };
 
   imageHandler = async (e) => {
@@ -556,7 +597,7 @@ class CreateProfile extends Component {
                           </Form.Row>
 
                           <Form.Group>
-                            <Form.Label>GPA</Form.Label>
+                            <Form.Label>GPA (Optional)</Form.Label>
                             <Form.Control
                               type="number"
                               step="0.01"
@@ -644,7 +685,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editSchool"
                                               )}
-                                              id="editSchool"
+                                              id={this.setElementID("editSchool", index)}
                                               name="editSchool"
                                               defaultValue={edu.school}
                                             />
@@ -657,7 +698,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editDegree"
                                               )}
-                                              id="editDegree"
+                                              id={this.setElementID("editDegree", index)}
                                               name="editDegree"
                                               defaultValue={edu.degree}
                                             />
@@ -670,7 +711,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editMajor"
                                               )}
-                                              id="editMajor"
+                                              id={this.setElementID("editMajor", index)}
                                               name="editMajor"
                                               defaultValue={edu.major}
                                             />
@@ -686,7 +727,7 @@ class CreateProfile extends Component {
                                                 onChange={this.updateField(
                                                   "editEduStartDate"
                                                 )}
-                                                id="editEduStartDate"
+                                                id={this.setElementID("editEduStartDate", index)}
                                                 name="editEduStartDate"
                                                 defaultValue={edu.eduStartDate}
                                               />
@@ -698,7 +739,7 @@ class CreateProfile extends Component {
                                                 onChange={this.updateField(
                                                   "editEduEndDate"
                                                 )}
-                                                id="editEduEndDate"
+                                                id={this.setElementID("editEduEndDate", index)}
                                                 name="editEduEndDate"
                                                 defaultValue={edu.eduEndDate}
                                               />
@@ -706,16 +747,16 @@ class CreateProfile extends Component {
                                           </Form.Row>
 
                                           <Form.Group>
-                                            <Form.Label>GPA</Form.Label>
+                                            <Form.Label>GPA (Optional)</Form.Label>
                                             <Form.Control
                                               type="number"
                                               step="0.01"
                                               onChange={this.updateField(
                                                 "editGpa"
                                               )}
-                                              id="editGpa"
+                                              id={this.setElementID("editGpa", index)}
                                               name="editGpa"
-                                              value={edu.gpa}
+                                              value={this.getOptionalValue(this.state.editGpa, edu.gpa)}
                                             />
                                           </Form.Group>
                                           <div className="text-center"></div>
@@ -908,7 +949,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editTitle"
                                               )}
-                                              id="editTitle"
+                                              id={this.setElementID("editTitle", index)} 
                                               name="editTitle"
                                               defaultValue={exp.title}
                                             />
@@ -921,7 +962,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editCompany"
                                               )}
-                                              id="editCompany"
+                                              id={this.setElementID("editCompany", index)}
                                               name="editCompany"
                                               defaultValue={exp.company}
                                             />
@@ -934,7 +975,7 @@ class CreateProfile extends Component {
                                               onChange={this.updateField(
                                                 "editLocation"
                                               )}
-                                              id="editLocation"
+                                              id={this.setElementID("editLocation", index)}
                                               name="editLocation"
                                               defaultValue={exp.location}
                                             />
@@ -950,7 +991,7 @@ class CreateProfile extends Component {
                                                 onChange={this.updateField(
                                                   "editExpStartDate"
                                                 )}
-                                                id="editExpStartDate"
+                                                id={this.setElementID("editExpStartDate", index)}
                                                 name="editExpStartDate"
                                                 defaultValue={exp.expStartDate}
                                               />
@@ -962,7 +1003,7 @@ class CreateProfile extends Component {
                                                 onChange={this.updateField(
                                                   "editExpEndDate"
                                                 )}
-                                                id="editExpEndDate"
+                                                id={this.setElementID("editExpEndDate", index)}
                                                 name="editExpEndDate"
                                                 defaultValue={exp.expEndDate}
                                               />
