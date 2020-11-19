@@ -12,4 +12,13 @@ describe("Home", () => {
   it("Home should exists", () => {
     expect(wrapper.exists()).toBe(true);
   });
+  it("should have h1", () => {
+    expect(wrapper.find("h1").length).toEqual(1);
+  });
+  it("should have h4", () => {
+    expect(wrapper.find("h4").length).toEqual(1);
+  });
+  it("should have h5", () => {
+    expect(wrapper.find("h5").length).toEqual(1);
+  });
 });

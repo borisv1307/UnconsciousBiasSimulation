@@ -19,8 +19,8 @@ code {
 
 .header {
   background-color: #84dad5;
-  height: 70px;
-  padding-top: 1.1%;
+  height: 90px;
+  padding-top: 1%;
 }
 
 .card-heading {
@@ -29,12 +29,12 @@ code {
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 1.5%;
-  color: whitesmoke;
+  color: #212529;
 }
 
 .image-style {
-  width: 18rem;
-  height: 18rem;
+  width: 15rem;
+  height: 15rem;
 }
 
 .login-heading {
@@ -51,4 +51,3 @@ code {
 .name-header {
   margin-left: 1100px;
 }
-

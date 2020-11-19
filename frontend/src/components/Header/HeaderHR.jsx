@@ -22,7 +22,6 @@ class Header extends Component {
   };
 
   render() {
-    let user = ls.get("userid");
     let name = ls.get("name");
     return (
       <>
@@ -40,14 +39,12 @@ class Header extends Component {
           <Navbar.Brand className="nav-style-title " href="/home">
             {"Unconscious Bias Simulation: " + name}
           </Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end nav-style">
-            {/* <Nav.Link href="/home">Home</Nav.Link> */}
-            <Nav.Link href={"/createProfile?userId=" + user}>
-              Create Presence
-            </Nav.Link>
-            <Nav.Link href={"/viewProfile?userId=" + user}>
-              View Presence
+          <Navbar.Collapse className="justify-content-end">
+            <Nav.Link
+              className="justify-content-end nav-style"
+              href="/viewApplications"
+            >
+              View Applications
             </Nav.Link>
             <Nav.Link>
               <Button id="logout" onClick={this.handleSubmit} variant="primary">

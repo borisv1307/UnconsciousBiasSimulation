@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string, duplicate-code
 import re
 from json import loads
 from functools import wraps
@@ -19,13 +19,14 @@ def profile_validation(func):
     def decorated(*args, **kwargs):
         try:
             profile_data = request.get_json()
-            get_email = profile_data['email']
+            get_user_id = profile_data['user_id']
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
-
-        if get_email is None or re.search("^\s*$", get_email):
+        if get_user_id is None or re.search("^\s*$", get_user_id):
             return {"code": 4, "error": "Input fields cannot be blank or null"}, 403
+        if not get_user_id.isdigit():
+            return {"code": 4, "error": "Input user ID is not a digit"}, 403
 
         return func(*args, **kwargs)
     return decorated
@@ -37,8 +38,8 @@ def create_user_profile():
    # Get fields from request body, check for missing fields
 
     profile_data = request.get_json()
-    get_email = profile_data['email']
 
+    get_user_id = int(profile_data['user_id'])
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
@@ -49,14 +50,11 @@ def create_user_profile():
         profile_id = 1
 
     # check if email is already in database
-    email_exists = user.count_documents({'email': get_email})
-    if email_exists:
-        get_user_id = user.find_one({"email": get_email}, {
-                                    'user_id': 1, '_id': 0})
-        user_id = get_user_id['user_id']
+    user_id_exists = user.count_documents({'user_id': get_user_id})
+    if user_id_exists:
         create_profile = profile.insert_one({
             "profile_id": profile_id,
-            "user_id": user_id,
+            "user_id": get_user_id,
             "profileName": profile_data['profileName'],
             "profileImg": profile_data['profileImg'],
             "first_name": profile_data['first_name'],
@@ -70,7 +68,7 @@ def create_user_profile():
         if create_profile:
             output = {
                 "profile_id": profile_id,
-                "user_id": user_id,
+                "user_id": get_user_id,
                 "profileName": profile_data['profileName'],
                 "profileImg": profile_data['profileImg'],
                 "first_name": profile_data['first_name'],
@@ -109,44 +107,45 @@ def get_user_profiles(user_id):
                         validate_user = user[0]['contact_details']['state']
                         value = True
                     except Exception as exception_msg:
-                        print("Unhandled Error inside the check condition:- %s" % exception_msg)
+                        print(
+                            "Unhandled Error inside the check condition:- %s" % exception_msg)
                         value = False
                     if value:
                         output.append({
-                        "profile_id": getprofile['profile_id'],
-                        "profileName": getprofile['profileName'],
-                        "user_id": getprofile['user_id'],
-                        "state": user[0]['contact_details']['state'],
-                        "zip": user[0]['contact_details']['zip'],
-                        "city": user[0]['contact_details']['city'],
-                        "email": user[0]['email'],
-                        "profileImg": getprofile['profileImg'],
-                        "first_name": getprofile['first_name'],
-                        "last_name": getprofile['last_name'],
-                        "position": getprofile['position'],
-                        "aboutMe":  getprofile['aboutMe'],
-                        "education": getprofile['education'],
-                        "experience": getprofile['experience']
+                            "profile_id": getprofile['profile_id'],
+                            "profileName": getprofile['profileName'],
+                            "user_id": getprofile['user_id'],
+                            "state": user[0]['contact_details']['state'],
+                            "zip": user[0]['contact_details']['zip'],
+                            "city": user[0]['contact_details']['city'],
+                            "email": user[0]['email'],
+                            "profileImg": getprofile['profileImg'],
+                            "first_name": getprofile['first_name'],
+                            "last_name": getprofile['last_name'],
+                            "position": getprofile['position'],
+                            "aboutMe":  getprofile['aboutMe'],
+                            "education": getprofile['education'],
+                            "experience": getprofile['experience']
                         })
                     else:
                         output.append({
-                        "profile_id": getprofile['profile_id'],
-                        "profileName": getprofile['profileName'],
-                        "user_id": getprofile['user_id'],
-                        "state": get_contact[0]['state'],
-                        "zip": get_contact[0]['zip'],
-                        "city": get_contact[0]['city'],
-                        "email": user[0]['email'],
-                        "profileImg": getprofile['profileImg'],
-                        "first_name": getprofile['first_name'],
-                        "last_name": getprofile['last_name'],
-                        "position": getprofile['position'],
-                        "aboutMe":  getprofile['aboutMe'],
-                        "education": getprofile['education'],
-                        "experience": getprofile['experience']
-                        }) 
+                            "profile_id": getprofile['profile_id'],
+                            "profileName": getprofile['profileName'],
+                            "user_id": getprofile['user_id'],
+                            "state": get_contact[0]['state'],
+                            "zip": get_contact[0]['zip'],
+                            "city": get_contact[0]['city'],
+                            "email": user[0]['email'],
+                            "profileImg": getprofile['profileImg'],
+                            "first_name": getprofile['first_name'],
+                            "last_name": getprofile['last_name'],
+                            "position": getprofile['position'],
+                            "aboutMe":  getprofile['aboutMe'],
+                            "education": getprofile['education'],
+                            "experience": getprofile['experience']
+                        })
             else:
-                output = {"error": "Profiles not found"}   
+                output = {"error": "Profiles not found"}
         else:
             output = {"error": "User not found"}
         if len(output) == 0:

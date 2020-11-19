@@ -5,7 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
-import Figure from "react-bootstrap/Figure";
+import { Alert } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
 
 class Profile extends Component {
   constructor(props) {
@@ -38,13 +39,12 @@ class Profile extends Component {
       );
       var yeardiff = parseInt(months / 12);
       var monthDiff = months % 12;
-      // console.log(yeardiff + " year " + monthDiff + " months");
       exp[i]["duration"] =
         yeardiff > 1
           ? yeardiff + " years "
           : yeardiff === 0
-          ? ""
-          : yeardiff + " year ";
+            ? ""
+            : yeardiff + " year ";
       exp[i]["duration"] +=
         monthDiff > 1 ? monthDiff + " months" : monthDiff + " month";
     });
@@ -52,6 +52,28 @@ class Profile extends Component {
     profile.experience = exp;
     this.setState({ profile });
   }
+
+  handleSubmit = (e) => {
+    var profile = this.state.profile;
+
+
+    console.log(profile)
+    fetch("http://localhost:5000/api/v1/addPresence/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(profile),
+    })
+      .then((res) => res.json())
+      .then((res) => res);
+
+    this.setState({
+      alertMessage: "Successfully Sent",
+      allSuccessState: true,
+      allErrorState: false,
+    });
+  };
 
   render() {
     return (
@@ -66,37 +88,52 @@ class Profile extends Component {
             }
           `}
         </style>
-        
+
+        <div className="text-center">
+          {this.state.allErrorState ? (
+            <Alert variant="danger">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+          {this.state.allSuccessState ? (
+            <Alert variant="success">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+        </div>
         <Container className="containbody justify-content-center">
           <div>
-            <h1> {this.state.profile.first_name} {this.state.profile.last_name}</h1>
+            <h1>
+              {" "}
+              {this.state.profile.first_name} {this.state.profile.last_name}
+            </h1>
             <h5> Position sought: {this.state.profile.position}</h5>
             <h5> Email: {this.state.profile.email} </h5>
           </div>
-          
+
           <Row>
             <Col>
-              <Card.Title className="card-heading card-title h5">
+              <Card.Title className="card-heading card-title h5 font-weight-bold">
                 ABOUT ME
               </Card.Title>
               <Card bg="Light">
                 <Card.Body>
                   <Row>
                     <Col sm={8}>
-                      <h5> Location: {this.state.profile.city}, {this.state.profile.state}, {this.state.profile.zip}</h5>
-                      <br/>
+                      <h5>
+                        {" "}
+                        Location: {this.state.profile.city},{" "}
+                        {this.state.profile.state}, {this.state.profile.zip}
+                      </h5>
+                      <br />
                       <label id="aboutMe">{this.state.profile.aboutMe}</label>
                     </Col>
                     <Col sm={3}>
-                      <Figure>
-                        <Figure.Image
-                          width={100}
-                          height={100}
-                          className="image-style"
-                          src={this.state.profile.profileImg}
-                          roundedCircle
-                        />
-                      </Figure>
+                      <Image
+                        className="image-style"
+                        src={this.state.profile.profileImg}
+                        roundedCircle
+                      ></Image>
                     </Col>
                   </Row>
                 </Card.Body>
@@ -111,12 +148,13 @@ class Profile extends Component {
                 {this.state.profile.education.map((edu, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong> {edu.school} </strong>  <br /> {edu.degree} in {edu.major}
+                      <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
+                      {edu.major}
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
                         <Card.Text>
-                          {edu.eduStartDate} to {edu.eduEndDate} <br/>
+                          {edu.eduStartDate} to {edu.eduEndDate} <br />
                           GPA: {edu.gpa}
                         </Card.Text>
                       </Card.Body>
@@ -125,15 +163,18 @@ class Profile extends Component {
                 ))}
               </Accordion>
             </Col>
-            
-            <Col>
 
+            <Col>
               <Accordion defaultActiveKey="0">
                 <Card.Title className="card-heading">EXPERIENCE</Card.Title>
                 {this.state.profile.experience.map((exp, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong> {exp.company} {exp.title} </strong> <br />
+                      <strong>
+                        {" "}
+                        {exp.company} {exp.title}{" "}
+                      </strong>{" "}
+                      <br />
                       <label id="duration">{exp.duration}</label>
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
@@ -147,23 +188,18 @@ class Profile extends Component {
                   </Card>
                 ))}
               </Accordion>
-            
             </Col>
-
           </Row>
           <br />
-
+          <br />
           <Row className="justify-content-center">
-            <Col>
-              <Button id="Send">
+            <Col sm={2}>
+              <Button id="Send" className="submit" onClick={this.handleSubmit}>
                 Send
-              </Button>{" "}
-              <Button id="Edit">
-                Edit
-              </Button>{" "}
+              </Button>
+              &nbsp;&nbsp; <Button id="Edit">Edit</Button>{" "}
             </Col>
           </Row>
-          <br />
           <br />
         </Container>
       </>
