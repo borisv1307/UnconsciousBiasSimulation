@@ -76,42 +76,8 @@ def insert_data(profile_information):
     return "ERROR"
 
 
+
 @presence_blueprint.route('/api/v1/getAllPresence/', methods=['GET'])
-def get_all_presence():
-    if request.method == 'GET':
-        all_presence = mongo.db.presence
-
-        output = []
-        try:
-            for presence in all_presence.find():
-
-                output.append({
-                    'user_id': int(presence['user_id']),
-                    'profile_id': presence['profile_id'],
-                    'profile_name': presence['profileName'],
-                    'profile_image': presence['profileImg'],
-                    'state': presence['state'],
-                    'zip': presence['zip'],
-                    'city': presence['city'],
-                    'email': presence['email'],
-                    'first_name': presence['first_name'],
-                    'last_name': presence['last_name'],
-                    'about_me': presence['aboutMe'],
-                    'position': presence['position'],
-                    'education': presence['education'],
-                    'experience': presence['experience'],
-                    'status': presence['status'],
-                    'reviewed_on': presence['reviewed_on'],
-                    'reviewed_by': presence['reviewed_by']
-                })
-            if len(output) > 0:
-                return {'count': len(output), 'results': output}
-
-            return {'code': 4, 'error': "No presence found"}
-        except:
-            return {'code': 4, 'error': "No presence found"}, 403
-
-@presence_blueprint.route('/api/v1/presenceById/', methods=['GET'])
 def get_all_presence_for_reviewer():
     if request.method == 'GET':
         presences = mongo.db.presence
@@ -121,7 +87,7 @@ def get_all_presence_for_reviewer():
         output = []
 
         try:
-            for presence in presences.find({"$and":[{"reviewed_by": {"$nin":[reviewer_id]}},{ "status": "submitted"}]}):
+            for presence in presences.find({"reviewed_by": {"$nin":[reviewer_id]}}):
                 output.append({
                     'user_id': int(presence['user_id']),
                     'profile_id': presence['profile_id'],
