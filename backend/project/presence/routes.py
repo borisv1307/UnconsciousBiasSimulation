@@ -111,41 +111,41 @@ def get_all_presence():
         except:
             return {'code': 4, 'error': "No presence found"}, 403
 
-
-@presence_blueprint.route('/api/v1/presenceById/', methods=['GET'])
-def get_all_presence_by_reviewer():
-    if request.method == 'GET':
-        presences = mongo.db.presence
-        reviewer = request.get_json()
-        reviewer_id = reviewer['user_id']
-
-        output = []
-        try:
-            for presence in presences.find({"reviewed_by": {"$in":[reviewer_id]}}):
-                output.append({
-                    'user_id': int(presence['user_id']),
-                    'profile_id': presence['profile_id'],
-                    'profile_name': presence['profileName'],
-                    'profile_image': presence['profileImg'],
-                    'state': presence['state'],
-                    'zip': presence['zip'],
-                    'city': presence['city'],
-                    'email': presence['email'],
-                    'first_name': presence['first_name'],
-                    'last_name': presence['last_name'],
-                    'about_me': presence['aboutMe'],
-                    'position': presence['position'],
-                    'education': presence['education'],
-                    'experience': presence['experience'],
-                    'status': presence['status'],
-                    'reviewed_on': presence['reviewed_on'],
-                    'reviewed_by': presence['reviewed_by']
-                })
-            if len(output) > 0:
-                return {'count': len(output), 'results': output}
-            return {'code': 4, 'error': "No presence found"}
-        except:
-            return {'code': 4, 'error': "No presence found"}, 403
+#
+# @presence_blueprint.route('/api/v1/presenceById/', methods=['GET'])
+# def get_all_presence_by_reviewer():
+#     if request.method == 'GET':
+#         presences = mongo.db.presence
+#         reviewer = request.get_json()
+#         reviewer_id = reviewer['user_id']
+#
+#         output = []
+#         try:
+#             for presence in presences.find({"reviewed_by": {"$in":[reviewer_id]}}):
+#                 output.append({
+#                     'user_id': int(presence['user_id']),
+#                     'profile_id': presence['profile_id'],
+#                     'profile_name': presence['profileName'],
+#                     'profile_image': presence['profileImg'],
+#                     'state': presence['state'],
+#                     'zip': presence['zip'],
+#                     'city': presence['city'],
+#                     'email': presence['email'],
+#                     'first_name': presence['first_name'],
+#                     'last_name': presence['last_name'],
+#                     'about_me': presence['aboutMe'],
+#                     'position': presence['position'],
+#                     'education': presence['education'],
+#                     'experience': presence['experience'],
+#                     'status': presence['status'],
+#                     'reviewed_on': presence['reviewed_on'],
+#                     'reviewed_by': presence['reviewed_by']
+#                 })
+#             if len(output) > 0:
+#                 return {'count': len(output), 'results': output}
+#             return {'code': 4, 'error': "No presence found"}
+#         except:
+#             return {'code': 4, 'error': "No presence found"}, 403
 
 
 @presence_blueprint.route('/api/v1/unreviewedPresence/', methods=['GET'])

@@ -141,31 +141,31 @@ class TestPool:
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
 
-    def test_get_all_presence_reviewed_by_a_reviewer(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
-        THEN check that the response is valid
-        """
-        data = {
-            "user_id": "1"
-        }
-        response = test_client.get('/api/v1/presenceById/',data=json.dumps(data), headers={'Content-Type': 'application/json'})
-        assert response.status_code == 200
-        assert response.data != b'{"code":4,"error":"No presence found"}\n'
-
-    def test_for_validating_all_presence_reviewed_by_a_reviewer(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
-        THEN check that the response is valid
-        """
-        data = {
-            "user_id": "7"
-        }
-        response = test_client.get('/api/v1/presenceById/',data=json.dumps(data), headers={'Content-Type': 'application/json'})
-        assert response.status_code == 200
-        assert response.data == b'{"code":4,"error":"No presence found"}\n'
+    # def test_get_all_presence_reviewed_by_a_reviewer(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+    #     THEN check that the response is valid
+    #     """
+    #     data = {
+    #         "user_id": "1"
+    #     }
+    #     response = test_client.get('/api/v1/presenceById/',data=json.dumps(data), headers={'Content-Type': 'application/json'})
+    #     assert response.status_code == 200
+    #     assert response.data != b'{"code":4,"error":"No presence found"}\n'
+    #
+    # def test_for_validating_all_presence_reviewed_by_a_reviewer(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+    #     THEN check that the response is valid
+    #     """
+    #     data = {
+    #         "user_id": "7"
+    #     }
+    #     response = test_client.get('/api/v1/presenceById/',data=json.dumps(data), headers={'Content-Type': 'application/json'})
+    #     assert response.status_code == 200
+    #     assert response.data == b'{"code":4,"error":"No presence found"}\n'
 
     def test_get_all_unreviewed_presence_for_a_reviewer(self, test_client):
         """
