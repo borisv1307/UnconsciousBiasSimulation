@@ -60,6 +60,7 @@ class TestSomething:
         "registration_type": "jobSeeker",
         "gender": "Male",
         "date_of_birth": random_date,
+        'email_validation':'False',
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
@@ -70,8 +71,10 @@ class TestSomething:
         }
         }
         response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        get_user= json.loads(response.data)
+        get_user_details = get_user['user']['otp_delivery_status']
         assert response.status_code == 200
-        assert response.data != 'null'
+        assert get_user_details == 'Successfully sent email'
 
 
     def test_for_missing_user_details(self, test_client):
@@ -87,6 +90,7 @@ class TestSomething:
         "registrationType": "jobSeeker",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
+        'email_validation':'False',
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
@@ -116,6 +120,7 @@ class TestSomething:
         "registration_type": "",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
+        'email_validation':'False',
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
@@ -144,6 +149,7 @@ class TestSomething:
         "registration_type": "jobSeeker",
         "gender": "Male",
         "date_of_birth": "1992-10-01",
+        'email_validation':'False',
         "contact_details": {
             "address": "test Street",
             "address2": "test Street 2",
@@ -447,6 +453,7 @@ class TestSomething:
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        print('res',response.data)
         assert response.status_code == 200
         assert response.data == b'{"success":"Successfully logged out"}\n'
 
