@@ -77,13 +77,11 @@ def insert_data(profile_information):
 
 
 
-@presence_blueprint.route('/api/v1/getAllPresence/', methods=['GET'])
-def get_all_presence_for_reviewer():
+@presence_blueprint.route('/api/v1/getAllPresence/<user_id>/', methods=['GET'])
+def get_all_presence_for_reviewer(user_id):
     if request.method == 'GET':
         presences = mongo.db.presence
-        reviewer = request.get_json()
-        reviewer_id = reviewer['user_id']
-
+        reviewer_id = user_id
         output = []
 
         try:
