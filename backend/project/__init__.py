@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from functools import wraps
+import smtplib
 
 mongo = PyMongo()
 
@@ -39,6 +40,46 @@ def token_required(f):
             return jsonify({'message': 'Token is Invalid!'}), 403
         return f(*args, **kwargs)
     return decorated
+
+# Login email and password for account sending emails
+sender = "Noreply.ubsapp@gmail.com"
+password = "Ubsdb@drexel"
+
+# Mail domain and port for account sending alerts
+host = "smtp.gmail.com"
+port = 587
+
+# Message template for alert
+MESSAGE = """From: {sender}
+To: {receivers}
+Subject: Verfiy your email to finish signing up for UBS
+
+Dear {User},
+
+Welcome! Thanks for signing up, to activate your account please use this One Time Password (OTP):- {OTP}
+
+Cheers!!,
+UBS Support Team
+"""
+
+# Email function
+def send_email(set_first_name,set_receiver,set_otp):
+    try:
+        smtpObj = smtplib.SMTP(host, port)  # Set up SMTP object
+        smtpObj.starttls()
+        smtpObj.login(sender, password)
+        smtpObj.sendmail(sender,set_receiver,
+                             MESSAGE.format(sender=sender,
+                                            receivers=set_receiver,
+                                            OTP=set_otp,
+                                            User=set_first_name
+                                            )
+                             )
+        return {'status':'Successfully sent email'}          
+    except smtplib.SMTPException as e:
+        return {'status':'error sending email','error_msg':str(e)}
+        
+        
 
 def register_blueprints(app):
     from project.home import home_blueprint
