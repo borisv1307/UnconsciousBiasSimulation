@@ -137,6 +137,6 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        response = test_client.get('/api/v1/getAllPresence/1/', headers={'Content-Type': 'application/json'})
+        response = test_client.get('/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
