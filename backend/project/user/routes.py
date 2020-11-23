@@ -1,12 +1,24 @@
 #pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
-import bcrypt, re
+import bcrypt, re, random, string, sys
 from flask_jwt_extended import create_access_token
-from flask import request
-from project import mongo, token_required
+from flask import request, render_template
+from project import mongo, token_required, send_email
 from pymongo import ReturnDocument
 from . import user_blueprint
 
+
+
+def generate_otp(size):  
+         
+    # Takes random choices from  
+    # ascii_letters and digits  
+    generate_pass = ''.join([random.choice( string.ascii_uppercase +
+                                            string.ascii_lowercase +
+                                            string.digits)  
+                                            for n in range(size)])  
+                             
+    return generate_pass
 
 # Registration API
 @user_blueprint.route('/api/v1/createUser/', methods=['POST'])
@@ -43,25 +55,39 @@ def create_user():
     if email_exists:
         output = {'code': 4, 'error': "Email is already in use"}, 403
     else:
-        user = users.insert_one({
-            'user_id': user_id,
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'password' : hashed_password,
-            'date_joined' : date_joined,
-            'registration_type' : registration_type,
-            'gender': gender,
-            'date_of_birth': date_of_birth,
-            'contact_details' : request.get_json()['contact_details'],
-        })
-        # Upon successful insert create JWT access token, update token in authtoken collection
-        if user:
-            access_token = create_access_token(identity={'user_id': user_id, 'date_joined': date_joined})
-            tokens = mongo.db.authtoken
-            tokens.insert_one({"user_id": user_id, "key": access_token, 'created': datetime.utcnow()})
-            output = {'token': access_token, 'user': {'user_id': user_id, 'first_name': first_name, 'email': email, 'registration_type': registration_type}}
+        try:
+            get_otp = generate_otp(10)
+            get_status = send_email(first_name,email,get_otp)
+            user_otp = mongo.db.users_otp
+            user_otp.find_one_and_update({"user_id": user_id},{
+                                            "$set": {"otp": get_otp, 'created': datetime.utcnow()}}, upsert=True)
+        except Exception as es:
+            print('error',str(es))
+            
 
+        if get_status['status']!= 'error sending email':
+            user = users.insert_one({
+                'user_id': user_id,
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'password' : hashed_password,
+                'date_joined' : date_joined,
+                'registration_type' : registration_type,
+                'gender': gender,
+                'date_of_birth': date_of_birth,
+                'email_validation':'False',
+                'contact_details' : request.get_json()['contact_details'],
+            })
+        # Upon successful insert create JWT access token, update token in authtoken collection
+            if user:
+                access_token = create_access_token(identity={'user_id': user_id, 'date_joined': date_joined})
+                tokens = mongo.db.authtoken
+                tokens.find_one_and_update({"user_id": user_id},{
+                                            "$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
+                output = {'token': access_token, 'user': {'user_id': user_id, 'first_name': first_name, 'email': email, 'registration_type': registration_type,'otp_delivery_status': get_status['status']}}
+        else:
+            output = {'code': 5, 'error': "Error sending email",'error_msg':get_status['error_msg']}, 403
     return output
 
 # Login API
@@ -90,7 +116,7 @@ def user_login():
          # Create token and update token into authtoken collection, this is to maintain session considering future logout scenario
         tokens.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {"key": access_token, 'created': datetime.utcnow()}}, upsert=True)
         user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
-        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token, "registration_type" : user['registration_type'], "first_name" : user['first_name'], "last_name":user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth']}
+        output = {"user_id" : user['user_id'], "email" : user['email'], "token": access_token, "registration_type" : user['registration_type'], "first_name" : user['first_name'], "last_name":user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth'],"email_validation": user['email_validation']}
 
     else:
         return {'code': 4, "error": "Invalid password"}, 403
