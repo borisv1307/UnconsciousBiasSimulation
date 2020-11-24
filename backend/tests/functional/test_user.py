@@ -462,16 +462,21 @@ class TestSomething:
         WHEN the '/api/v1/verify_otp/' page is requested (POST)
         THEN check that the response is valid
         """
-        user_otp = mongo.db.users_otp
-        get_user_id = user_otp.find({},{"user_id":1})
         number_list = []
+        user_list = []
+
+        otp = mongo.db.users_otp
+        users = mongo.db.user
+
+        get_user_id = otp.find({},{"user_id":1})
         for user in get_user_id:
             number_list.append(user['user_id'])
-        set_user_id = random.choice(number_list)
-        if set_user_id == 240:
-            number_list.remove(240)
-            set_user_id = random.choice(number_list)
-        get_otp = user_otp.find_one( { "user_id": set_user_id },{ 'otp': 1, '_id': 0 })
+
+        users_with_otp = users.find( { 'user_id': { '$in': number_list } } )
+        for user_with_tok in users_with_otp:
+            user_list.append(user_with_tok['user_id'])
+        set_user_id = random.choice(user_list)
+        get_otp = otp.find_one( { "user_id": set_user_id },{ 'otp': 1, '_id': 0 })
         get_corresponding_otp = get_otp['otp']
 
         data = {
@@ -489,17 +494,28 @@ class TestSomething:
         WHEN the '/api/v1/verify_otp/' page is requested (POST)
         THEN check that the response is valid
         """
-        user_otp = 'fbLGnQruBM'
-        set_user_id = 240
+        number_list = []
+        user_list = []
 
+        otp = mongo.db.users_otp
+        users = mongo.db.user
+
+        get_user_id = otp.find({},{"user_id":1})
+        for user in get_user_id:
+            number_list.append(user['user_id'])
+
+        users_with_otp = users.find( { 'user_id': { '$in': number_list } } )
+        for user_with_tok in users_with_otp:
+            user_list.append(user_with_tok['user_id'])
+        set_user_id = random.choice(user_list)
+        print('iser--',set_user_id)
 
         data = {
-        "user_id":set_user_id,
-        "otp":user_otp
+        "user_id": set_user_id,
+        "otp": 'fbLGnQruBM'
         }
 
         response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('res----',response.data)
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id and OTP mismatch"}\n'
 
@@ -525,6 +541,53 @@ class TestSomething:
         print('res----',response.data)
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
+    
+    def test_for_verify_otp_when_user_id_not_an_integer(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/verify_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        "user_id":"one",
+        "otp":SET_TOKEN
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"user_id must be numerical"}\n'
+    
+    def test_for_verify_otp_when_otp_is_blank(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/verify_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        "user_id":"6",
+        "otp":"  "
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"OTP cannot be blank or null"}\n'
+
+    def test_for_verify_otp_without_passing_user_id(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/logout/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        
+        data = {
+        
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"Missing fields in request body"}\n'
 
     def test_for_logout_when_user_does_not_exist(self, test_client):
         """
@@ -592,7 +655,6 @@ class TestSomething:
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        print('response_check:---------',response.data)
         assert response.data == b'{"error":"Token cannot be blank or null"}\n'
 
     def test_for_logout_when_token_is_null(self, test_client):
@@ -609,5 +671,4 @@ class TestSomething:
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        print('response_check:---------',response.data)
         assert response.data == b'{"error":"Token cannot be blank or null"}\n'
