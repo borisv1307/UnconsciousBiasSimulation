@@ -20,8 +20,7 @@ def initialize_extensions(app,env_name):
     JWTManager(app)
     app.config['JWT_SECRET_KEY'] = 'secret'
     if env_name =='dev':
-        # app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDB?ssl=true&ssl_cert_reqs=CERT_NONE"
-        app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDBTEST?ssl=true&ssl_cert_reqs=CERT_NONE"
+        app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDB?ssl=true&ssl_cert_reqs=CERT_NONE"
     else:
         app.config['MONGO_URI'] = "mongodb+srv://UBSDBAdmin:Admin123@cluster0.yed1w.azure.mongodb.net/UBSDBTEST?ssl=true&ssl_cert_reqs=CERT_NONE"
     mongo.init_app(app)
