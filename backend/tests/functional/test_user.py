@@ -453,9 +453,78 @@ class TestSomething:
         }
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('res',response.data)
         assert response.status_code == 200
         assert response.data == b'{"success":"Successfully logged out"}\n'
+
+    def test_for_verify_otp(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/verify_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        user_otp = mongo.db.users_otp
+        get_user_id = user_otp.find({},{"user_id":1})
+        number_list = []
+        for user in get_user_id:
+            number_list.append(user['user_id'])
+        set_user_id = random.choice(number_list)
+        if set_user_id == 240:
+            number_list.remove(240)
+            set_user_id = random.choice(number_list)
+        get_otp = user_otp.find_one( { "user_id": set_user_id },{ 'otp': 1, '_id': 0 })
+        get_corresponding_otp = get_otp['otp']
+
+        data = {
+        "user_id":set_user_id,
+        "otp":get_corresponding_otp
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"success":"Email validation successful"}\n'
+    
+    def test_for_verify_otp_when_user_id_does_not_have_otp(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/verify_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        user_otp = 'fbLGnQruBM'
+        set_user_id = 240
+
+
+        data = {
+        "user_id":set_user_id,
+        "otp":user_otp
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        print('res----',response.data)
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"User_id and OTP mismatch"}\n'
+
+    def test_for_verify_otp_when_user_id_does_not_exist(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/verify_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        try:
+            users = mongo.db.user
+            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 10
+        except:
+            user_id= 100000
+
+
+        data = {
+        "user_id":user_id,
+        "otp":'jdhd@RT'
+        }
+
+        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        print('res----',response.data)
+        assert response.status_code == 403
+        assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
 
     def test_for_logout_when_user_does_not_exist(self, test_client):
         """

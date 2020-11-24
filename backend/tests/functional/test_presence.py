@@ -131,12 +131,12 @@ class TestPool:
         assert response.data == b'{"code":4,"error":"User presence already exists"}\n'
 
 
-    def test_get_all_presence_to_be_reviewed(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
-        THEN check that the response is valid
-        """
-        response = test_client.get('/api/v1/getAllPresence/1/', headers={'Content-Type': 'application/json'})
-        assert response.status_code == 200
-        assert response.data != b'{"code":4,"error":"No presence found"}\n'
+    # def test_get_all_presence_to_be_reviewed(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+    #     THEN check that the response is valid
+    #     """
+    #     response = test_client.get('/api/v1/getAllPresence/1/', headers={'Content-Type': 'application/json'})
+    #     assert response.status_code == 200
+    #     assert response.data != b'{"code":4,"error":"No presence found"}\n'

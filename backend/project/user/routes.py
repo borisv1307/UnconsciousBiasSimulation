@@ -123,6 +123,46 @@ def user_login():
 
     return output
 
+### VERIFY OTP
+@user_blueprint.route('/api/v1/verify_otp/', methods=['POST'])
+def verify_otp():
+    # Initialize variables to be inserted and displayed
+    try:
+        user_id = request.get_json()['user_id']
+        get_otp = request.get_json()['otp']
+    except:
+        return {"error": "Missing fields in request body"}, 403
+ 
+    # Convert id to integer
+    try:
+        user_id = int(user_id)
+    except:
+        return {"error": "user_id must be numerical"}, 403
+    
+    # Check if any of the fields are empty
+    if get_otp is None or re.search("^\s*$", get_otp):
+        return {"error": "OTP cannot be blank or null"}, 403
+ 
+    # Get collections
+    users_otp = mongo.db.users_otp
+ 
+    # Check if user exists in users collection
+    users = mongo.db.user
+    user = users.find_one({"user_id" : user_id})
+ 
+    if user:
+        # Check if user exists in users_otp collection
+        db_otp = users_otp.find_one({'user_id': user_id})
+        if get_otp == db_otp['otp']:
+            users_otp.find_one_and_delete({'user_id': user_id})
+            user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {'email_validation': 'True'}})
+            output = {"success": "Email validation successful"}
+        else:
+            output = {'code': 4, "error": "User_id and OTP mismatch"}, 403
+    else:
+        output = {'code': 4, "error": "User_id does not exist"}, 403
+    return output
+
 ### LOGOUT
 @user_blueprint.route('/api/v1/logout/', methods=['POST'])
 def logout():
