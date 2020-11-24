@@ -1,8 +1,8 @@
-#pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+#pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
-import bcrypt, re, random, string, sys
+import bcrypt, re, random, string
 from flask_jwt_extended import create_access_token
-from flask import request, render_template
+from flask import request
 from project import mongo, token_required, send_email
 from pymongo import ReturnDocument
 from . import user_blueprint
@@ -61,8 +61,8 @@ def create_user():
             user_otp = mongo.db.users_otp
             user_otp.find_one_and_update({"user_id": user_id},{
                                             "$set": {"otp": get_otp, 'created': datetime.utcnow()}}, upsert=True)
-        except Exception as es:
-            print('error',str(es))
+        except Exception as get_error_msg:
+            print('error',str(get_error_msg))
             
 
         if get_status['status']!= 'error sending email':

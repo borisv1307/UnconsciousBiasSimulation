@@ -108,6 +108,6 @@ def get_all_presence_for_reviewer(user_id):
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
             return {'code': 4, 'error': "No presence found"}
-        except Exception as e:
-            print('error',e)
+        except Exception as get_error_msg:
+            print('error',get_error_msg)
             return {'code': 4, 'error': "No presence found"}, 403
