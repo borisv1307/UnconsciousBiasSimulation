@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import Header from "../Header/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ls from "local-storage";
 
 const initialState = {
   profileName: "",
@@ -62,7 +63,12 @@ class CreateProfile extends Component {
     super(props);
     this.state = initialState;
   }
-
+  componentDidMount() {
+    const token = ls.get("token");
+    if(token===null || token===""){
+      window.location.href = "/login"
+    }
+  }
   reset() {
     this.setState(initialState);
   }
