@@ -73,7 +73,7 @@ class TestPool:
                 }
             ],
             "status": "submitted",
-            "reviewed_by": "",
+            "reviewed_by": [],
             "added_on": datetime.utcnow(),
             "reviewed_on": ""
         }
@@ -121,7 +121,7 @@ class TestPool:
                 }
             ],
             "status": "submitted",
-            "reviewed_by": "",
+            "reviewed_by": [],
             "added_on": datetime.utcnow(),
             "reviewed_on": ""
         }
