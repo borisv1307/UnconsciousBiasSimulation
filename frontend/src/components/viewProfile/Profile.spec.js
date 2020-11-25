@@ -68,12 +68,12 @@ describe("Profile", () => {
 
   it("Profile should include container", () => {
     const container = wrapper.find("Container");
-    expect(container.length).toEqual(1);
+    expect(container.length).toEqual(8);
   });
 
   it("Profile should include card", () => {
     const container = wrapper.find("Card");
-    expect(container.length).toEqual(5);
+    expect(container.length).toEqual(11);
   });
 
   it("Profile should include image", () => {
@@ -83,12 +83,12 @@ describe("Profile", () => {
 
   it("Profile should include row", () => {
     const container = wrapper.find("Row");
-    expect(container.length).toEqual(4);
+    expect(container.length).toEqual(7);
   });
 
   it("Profile should include Col", () => {
     const container = wrapper.find("Col");
-    expect(container.length).toEqual(6);
+    expect(container.length).toEqual(12);
   });
   it("renders the respective image", () => {
     const fig = wrapper.find("Image");
@@ -97,7 +97,7 @@ describe("Profile", () => {
 
   it("ViewProfiles should include Accordion", () => {
     const accordian = wrapper.find("Accordion");
-    expect(accordian.length).toEqual(2);
+    expect(accordian.length).toEqual(5);
   });
 
   it("Profile should include labels", () => {
@@ -105,15 +105,15 @@ describe("Profile", () => {
   });
 
   it("Profile should include h5 tags", () => {
-    expect(wrapper.find("h5").length).toEqual(3);
+    expect(wrapper.find("h5").length).toEqual(4);
   });
 
-  it("Profile should include 4 Row tags", () => {
-    expect(wrapper.find("Row").length).toEqual(4);
+  it("Profile should include 7 Row tags", () => {
+    expect(wrapper.find("Row").length).toEqual(7);
   });
 
-  it("Profile should include 6 Col tags", () => {
-    expect(wrapper.find("Col").length).toEqual(6);
+  it("Profile should include 12 Col tags", () => {
+    expect(wrapper.find("Col").length).toEqual(12);
   });
 
   it("validate duration value", () => {
@@ -152,4 +152,14 @@ describe("Profile", () => {
     expect(button).toHaveLength(1);
     expect(button.text()).toEqual("Edit");
   });
+
+
+  it("should show the edit profile modal upon pressing the edit button setting the modal_show state to true", () => {
+
+      wrapper.find("Button#Edit").simulate('click'), () => { //submit form
+        wrapper.update();
+      };
+      expect(wrapper.state("modal_show")).toEqual(true);
+    });
 });
+
