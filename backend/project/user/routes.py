@@ -3,12 +3,53 @@ from datetime import datetime
 import bcrypt, re, random, string
 from flask_jwt_extended import create_access_token
 from flask import request
-from project import mongo, token_required, send_email
+from project import mongo, token_required
 from pymongo import ReturnDocument
+import smtplib
 from . import user_blueprint
 
 
+# Get collections
+emails = mongo.db.email
+# Login email and password for account sending emails
+sender = "Noreply.ubsapp@gmail.com"
+get_details = emails.find_one({"email" : sender})
+password = get_details['password']
 
+# Mail domain and port for account sending alerts
+host = get_details['host']
+port = get_details['port']
+
+# Message template for alert
+MESSAGE = """From: {sender}
+To: {receivers}
+Subject: Verfiy your email to finish signing up for UBS
+
+Dear {User},
+
+Welcome! Thanks for signing up, to activate your account please use this One Time Password (OTP):- {OTP}
+
+Cheers!!,
+UBS Support Team
+"""
+
+# Email function
+def send_email(set_first_name,set_receiver,set_otp):
+    try:
+        smtp_obj = smtplib.SMTP(host, port)  # Set up SMTP object
+        smtp_obj.starttls()
+        smtp_obj.login(sender, password)
+        smtp_obj.sendmail(sender,set_receiver,
+                             MESSAGE.format(sender=sender,
+                                            receivers=set_receiver,
+                                            OTP=set_otp,
+                                            User=set_first_name
+                                            )
+                             )
+        return {'status':'Successfully sent email'}          
+    except smtplib.SMTPException as e:
+        return {'status':'error sending email','error_msg':str(e)}
+        
 def generate_otp(size):  
          
     # Takes random choices from  
@@ -307,3 +348,21 @@ def edit_one_user(user_id):
     except:
         output = {'code': 5, "error": "User does not exist"}, 403
     return output
+
+# Registration API
+@user_blueprint.route('/api/v1/savedbcredentials/', methods=['POST'])
+def db_credentials():
+        # Get fields from request body, check for missing fields
+    try:
+        email = request.get_json()['email']
+        hashed_password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
+
+    except:
+        return {'code': 4, 'error': 'Missing request body'}, 403
+    output = {}
+    tokens = mongo.db.authtoken
+    tokens.find_one_and_update({"email": email},{
+                                            "$set": {"password": hashed_password, 'created': datetime.utcnow()}}, upsert=True)
+    output = {'email': email,'password':hashed_password}
+    return output
+
