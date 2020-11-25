@@ -49,17 +49,17 @@ def send_email(set_first_name,set_receiver,set_otp):
         return {'status':'Successfully sent email'}          
     except smtplib.SMTPException as e:
         return {'status':'error sending email','error_msg':str(e)}
-        
-def generate_otp(size):  
+
+def get_random_otp(size):  
          
     # Takes random choices from  
     # ascii_letters and digits  
-    generate_pass = ''.join([random.choice( string.ascii_uppercase +
+    generate_random_otp = ''.join([random.choice( string.ascii_uppercase +
                                             string.ascii_lowercase +
                                             string.digits)  
                                             for n in range(size)])  
                              
-    return generate_pass
+    return generate_random_otp
 
 # Registration API
 @user_blueprint.route('/api/v1/createUser/', methods=['POST'])
@@ -97,7 +97,7 @@ def create_user():
         output = {'code': 4, 'error': "Email is already in use"}, 403
     else:
         try:
-            get_otp = generate_otp(10)
+            get_otp = get_random_otp(10)
             get_status = send_email(first_name,email,get_otp)
             user_otp = mongo.db.users_otp
             user_otp.find_one_and_update({"user_id": user_id},{
