@@ -155,7 +155,7 @@ def verify_otp():
         db_otp = users_otp.find_one({'user_id': user_id})
         if get_otp == db_otp['otp']:
             users_otp.find_one_and_delete({'user_id': user_id})
-            user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {'email_validation': 'True'}})
+            user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {'email_validation': 'True'}},upsert=False)
             output = {"success": "Email validation successful"}
         else:
             output = {'code': 4, "error": "User_id and OTP mismatch"}, 403
