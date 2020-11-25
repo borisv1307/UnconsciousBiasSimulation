@@ -5,11 +5,7 @@ test create profile and view profile.
 Command to run tests:- pytest --setup-show tests/functional
 
 """
-import pytest
-import os
-import sys
-import datetime
-import random
+import pytest, os, sys , datetime , random
 from json import loads
 from bson.json_util import dumps
 from faker import Faker
@@ -586,8 +582,9 @@ class TestSomething:
         }
 
         response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        print(response.data)
         assert response.status_code == 403
-        assert response.data == b'{"error":"Missing fields in request body"}\n'
+        assert response.data == b'{"error":"Missing request body"}\n'
 
     def test_for_logout_when_user_does_not_exist(self, test_client):
         """
@@ -623,7 +620,7 @@ class TestSomething:
 
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
-        assert response.data == b'{"error":"Missing fields in request body"}\n'
+        assert response.data == b'{"error":"Missing request body"}\n'
         
     def test_for_logout_when_user_id_not_an_integer(self, test_client):
         """
