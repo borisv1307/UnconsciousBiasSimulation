@@ -1,6 +1,6 @@
 #pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
-import bcrypt, re, random, string
+import bcrypt, re, string
 from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo, token_required
@@ -14,8 +14,8 @@ MISSING_MSG = 'Missing request body'
 # Get collections
 emails = mongo.db.email
 # Login email and password for account sending emails
-sender_email = "Noreply.ubsapp@gmail.com"
-get_details = emails.find_one({"email" : sender_email})
+SENDER_EMAIL = "Noreply.ubsapp@gmail.com"
+get_details = emails.find_one({"email" : SENDER_EMAIL})
 get_password = get_details['password']
 
 # Mail domain and port for account sending alerts
@@ -40,9 +40,9 @@ def send_email(set_first_name,set_receiver,set_otp):
     try:
         smtp_obj = smtplib.SMTP(host, port)  # Set up SMTP object
         smtp_obj.starttls()
-        smtp_obj.login(sender_email, get_password)
-        smtp_obj.sendmail(sender_email,set_receiver,
-                             MESSAGE.format(sender=sender_email,
+        smtp_obj.login(SENDER_EMAIL, get_password)
+        smtp_obj.sendmail(SENDER_EMAIL,set_receiver,
+                             MESSAGE.format(sender=SENDER_EMAIL,
                                             receivers=set_receiver,
                                             OTP=set_otp,
                                             User=set_first_name
@@ -52,7 +52,7 @@ def send_email(set_first_name,set_receiver,set_otp):
     except smtplib.SMTPException as get_error_msg:
         return {'status':'error sending email','error_msg':str(get_error_msg)}
 
-def get_random_otp(size):  
+def get_random_otp():  
          
     # Takes random choices from  
     # ascii_letters and digits  
@@ -100,7 +100,7 @@ def create_user():
         output = {'code': 4, 'error': "Email is already in use"}, 403
     else:
         try:
-            get_otp = get_random_otp(10)
+            get_otp = get_random_otp()
             get_status = send_email(first_name,email,get_otp)
             user_otp = mongo.db.users_otp
             user_otp.find_one_and_update({"user_id": user_id},{
