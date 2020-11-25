@@ -5,16 +5,18 @@ from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo, token_required
 from pymongo import ReturnDocument
-import smtplib
+import smtplib, pyotp
 from . import user_blueprint
 
+
+MISSING_MSG = 'Missing request body'
 
 # Get collections
 emails = mongo.db.email
 # Login email and password for account sending emails
-sender = "Noreply.ubsapp@gmail.com"
-get_details = emails.find_one({"email" : sender})
-password = get_details['password']
+sender_email = "Noreply.ubsapp@gmail.com"
+get_details = emails.find_one({"email" : sender_email})
+get_password = get_details['password']
 
 # Mail domain and port for account sending alerts
 host = get_details['host']
@@ -38,26 +40,27 @@ def send_email(set_first_name,set_receiver,set_otp):
     try:
         smtp_obj = smtplib.SMTP(host, port)  # Set up SMTP object
         smtp_obj.starttls()
-        smtp_obj.login(sender, password)
-        smtp_obj.sendmail(sender,set_receiver,
-                             MESSAGE.format(sender=sender,
+        smtp_obj.login(sender_email, get_password)
+        smtp_obj.sendmail(sender_email,set_receiver,
+                             MESSAGE.format(sender=sender_email,
                                             receivers=set_receiver,
                                             OTP=set_otp,
                                             User=set_first_name
                                             )
                              )
         return {'status':'Successfully sent email'}          
-    except smtplib.SMTPException as e:
-        return {'status':'error sending email','error_msg':str(e)}
+    except smtplib.SMTPException as get_error_msg:
+        return {'status':'error sending email','error_msg':str(get_error_msg)}
 
 def get_random_otp(size):  
          
     # Takes random choices from  
     # ascii_letters and digits  
-    generate_random_otp = ''.join([random.choice( string.ascii_uppercase +
-                                            string.ascii_lowercase +
-                                            string.digits)  
-                                            for n in range(size)])  
+    # generate_random_otp = ''.join([random.choice( string.ascii_uppercase +
+    #                                         string.ascii_lowercase +
+    #                                         string.digits)  
+    #                                         for n in range(size)]) 
+    generate_random_otp = pyotp.random_base32() 
                              
     return generate_random_otp
 
@@ -74,7 +77,7 @@ def create_user():
         gender = request.get_json()['gender']
         date_of_birth = request.get_json()['date_of_birth']
     except:
-        return {'code': 4, 'error': 'Missing request body'}, 403
+        return {'code': 4, 'error': MISSING_MSG}, 403
     # Check for blanks
     if first_name == '' or last_name == '' or request.get_json()['password'] == '' or email == '' or registration_type == '':
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
@@ -139,7 +142,7 @@ def user_login():
         email = request.get_json()['email']
         password = request.get_json()['password']
     except:
-        return {'code': 4, 'error': 'Missing request body'}, 403
+        return {'code': 4, 'error': MISSING_MSG}, 403
     # Check for blanks
     if request.get_json()['password'] == '' or email == '':
         return {'code': 4, 'error': "Field/s cannot be blank"}, 403
@@ -172,7 +175,7 @@ def verify_otp():
         user_id = request.get_json()['user_id']
         get_otp = request.get_json()['otp']
     except:
-        return {"error": "Missing fields in request body"}, 403
+        return {"error": MISSING_MSG}, 403
  
     # Convert id to integer
     try:
@@ -212,7 +215,7 @@ def logout():
         user_id = request.get_json()['user_id']
         token = request.get_json()['token']
     except:
-        return {"error": "Missing fields in request body"}, 403
+        return {"error": MISSING_MSG}, 403
  
     # Convert id to integer
     try:
@@ -349,20 +352,5 @@ def edit_one_user(user_id):
         output = {'code': 5, "error": "User does not exist"}, 403
     return output
 
-# Registration API
-@user_blueprint.route('/api/v1/savedbcredentials/', methods=['POST'])
-def db_credentials():
-        # Get fields from request body, check for missing fields
-    try:
-        email = request.get_json()['email']
-        hashed_password = bcrypt.hashpw(request.get_json()['password'].encode('utf-8'), bcrypt.gensalt())
 
-    except:
-        return {'code': 4, 'error': 'Missing request body'}, 403
-    output = {}
-    tokens = mongo.db.authtoken
-    tokens.find_one_and_update({"email": email},{
-                                            "$set": {"password": hashed_password, 'created': datetime.utcnow()}}, upsert=True)
-    output = {'email': email,'password':hashed_password}
-    return output
 
