@@ -25,11 +25,6 @@ decrypted = decrypt(10, get_password)
 # Perform slicing
 res = decrypted[0].upper() + decrypted[1:]
 
-
-# Mail domain and port for account sending alerts
-host = get_details['host']
-port = get_details['port']
-
 # Message template for alert
 MESSAGE = """From: {sender}
 To: {receivers}
@@ -46,7 +41,7 @@ UBS Support Team
 # Email function
 def send_email(set_first_name,set_receiver,set_otp):
     try:
-        smtp_obj = smtplib.SMTP(host, port)  # Set up SMTP object
+        smtp_obj = smtplib.SMTP(get_details['host'], get_details['port'])  # Set up SMTP object
         smtp_obj.starttls()
         smtp_obj.login(SENDER_EMAIL, res)
         smtp_obj.sendmail(SENDER_EMAIL,set_receiver,
