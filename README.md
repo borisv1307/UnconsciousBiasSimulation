@@ -2,7 +2,7 @@
 
 ---
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Jijogeorge69_UnconsciousBiasSimulation)](https://sonarcloud.io/dashboard?id=Jijogeorge69_UnconsciousBiasSimulation)
-https://travis-ci.org/Jijogeorge69/UnconsciousBiasSimulation.svg?branch=master
+[![Build Status](https://travis-ci.org/Jijogeorge69/UnconsciousBiasSimulation.svg?branch=master)](https://travis-ci.org/Jijogeorge69/UnconsciousBiasSimulation)
 ## Introduction
 
 All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. This website serves both populations with a simulation..
