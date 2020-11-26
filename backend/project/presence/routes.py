@@ -36,9 +36,9 @@ def add_presence_to_pool():
                 "first_name": profile_data['first_name'],
                 "last_name": profile_data['last_name'],
                 "status": "submitted",
-                "addedOn": date_joined,
-                "reviewedOn": "",
-                "reviewedBy": ""
+                "added_on": date_joined,
+                "reviewed_on": "",
+                "reviewed_by": []
             }
         else:
             result = {'code': 4, "error": "User account does not exist"}, 403
@@ -67,24 +67,25 @@ def insert_data(profile_information):
         "education": profile_information['education'],
         "experience": profile_information['experience'],
         "status": "submitted",
-        "addedOn": date_joined,
-        "reviewedOn": "",
-        "reviewedBy": ""
+        "added_on": date_joined,
+        "reviewed_on": "",
+        "reviewed_by": []
     })
     if create_presence:
         return profile_information
     return "ERROR"
 
 
-@presence_blueprint.route('/api/v1/getAllPresence/', methods=['GET'])
-def get_all_presence():
+
+@presence_blueprint.route('/api/v1/getAllPresence/<user_id>/', methods=['GET'])
+def get_all_presence_for_reviewer(user_id):
     if request.method == 'GET':
-        all_presence = mongo.db.presence
-
+        presences = mongo.db.presence
+        reviewer_id = int(user_id)
         output = []
-        try:
-            for presence in all_presence.find():
 
+        try:
+            for presence in presences.find({"reviewed_by": {"$nin":[reviewer_id]}}):
                 output.append({
                     'user_id': int(presence['user_id']),
                     'profile_id': presence['profile_id'],
@@ -101,12 +102,12 @@ def get_all_presence():
                     'education': presence['education'],
                     'experience': presence['experience'],
                     'status': presence['status'],
-                    'reviewed_on': presence['reviewedOn'],
-                    'reviewed_by': presence['reviewedBy']
+                    'reviewed_on': presence['reviewed_on'],
+                    'reviewed_by': presence['reviewed_by']
                 })
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
-
             return {'code': 4, 'error': "No presence found"}
-        except:
+        except Exception as get_error_msg:
+            print('error',get_error_msg)
             return {'code': 4, 'error': "No presence found"}, 403

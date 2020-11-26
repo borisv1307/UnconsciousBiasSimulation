@@ -2,7 +2,7 @@
 from flask_cors import CORS
 from flask_restful import Api
 from flask import Flask
-from project import create_app
+from project import create_app, mongo
 
 app = create_app('dev')
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
