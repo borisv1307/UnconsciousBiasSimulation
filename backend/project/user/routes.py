@@ -3,11 +3,14 @@ from datetime import datetime
 import bcrypt, re
 from flask_jwt_extended import create_access_token
 from flask import request
-from project import mongo, token_required
+from project import mongo, token_required, decrypt
 from pymongo import ReturnDocument
 import smtplib, pyotp
 from . import user_blueprint
 
+"""
+TO DO:- Perform caching to improve speed.
+"""
 
 MISSING_MSG = 'Missing request body'
 
@@ -17,6 +20,11 @@ emails = mongo.db.email
 SENDER_EMAIL = "Noreply.ubsapp@gmail.com"
 get_details = emails.find_one({"email" : SENDER_EMAIL})
 get_password = get_details['password']
+# Set decryption offset to 10
+decrypted = decrypt(10, get_password)
+# Perform slicing
+res = decrypted[0].upper() + decrypted[1:]
+
 
 # Mail domain and port for account sending alerts
 host = get_details['host']
@@ -40,7 +48,7 @@ def send_email(set_first_name,set_receiver,set_otp):
     try:
         smtp_obj = smtplib.SMTP(host, port)  # Set up SMTP object
         smtp_obj.starttls()
-        smtp_obj.login(SENDER_EMAIL, get_password)
+        smtp_obj.login(SENDER_EMAIL, res)
         smtp_obj.sendmail(SENDER_EMAIL,set_receiver,
                              MESSAGE.format(sender=SENDER_EMAIL,
                                             receivers=set_receiver,
@@ -52,17 +60,10 @@ def send_email(set_first_name,set_receiver,set_otp):
     except smtplib.SMTPException as get_error_msg:
         return {'status':'error sending email','error_msg':str(get_error_msg)}
 
-def get_random_otp():  
-         
-    # Takes random choices from  
-    # ascii_letters and digits  
-    # generate_random_otp = ''.join([random.choice( string.ascii_uppercase +
-    #                                         string.ascii_lowercase +
-    #                                         string.digits)  
-    #                                         for n in range(size)]) 
-    generate_random_otp = pyotp.random_base32() 
-                             
-    return generate_random_otp
+"""
+TO DO:- Perform caching to improve speed.
+Current Response Time:- 2.98 seconds
+"""
 
 # Registration API
 @user_blueprint.route('/api/v1/createUser/', methods=['POST'])
@@ -100,7 +101,7 @@ def create_user():
         output = {'code': 4, 'error': "Email is already in use"}, 403
     else:
         try:
-            get_otp = get_random_otp()
+            get_otp = pyotp.random_base32() 
             get_status = send_email(first_name,email,get_otp)
             user_otp = mongo.db.users_otp
             user_otp.find_one_and_update({"user_id": user_id},{
