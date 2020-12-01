@@ -8,6 +8,9 @@ import {
   Accordion,
   Card,
   Alert,
+  OverlayTrigger,
+  Badge,
+  Popover
 } from "react-bootstrap";
 import Header from "../Header/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -433,7 +436,7 @@ class CreateProfile extends Component {
                       onChange={this.updateField("profileName")}
                       id="profileName"
                       name="profileName"
-                      placeholder="Profile A"
+                      placeholder="Profile Name"
                     />
                   </Form.Group>
 
@@ -445,7 +448,7 @@ class CreateProfile extends Component {
                       onChange={this.updateField("email")}
                       id="email"
                       name="email"
-                      placeholder="test@test.com"
+                      placeholder="Email"
                     />
                   </Form.Group>
 
@@ -457,7 +460,7 @@ class CreateProfile extends Component {
                       onChange={this.updateField("first_name")}
                       id="first_name"
                       name="first_name"
-                      placeholder="John"
+                      placeholder="First Name"
                     />
                   </Form.Group>
 
@@ -469,42 +472,57 @@ class CreateProfile extends Component {
                       onChange={this.updateField("last_name")}
                       id="last_name"
                       name="last_name"
-                      placeholder="Doe"
+                      placeholder="Last Name"
                     />
                   </Form.Group>
 
                   <Form.Group>
-                    <Form.Label>Position</Form.Label>
+                    <Form.Label>Position Sought</Form.Label>
                     <Form.Control
                       type="text"
                       value={this.state.position}
                       onChange={this.updateField("position")}
                       id="position"
                       name="position"
-                      placeholder="Intern"
-                    />
-                  </Form.Group>
-
-                  <Form.Group>
-                    <Form.Label>About Me</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.aboutMe}
-                      onChange={this.updateField("aboutMe")}
-                      id="aboutMe"
-                      name="aboutMe"
-                      placeholder="Hardworking"
+                      placeholder="Ex: Developer"
                     />
                   </Form.Group>
                 </Form>
               </Container>
             </Col>
 
+
             <Col>
               <Container className="text-center">
+
+
+                    
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show:250, hide: 400}}
+                    overlay={
+                      <Popover id="popover-basic">
+                      <Popover.Title as="h3">What <strong>Image</strong> can I use?</Popover.Title>
+                      <Popover.Content>
+                        Add Constraints Here
+                      </Popover.Content>
+                      </Popover>
+
+                    }>
+                      <Form.Label>
+                        <h3>Add your Image{' '}
+                        <Badge pill variant="info">
+                          ?
+                        </Badge></h3> 
+                      </Form.Label>
+                    </OverlayTrigger>
+                    
+                    
+                    
+                    <br />
+
                 <div className="page">
                   <div className="container">
-                    <h3 className="heading">Add your Image</h3> <br />
                     <img
                       src={profileImg}
                       width="200"
@@ -525,6 +543,41 @@ class CreateProfile extends Component {
               </Container>
             </Col>
           </Row>
+
+          <Container>
+            <Form.Group>
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show:250, hide: 400}}
+                      overlay={
+                        <Popover id="popover-basic">
+                        <Popover.Title as="h3">What's an <strong>Objective</strong>?</Popover.Title>
+                        <Popover.Content>
+                          An <strong>Objective</strong> consists of 1-2 sentences explaining why
+                          you are suited for the position.
+                        </Popover.Content>
+                        </Popover>
+
+                      }>
+                      <Form.Label>Objective {' '}
+                        <Badge pill variant="info">
+                          ?
+                        </Badge></Form.Label>
+                      </OverlayTrigger>
+                      
+                      <Form.Control
+                        type="text"
+                        value={this.state.aboutMe}
+                        onChange={this.updateField("aboutMe")}
+                        id="aboutMe"
+                        name="aboutMe"
+                        placeholder=""
+                        rows={2}
+                        as="textarea"
+                      />
+              </Form.Group>
+          </Container>
+          
           <Container>
             <Accordion>
               <Card>
@@ -551,7 +604,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("school")}
                               id="school"
                               name="school"
-                              placeholder="X University"
+                              placeholder="Ex: Drexel"
                             />
                           </Form.Group>
 
@@ -563,7 +616,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("degree")}
                               id="degree"
                               name="degree"
-                              placeholder="Bachelor's"
+                              placeholder="Ex: Bachelor's"
                             />
                           </Form.Group>
 
@@ -575,7 +628,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("major")}
                               id="major"
                               name="major"
-                              placeholder="Software Engineering"
+                              placeholder="Ex: Software Engineering"
                             />
                           </Form.Group>
 
@@ -832,7 +885,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("title")}
                               id="title"
                               name="title"
-                              placeholder="Intern"
+                              placeholder="Ex: Developer"
                             />
                           </Form.Group>
 
@@ -844,7 +897,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("company")}
                               id="company"
                               name="company"
-                              placeholder="Y Company"
+                              placeholder="Ex: IBM"
                             />
                           </Form.Group>
 
@@ -856,7 +909,7 @@ class CreateProfile extends Component {
                               onChange={this.updateField("location")}
                               id="location"
                               name="location"
-                              placeholder="Philadelphia"
+                              placeholder="Ex: Philadelphia"
                             />
                           </Form.Group>
 

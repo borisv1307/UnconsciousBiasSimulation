@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, Container, Button, Col, Row, Form, Alert, Modal, Card, Accordion, ModalTitle } from "react-bootstrap";
+import { Image, Container, Button, Col, Row, Form, Alert, Modal, Card, Accordion, Popover, OverlayTrigger, Badge } from "react-bootstrap";
 
 class Profile extends Component {
 
@@ -41,6 +41,10 @@ class Profile extends Component {
 
   modalShow = () => {
     this.setState({ modal_show: true});
+  };
+
+  renderTooltip = (props) => {
+    
   };
 
 
@@ -250,18 +254,18 @@ class Profile extends Component {
           </Row>
           <br />
         </Container>
-  
+
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static" keyboard={false} size="lg">
             <Modal.Header>
-              <h5> Pressence Edit Form </h5>
+              <h3> Presence Edit Form </h3>
             </Modal.Header>
             <Modal.Body>
-            <Row>
+          <Row>
             <Col>
               <Container>
                 <Form>
                   <Form.Group>
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label><h5> Email </h5></Form.Label>
                     <Form.Control
                       type="email"
                       value={this.state.profile.email}
@@ -273,7 +277,7 @@ class Profile extends Component {
                   </Form.Group>
 
                   <Form.Group>
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label><h5> First Name </h5></Form.Label>
                     <Form.Control
                       type="text"
                       value={this.state.profile.first_name}
@@ -285,7 +289,7 @@ class Profile extends Component {
                   </Form.Group>
 
                   <Form.Group>
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label><h5> Last Name </h5></Form.Label>
                     <Form.Control
                       type="text"
                       value={this.state.profile.last_name}
@@ -297,7 +301,7 @@ class Profile extends Component {
                   </Form.Group>
 
                   <Form.Group>
-                    <Form.Label>Position</Form.Label>
+                    <Form.Label><h5> Position Sought</h5></Form.Label>
                     <Form.Control
                       type="text"
                       value={this.state.profile.position}
@@ -307,27 +311,37 @@ class Profile extends Component {
                       placeholder="Intern"
                     />
                   </Form.Group>
-
-                  <Form.Group>
-                    <Form.Label>About Me</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.profile.aboutMe}
-                      onChange={this.updateField("aboutMe")}
-                      id="aboutMe"
-                      name="aboutMe"
-                      placeholder="Hardworking"
-                    />
-                  </Form.Group>
                 </Form>
               </Container>
             </Col>
 
             <Col>
               <Container className="text-center">
-                <div className="page">
-                  <div className="container">
-                    <h3 className="heading">Change Image</h3> <br />
+                
+                    <OverlayTrigger
+                    placement="right"
+                    delay={{ show:250, hide: 400}}
+                    overlay={
+                      <Popover id="popover-basic">
+                      <Popover.Title as="h3">What <strong>Image</strong> can I use?</Popover.Title>
+                      <Popover.Content>
+                        Add Constraints Here
+                      </Popover.Content>
+                      </Popover>
+
+                    }>
+                      <Form.Label>
+                        <h3>Change Image{' '}
+                        <Badge pill variant="info">
+                          ?
+                        </Badge> </h3>
+                      </Form.Label>
+                      
+                    </OverlayTrigger>
+                    
+
+                    <div className="page">
+                    <div className="container"> 
                     <img
                       src={this.state.profile.profileImg}
                       width="200"
@@ -345,9 +359,50 @@ class Profile extends Component {
                     />
                   </div>
                 </div>
+                <br></br>
               </Container>
             </Col>
           </Row>
+          <Container>
+          <Form.Group>
+                    <OverlayTrigger
+                    placement="right"
+                    delay={{ show:250, hide: 400}}
+                    overlay={
+                      <Popover id="popover-basic">
+                      <Popover.Title as="h3">What's an <strong>Objective</strong>?</Popover.Title>
+                      <Popover.Content>
+                        An <strong>Objective</strong> consists of 1-2 sentences explaining why
+                        you are suited for the position.
+                      </Popover.Content>
+                      </Popover>
+
+                    }>
+                    <Form.Label>
+                      <h5>
+                        Objective {' '}
+                        <Badge pill variant="info">
+                          ?
+                        </Badge> 
+                      </h5> 
+                      </Form.Label>
+                    </OverlayTrigger>
+                    <Form.Control
+                      type="text"
+                      value={this.state.profile.aboutMe}
+                      onChange={this.updateField("aboutMe")}
+                      id="aboutMe"
+                      name="aboutMe"
+                      placeholder="Hardworking"
+                      rows={3}
+                      as="textarea"
+                      
+                    />
+            </Form.Group>
+          </Container>
+
+
+          
 
           <Container>
             <Accordion>
@@ -375,7 +430,7 @@ class Profile extends Component {
                               onChange={this.updateField("school")}
                               id="school"
                               name="school"
-                              placeholder="X University"
+                              placeholder="Ex: Drexel University"
                             />
                           </Form.Group>
 
@@ -387,7 +442,7 @@ class Profile extends Component {
                               onChange={this.updateField("degree")}
                               id="degree"
                               name="degree"
-                              placeholder="Bachelor's"
+                              placeholder="Ex: Bachelor's"
                             />
                           </Form.Group>
 
@@ -399,7 +454,7 @@ class Profile extends Component {
                               onChange={this.updateField("major")}
                               id="major"
                               name="major"
-                              placeholder="Software Engineering"
+                              placeholder="Ex: Software Engineering"
                             />
                           </Form.Group>
 
@@ -656,7 +711,7 @@ class Profile extends Component {
                               onChange={this.updateField("title")}
                               id="title"
                               name="title"
-                              placeholder="Intern"
+                              placeholder="Ex: Developer"
                             />
                           </Form.Group>
 
@@ -668,7 +723,7 @@ class Profile extends Component {
                               onChange={this.updateField("company")}
                               id="company"
                               name="company"
-                              placeholder="Y Company"
+                              placeholder="Ex: IBM"
                             />
                           </Form.Group>
 
@@ -680,7 +735,7 @@ class Profile extends Component {
                               onChange={this.updateField("location")}
                               id="location"
                               name="location"
-                              placeholder="Philadelphia"
+                              placeholder="Ex: Philadelphia"
                             />
                           </Form.Group>
 

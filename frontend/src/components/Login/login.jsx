@@ -62,8 +62,10 @@ class Login extends Component {
                 }&Name=${res.first_name}`;
             }
           } else {
-            this.handleShow("User not found");
+            this.handleShow("Incorrect username or password");
           }
+
+          
         });
     }
   };
@@ -116,6 +118,7 @@ class Login extends Component {
                   onChange={this.updateField("email")}
                   id="email"
                   aria-describedby="emailHelp"
+                  value={this.state.email}
                   placeholder="Enter email"
                 />
               </div>
@@ -126,6 +129,7 @@ class Login extends Component {
                   type="password"
                   className="form-control"
                   onChange={this.updateField("password")}
+                  value={this.state.password}
                   id="password"
                   placeholder="Password"
                 />

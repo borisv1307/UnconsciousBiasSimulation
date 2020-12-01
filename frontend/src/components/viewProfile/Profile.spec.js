@@ -68,7 +68,7 @@ describe("Profile", () => {
 
   it("Profile should include container", () => {
     const container = wrapper.find("Container");
-    expect(container.length).toEqual(8);
+    expect(container.length).toEqual(9);
   });
 
   it("Profile should include card", () => {
@@ -105,7 +105,7 @@ describe("Profile", () => {
   });
 
   it("Profile should include h5 tags", () => {
-    expect(wrapper.find("h5").length).toEqual(4);
+    expect(wrapper.find("h5").length).toEqual(8);
   });
 
   it("Profile should include 7 Row tags", () => {
