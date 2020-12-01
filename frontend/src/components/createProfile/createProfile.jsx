@@ -130,9 +130,7 @@ class CreateProfile extends Component {
   };
 
   handleSubmit = (e) => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const userId = urlParams.get("userId");
+    const userId = ls.get("userid");
 
     const isValid = this.validateSubmit();
     if (isValid) {

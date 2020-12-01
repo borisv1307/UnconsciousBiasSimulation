@@ -23,9 +23,7 @@ class ViewProfiles extends Component {
   }
 
   componentDidMount() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const userId = urlParams.get('userId')
+    const userId = ls.get("userid")
     const token = ls.get("token");
     if(token===null || token===""){
       window.location.href = "/login"

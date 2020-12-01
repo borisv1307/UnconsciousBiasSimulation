@@ -16,9 +16,10 @@ class viewApplications extends Component {
   }
 
   componentDidMount() {
+    const userId = ls.get("userid")
     const token = ls.get("token");
     console.log(token)
-    fetch("http://localhost:5000/api/v1/getAllPresence/",
+    fetch("http://localhost:5000/api/v1/getAllPresence/"+ userId + "/",
       {
         headers: {
           "Authorization": "Bearer " + token

@@ -52,14 +52,10 @@ class Login extends Component {
               res.registration_type === "Job Seeker"
             ) {
               this.handleClose();
-              window.location.href = `./home/?id=${+res.user_id}&registration_type=${
-                res.registration_type
-                }&Name=${res.first_name}`;
+              window.location.href = `./home/`;
             } else {
               this.handleClose();
-              window.location.href = `./homehr/?id=${+res.user_id}&registration_type=${
-                res.registration_type
-                }&Name=${res.first_name}`;
+              window.location.href = `./homehr/`;
             }
           } else {
             this.handleShow("Incorrect username or password");
