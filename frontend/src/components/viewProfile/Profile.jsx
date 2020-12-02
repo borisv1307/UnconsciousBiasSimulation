@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, Container, Button, Col, Row, Form, Alert, Modal, Card, Accordion, Popover, OverlayTrigger, Badge } from "react-bootstrap";
+import { Image, Container, Button, Col, Row, Alert, Modal, Card, Accordion } from "react-bootstrap";
 import ProfileForm from "../profileForm/profileForm";
 class Profile extends Component {
 
@@ -39,14 +39,14 @@ class Profile extends Component {
     this.setState({ modal_show: false });
   };
 
-  handleModalHide = (childSignal) =>{
-    if(childSignal){
+  handleModalHide = (childSignal) => {
+    if (childSignal) {
       this.modalHide();
     }
   };
 
   modalShow = () => {
-    this.setState({ modal_show: true});
+    this.setState({ modal_show: true });
   };
 
   toggleEditForm = (input) => (e) => {
@@ -257,13 +257,13 @@ class Profile extends Component {
         </Container>
 
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static" keyboard={false} size="lg">
-            <Modal.Header>
-              <h3> Presence Edit Form </h3>
-            </Modal.Header>
-            <Modal.Body>
-                  <ProfileForm parent_to_child = {this.state} modal_hide = {this.handleModalHide}/>
-            </Modal.Body>
-          </Modal>
+          <Modal.Header>
+            <h3> Presence Edit Form </h3>
+          </Modal.Header>
+          <Modal.Body>
+            <ProfileForm parent_to_child={this.state} modal_hide={this.handleModalHide} />
+          </Modal.Body>
+        </Modal>
       </>
     );
   }
