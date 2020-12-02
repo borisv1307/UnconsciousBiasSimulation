@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from functools import wraps
 
+SET_KEY = 'abcdefghijklmnopqrstuvwxyz'
 mongo = PyMongo()
 
 def create_app(env_name):
@@ -38,7 +39,33 @@ def token_required(f):
         if not tokens.find_one({'key': header_token}):
             return jsonify({'message': 'Token is Invalid!'}), 403
         return f(*args, **kwargs)
-    return decorated
+    return decorated  
+
+def encrypt(n, plaintext):
+    """Encrypt the string and return the ciphertext"""
+    result = ''
+
+    for l in plaintext.lower():
+        try:
+            i = (SET_KEY.index(l) + n) % 26
+            result += SET_KEY[i]
+        except ValueError:
+            result += l
+
+    return result.lower()
+
+def decrypt(n, ciphertext):
+    """Decrypt the string and return the plaintext"""
+    result = ''
+
+    for l in ciphertext:
+        try:
+            i = (SET_KEY.index(l) - n) % 26
+            result += SET_KEY[i]
+        except ValueError:
+            result += l
+
+    return result
 
 def register_blueprints(app):
     from project.home import home_blueprint
