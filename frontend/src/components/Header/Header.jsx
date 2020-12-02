@@ -22,7 +22,6 @@ class Header extends Component {
   };
 
   render() {
-    let user = ls.get("userid");
     let name = ls.get("name");
     return (
       <>

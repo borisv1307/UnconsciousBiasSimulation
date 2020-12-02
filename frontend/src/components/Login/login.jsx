@@ -47,21 +47,26 @@ class Login extends Component {
             ls.set("userid", res.user_id);
             ls.set("name", res.first_name);
             ls.set("token", res.token);
+            if(res.email_validation==="False"){
+              window.location.href = "/emailValidation";
+            }
+            else{
             if (
               res.registration_type === "jobSeeker" ||
               res.registration_type === "Job Seeker"
             ) {
               this.handleClose();
-              window.location.href = `./home/`;
+              window.location.href = "/home";
             } else {
               this.handleClose();
-              window.location.href = `./homehr/`;
+              window.location.href = "/homehr";
             }
+          }
           } else {
             this.handleShow("Incorrect username or password");
           }
 
-          
+        
         });
     }
   };
