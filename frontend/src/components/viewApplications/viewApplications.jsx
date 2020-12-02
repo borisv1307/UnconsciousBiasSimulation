@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Row, Col, Container, Image, Accordion } from "react-bootstrap";
+import { Card, Button, Row, Col, Container, Image, Accordion, Modal } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import ls from "local-storage";
 
@@ -11,7 +11,9 @@ class viewApplications extends Component {
       index: 0,
       view: [],
       started: false,
-      completed: false
+      completed: false,
+      modal_message: "",
+      modal_show: false
     };
   }
 
@@ -28,15 +30,17 @@ class viewApplications extends Component {
       .then((response) => response.json())
       .then((res) => {
 
-        if (res["results"].error !== 'Applications not found') {
+        if (res["results"]) {
           this.setState({ applications: res["results"] });
         }
-        else {
-          this.modalShow(res["results"].error)
-        }
+        // else {
+        //   this.modalShow(res["error"])
+        // }
       });
   }
-
+  modalShow = (message) => {
+    this.setState({ modal_show: true, modal_message: message });
+  };
   next = () => {
     if(this.state.index < (this.state.applications.length - 1)){
       const newIndex = this.state.index + 1;
@@ -89,6 +93,7 @@ class viewApplications extends Component {
   };
 
   start = (e) => {
+    if(this.state.index < (this.state.applications.length - 1)){
     const newApplication = this.state.applications[this.state.index];
 
     const newView = []
@@ -98,6 +103,16 @@ class viewApplications extends Component {
       view: newView,
       started: true
     });
+  }
+  else{
+    const newView = []
+      this.setState({
+        view: newView,
+        started: true,
+        completed: true
+      })
+    // this.modalShow("No presences to be reviewed!");
+  }
   };
 
   render() {

@@ -4,6 +4,7 @@ test create profile and view profile.
 
 """
 # pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
+from project import create_app
 from bson.objectid import ObjectId
 
 import pytest
@@ -16,7 +17,6 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 PARENT_ROOT = os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
 GRANDPAPA_ROOT = os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
 sys.path.insert(0, GRANDPAPA_ROOT)
-from project import create_app
 
 profilename = "Profile B"
 
@@ -38,7 +38,7 @@ class TestPool:
         WHEN the '/addPresence' page is requested (POST)
         THEN check that request has email address
         """
-        random_userid =random.randint(99, 999999)
+        random_userid = random.randint(99, 999999)
         random_profileid = random.randint(99, 99999)
         data = {
             "profileName": profilename,
@@ -74,9 +74,9 @@ class TestPool:
             ],
             "reviewed_by": [
                 {
-                    "reviewed_by":"",
-                    "reviewed_on":"",
-                    "status":""
+                    "reviewed_by": "",
+                    "reviewed_on": "",
+                    "status": ""
                 }
             ],
             "added_on": datetime.utcnow()
@@ -126,9 +126,9 @@ class TestPool:
             ],
             "reviewed_by": [
                 {
-                    "reviewed_by":"",
-                    "reviewed_on":"",
-                    "status":""
+                    "reviewed_by": "",
+                    "reviewed_on": "",
+                    "status": ""
                 }
             ],
             "added_on": datetime.utcnow()
@@ -138,17 +138,16 @@ class TestPool:
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User presence already exists"}\n'
 
-
     def test_get_all_presence_to_be_reviewed(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        response = test_client.get('/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json'})
+        response = test_client.get(
+            '/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
-
 
     def test_save_presence_feedback(self, test_client):
         """
@@ -156,16 +155,17 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        data =   {
-            "profile_id":"9",
-            "user_id":"1",
-            "feedback" :{
+        data = {
+            "profile_id": "9",
+            "user_id": "1",
+            "feedback": {
                 "reviewer_id": "4",
                 "reviewed_on": "1122",
-                "status":"rejected"
-                }
+                "status": "rejected"
+            }
         }
-        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
+            data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
 
@@ -175,15 +175,28 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        data =   {
-            "profile_id":"93",
-            "user_id":"71",
-            "feedback" :{
+        data = {
+            "profile_id": "93",
+            "user_id": "71",
+            "feedback": {
                 "reviewer_id": "4",
                 "reviewed_on": "1122",
-                "status":"rejected"
-                }
+                "status": "rejected"
+            }
         }
-        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
+            data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data == b'{"code":4,"error":"User presence not found"}\n'
+
+    def test_for_get_all_presence_when_user_id_not_an_integer(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get(
+            '/api/v1/getAllPresence/Seven/', headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"error":"reviewer id must be numeric"}\n'

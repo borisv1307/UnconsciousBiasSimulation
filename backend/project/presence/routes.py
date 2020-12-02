@@ -17,7 +17,8 @@ def add_presence_to_pool():
     date_joined = datetime.utcnow()
     profile_data = request.get_json()
     presence = mongo.db.presence
-    user_presence_count = presence.count_documents({ "$and": [{ "user_id": profile_data['user_id']},{ "profile_id": profile_data['profile_id']}]})
+    user_presence_count = presence.count_documents(
+        {"$and": [{"user_id": profile_data['user_id']}, {"profile_id": profile_data['profile_id']}]})
     if user_presence_count == 0:
         output = insert_data(profile_data)
         if output != "ERROR":
@@ -42,7 +43,7 @@ def add_presence_to_pool():
         else:
             result = {'code': 4, "error": "User account does not exist"}, 403
     else:
-        result = {'code':4, "error":"User presence already exists"}, 403
+        result = {'code': 4, "error": "User presence already exists"}, 403
 
     return result
 
@@ -73,14 +74,17 @@ def insert_data(profile_information):
     return "ERROR"
 
 
-@presence_blueprint.route('/api/v1/getAllPresence/<user_id>/', methods=['GET'])
-def get_all_presence_for_reviewer(user_id):
+@presence_blueprint.route('/api/v1/getAllPresence/<reviewer_id>/', methods=['GET'])
+def get_all_presence_for_reviewer(reviewer_id):
     if request.method == 'GET':
+        try:
+            reviewer_id = int(reviewer_id)
+        except:
+            return {'error': 'reviewer id must be numeric'}, 403
         presences = mongo.db.presence
-        reviewer_id = user_id
         output = []
         try:
-            for presence in presences.find({"reviewed_by" :{"$not": {'$elemMatch': {"reviewer_id" : reviewer_id}}}}):
+            for presence in presences.find({"reviewed_by": {"$not": {'$elemMatch': {"reviewer_id": reviewer_id}}}}):
                 output.append({
                     'user_id': int(presence['user_id']),
                     'profile_id': presence['profile_id'],
@@ -100,23 +104,26 @@ def get_all_presence_for_reviewer(user_id):
                 })
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
-            return {'code': 4, 'error': "User presence not found"}
+            return {'code': 4, 'error': "No more presence to be reviewed"}
         except Exception as error:
-            print("Exception ",error)
+            print("Exception ", error)
             return {'code': 4, 'error': "No presence found"}, 403
+
 
 @presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
 def update_presence_with_review():
     date_joined = datetime.utcnow()
-    reviewer= request.get_json()
+    reviewer = request.get_json()
     presence_profile_id = int(reviewer['profile_id'])
     presence_user_id = int(reviewer['user_id'])
     feedback = reviewer['feedback']
-    query = { "$and": [{ "user_id": presence_user_id},{ "profile_id": presence_profile_id}]}
+    query = {"$and": [{"user_id": presence_user_id},
+                      {"profile_id": presence_profile_id}]}
 
     try:
         if mongo.db.presence.count_documents(query) == 1:
-            profile_data= mongo.db.presence.find_one_and_update(query,{"$push": {'reviewed_by': feedback}},return_document=ReturnDocument.AFTER)
+            profile_data = mongo.db.presence.find_one_and_update(
+                query, {"$push": {'reviewed_by': feedback}}, return_document=ReturnDocument.AFTER)
             result = {
                 "profile_id": profile_data['profile_id'],
                 "state": profile_data['state'],
@@ -136,8 +143,8 @@ def update_presence_with_review():
                 "reviewed_by": profile_data['reviewed_by']
             }
         else:
-            result = {'code':4, 'error': "User presence not found"}, 200
+            result = {'code': 4, 'error': "User presence not found"}, 200
     except Exception as error:
-        print("Exception",error)
-        result = {'code':4, 'error': "No presence found"}, 403
+        print("Exception", error)
+        result = {'code': 4, 'error': "No presence found"}, 403
     return result
