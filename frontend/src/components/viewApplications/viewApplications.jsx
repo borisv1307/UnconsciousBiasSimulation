@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Row, Col, Container, Image, Accordion, Modal } from "react-bootstrap";
+import { Card, Button, Row, Col, Container, Image, Accordion } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import ls from "local-storage";
 

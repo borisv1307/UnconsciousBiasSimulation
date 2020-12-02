@@ -1236,7 +1236,7 @@ render() {
     </div>
     );
 }
-};
+}
 
 
 export default ProfileForm;

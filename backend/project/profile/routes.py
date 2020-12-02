@@ -159,7 +159,7 @@ def get_user_profiles(user_id):
 
 @profile_blueprint.route('/api/v1/editProfile/', methods=['PUT'])
 @profile_validation
-def editProfile():
+def edit_profile():
     profile_data = request.get_json()
     get_user_id = int(profile_data['user_id'])
     get_profile_id = int(profile_data['profile_id'])
@@ -169,7 +169,7 @@ def editProfile():
     
     user_id_exists = user.count_documents({'user_id': get_user_id})
     if user_id_exists:
-        editProfile = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
+        edit_profile = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
         {
             "profile_id": profile_data['profile_id'],
             "user_id": profile_data['user_id'],
@@ -184,7 +184,7 @@ def editProfile():
             "experience": profile_data["experience"]
 
         })
-        if editProfile:
+        if edit_profile:
             output = {
                 "profile_id": profile_data['profile_id'],
                 "user_id": profile_data['user_id'],
