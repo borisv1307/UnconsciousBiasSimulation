@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, Alert} from "react-bootstrap";
+import { Container, Button, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ls from "local-storage";
 import Navbar from "react-bootstrap/Navbar";
@@ -12,19 +12,19 @@ class EmailValidation extends Component {
     error_show: false,
     error_message: "",
     success_show: false,
-    success_message:""
+    success_message: ""
   };
 
-   timeout(delay) {
-    return new Promise( res => setTimeout(res, delay) );
-}
-delayState() {
-  setTimeout(() => {
+  timeout(delay) {
+    return new Promise(res => setTimeout(res, delay));
+  }
+  delayState() {
+    setTimeout(() => {
       this.setState({
-      clicked: false
-    })
-  }, 5000);
-};
+        clicked: false
+      })
+    }, 5000);
+  }
 
   errorhandleClose = () => {
     this.setState({ error_show: false });
@@ -47,7 +47,7 @@ delayState() {
   handleValidate = async (e) => {
     // const userid= ls.get("userid");
     const data = {
-      user_id:ls.get("userid"),
+      user_id: ls.get("userid"),
       otp: this.state.otp,
     };
 
@@ -68,7 +68,7 @@ delayState() {
             this.delayState();
             this.timeout(5000);
             window.location.href = "/login";
-            
+
           } else {
             this.errorhandleShow(res.error);
           }
@@ -132,13 +132,13 @@ delayState() {
               ) : (
                   " "
                 )}
-                {this.state.success_show ? (
-                              <Alert variant="success">
-                                {this.state.success_message}
-                              </Alert>
-                            ) : (
-                              " "
-                            )}
+              {this.state.success_show ? (
+                <Alert variant="success">
+                  {this.state.success_message}
+                </Alert>
+              ) : (
+                  " "
+                )}
               <div className="form-check"></div>
               <br />
               <Button
@@ -159,7 +159,7 @@ delayState() {
 
             </Form>
 
-            
+
 
 
           </Container>
