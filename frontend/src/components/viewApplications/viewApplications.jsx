@@ -203,16 +203,19 @@ class viewApplications extends Component {
             </Row>
             
             <br />
-            <div class="d-flex justify-content-center">
               <Row>
+                <Col></Col>
                 <Col>
-                  <Button id="accept" variant="success" size="lg" onClick={this.handleAccept}>Accept</Button>
+                  <Button id="accept" variant="success" size="lg" onClick={this.handleAccept} block>Accept</Button>
                 </Col>
                 <Col>
-                  <Button id="decline" variant="danger" size="lg" onClick={this.handleDecline}>Decline</Button>
                 </Col>
-              </Row>
-            </div>
+                <Col> 
+                  <Button id="decline" variant="danger" size="lg" onClick={this.handleDecline} block>Decline</Button>
+                </Col>
+                <Col></Col>
+              </Row>        
+            <br />
             
             </Container>
         ))}

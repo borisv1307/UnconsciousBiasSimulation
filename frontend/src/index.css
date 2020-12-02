@@ -1,3 +1,8 @@
+:root {
+  --main-header-color: #ffcf73;
+  --card-header-color: #ffecc9;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -14,17 +19,16 @@ code {
 
 .containbody {
   background-color: rgba(252, 250, 250, 0.945);
-  /* padding-left: 10%; */
 }
 
 .header {
-  background-color: #84dad5;
+  background-color: var(--main-header-color);
   height: 90px;
   padding-top: 1%;
 }
 
 .card-heading {
-  background-color: #84dad5;
+  background-color: var(--card-header-color);
   height: 40px;
   padding-top: 1%;
   padding-bottom: 1%;
@@ -46,4 +50,8 @@ code {
   padding-left: 1.5%;
   align-content: initial;
   color: #212529;
+}
+
+.name-header {
+  margin-left: 1100px;
 }
