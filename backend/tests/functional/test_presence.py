@@ -72,10 +72,14 @@ class TestPool:
                     "expEndDate": "0001-01"
                 }
             ],
-            "status": "submitted",
-            "reviewed_by": [],
-            "added_on": datetime.utcnow(),
-            "reviewed_on": ""
+            "reviewed_by": [
+                {
+                    "reviewed_by":"",
+                    "reviewed_on":"",
+                    "status":""
+                }
+            ],
+            "added_on": datetime.utcnow()
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -120,10 +124,14 @@ class TestPool:
                     "expEndDate": "0001-01"
                 }
             ],
-            "status": "submitted",
-            "reviewed_by": [],
-            "added_on": datetime.utcnow(),
-            "reviewed_on": ""
+            "reviewed_by": [
+                {
+                    "reviewed_by":"",
+                    "reviewed_on":"",
+                    "status":""
+                }
+            ],
+            "added_on": datetime.utcnow()
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -140,3 +148,42 @@ class TestPool:
         response = test_client.get('/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
+
+
+    def test_save_presence_feedback(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        data =   {
+            "profile_id":"9",
+            "user_id":"1",
+            "feedback" :{
+                "reviewer_id": "4",
+                "reviewed_on": "1122",
+                "status":"rejected"
+                }
+        }
+        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data != b'{"code":4,"error":"No presence found"}\n'
+
+    def test_validating_save_presence_feedback(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        data =   {
+            "profile_id":"93",
+            "user_id":"71",
+            "feedback" :{
+                "reviewer_id": "4",
+                "reviewed_on": "1122",
+                "status":"rejected"
+                }
+        }
+        response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"code":4,"error":"No presence found"}\n'

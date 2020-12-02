@@ -2,6 +2,7 @@
 from datetime import datetime
 from flask import request
 from project import mongo
+from pymongo.collection import ReturnDocument
 from . import presence_blueprint
 
 ################
@@ -16,7 +17,7 @@ def add_presence_to_pool():
     date_joined = datetime.utcnow()
     profile_data = request.get_json()
     presence = mongo.db.presence
-    user_presence_count = presence.count_documents({ "$and": [{ "user_id": profile_data['user_id']},{ "profile_id": profile_data['profile_id']},{ "status": "submitted"}]})
+    user_presence_count = presence.count_documents({ "$and": [{ "user_id": profile_data['user_id']},{ "profile_id": profile_data['profile_id']}]})
     if user_presence_count == 0:
         output = insert_data(profile_data)
         if output != "ERROR":
@@ -35,10 +36,8 @@ def add_presence_to_pool():
                 "profileImg": profile_data['profileImg'],
                 "first_name": profile_data['first_name'],
                 "last_name": profile_data['last_name'],
-                "status": "submitted",
                 "added_on": date_joined,
-                "reviewed_on": "",
-                "reviewed_by": []
+                "reviewed_by": output['reviewed_by']
             }
         else:
             result = {'code': 4, "error": "User account does not exist"}, 403
@@ -66,15 +65,12 @@ def insert_data(profile_information):
         "aboutMe":  profile_information['aboutMe'],
         "education": profile_information['education'],
         "experience": profile_information['experience'],
-        "status": "submitted",
         "added_on": date_joined,
-        "reviewed_on": "",
         "reviewed_by": []
     })
     if create_presence:
         return profile_information
     return "ERROR"
-
 
 
 @presence_blueprint.route('/api/v1/getAllPresence/<user_id>/', methods=['GET'])
@@ -83,9 +79,8 @@ def get_all_presence_for_reviewer(user_id):
         presences = mongo.db.presence
         reviewer_id = user_id
         output = []
-
         try:
-            for presence in presences.find({"reviewed_by": {"$nin":[reviewer_id]}}):
+            for presence in presences.find({"reviewed_by" :{"$not": {'$elemMatch': {"reviewer_id" : reviewer_id}}}}):
                 output.append({
                     'user_id': int(presence['user_id']),
                     'profile_id': presence['profile_id'],
@@ -101,12 +96,48 @@ def get_all_presence_for_reviewer(user_id):
                     'position': presence['position'],
                     'education': presence['education'],
                     'experience': presence['experience'],
-                    'status': presence['status'],
-                    'reviewed_on': presence['reviewed_on'],
                     'reviewed_by': presence['reviewed_by']
                 })
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
             return {'code': 4, 'error': "No presence found"}
-        except:
+        except Exception as e:
+            print("Exception ",e)
             return {'code': 4, 'error': "No presence found"}, 403
+
+@presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
+def update_presence_with_review():
+    date_joined = datetime.utcnow()
+    reviewer= request.get_json()
+    presence_profile_id = int(reviewer['profile_id'])
+    presence_user_id = int(reviewer['user_id'])
+    feedback = reviewer['feedback']
+    query = { "$and": [{ "user_id": presence_user_id},{ "profile_id": presence_profile_id}]}
+
+    try:
+        if mongo.db.presence.count_documents(query) == 1:
+            profile_data= mongo.db.presence.find_one_and_update(query,{"$push": {'reviewed_by': feedback}},return_document=ReturnDocument.AFTER)
+            result = {
+                "profile_id": profile_data['profile_id'],
+                "state": profile_data['state'],
+                "zip": profile_data['zip'],
+                "city": profile_data['city'],
+                "email": profile_data['email'],
+                "position": profile_data['position'],
+                "aboutMe":  profile_data['aboutMe'],
+                "education": profile_data['education'],
+                "experience": profile_data['experience'],
+                "user_id": profile_data['user_id'],
+                "profileName": profile_data['profileName'],
+                "profileImg": profile_data['profileImg'],
+                "first_name": profile_data['first_name'],
+                "last_name": profile_data['last_name'],
+                "added_on": date_joined,
+                "reviewed_by": profile_data['reviewed_by']
+            }
+        else:
+            result = {'code':4, 'error': "No presence found"}, 200
+    except Exception as e:
+        print("Exception",e)
+        result = {'code':4, 'error': "No presence found"}, 403
+    return result
