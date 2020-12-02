@@ -186,4 +186,4 @@ class TestPool:
         }
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response.data == b'{"code":4,"error":"No presence found"}\n'
+        assert response.data == b'{"code":4,"error":"User presence not found"}\n'
