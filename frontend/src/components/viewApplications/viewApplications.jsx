@@ -58,11 +58,10 @@ class viewApplications extends Component {
       })
     }   
   }
-
-  handleAccept = (e) => {
+  updateReviewerDetails(status){
     const reviewerDetails = {
       reviewer_id: ls.get("userid"),
-      application_status: "Approved",
+      application_status: status,
     };
     const data = {
       user_id: this.state.applications[this.state.index].user_id,
@@ -76,27 +75,15 @@ class viewApplications extends Component {
         },
         body: JSON.stringify(data),
       });
+  }
+  handleAccept = (e) => {
+    this.updateReviewerDetails("Accepted");
     this.next();
     console.log("Accepting application"); 
   };
 
   handleDecline = (e) => {
-    const reviewerDetails = {
-      reviewer_id: ls.get("userid"),
-      application_status: "Declined",
-    };
-    const data = {
-      user_id: this.state.applications[this.state.index].user_id,
-      profile_id: this.state.applications[this.state.index].profile_id,
-      feedback: reviewerDetails,
-    };
-    fetch("http://localhost:5000//api/v1/savePresenceReview/", {
-        method: "PATCH",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    this.updateReviewerDetails("Declined");
     this.next();
     console.log("Declining application");
   };
