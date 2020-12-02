@@ -7,6 +7,8 @@ class Profile extends Component {
     super(props);
     this.state = {
       profile: this.props.profile,
+      profile_id: this.props.profile.profile_id,
+      profileName: this.props.profile.profileName,
       email: this.props.profile.email,
       profileImg: this.props.profile.profileImg,
       first_name: this.props.profile.first_name,
@@ -26,8 +28,12 @@ class Profile extends Component {
       expEndDate: this.props.profile.expEndDate,
       education: this.props.profile.education,
       experience: this.props.profile.experience,
+      formMode: false,
       modal_message: "",
-      modal_show: false
+      modal_show: false,
+
+      edit_modal_show: false,
+      edit_modal_message: ""
     };
   }
 
@@ -39,9 +45,27 @@ class Profile extends Component {
     this.setState({ modal_show: false });
   };
 
-  handleModalHide = (childSignal) => {
-    if (childSignal) {
+
+  editSuccessModalHide = () => {
+    this.setState({ edit_modal_show: false });
+  };
+
+  editSuccessModalShow = (message) => {
+    this.setState({ edit_modal_show: true, edit_modal_message: message });
+};
+
+redirectToViewProfile = () =>{
+  window.location.href = "/viewProfile"
+};
+
+
+  handleModalHide = (childSignal) =>{
+    if(childSignal == "cancel"){
       this.modalHide();
+    }
+    else if(childSignal == "edit"){
+      this.modalHide();
+      this.editSuccessModalShow("Successfully Edited Profile")
     }
   };
 
@@ -257,13 +281,28 @@ class Profile extends Component {
         </Container>
 
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static" keyboard={false} size="lg">
-          <Modal.Header>
-            <h3> Presence Edit Form </h3>
-          </Modal.Header>
-          <Modal.Body>
-            <ProfileForm parent_to_child={this.state} modal_hide={this.handleModalHide} />
-          </Modal.Body>
-        </Modal>
+            <Modal.Header>
+              <h3> Presence Edit Form </h3>
+            </Modal.Header>
+            <Modal.Body>
+                  <ProfileForm parent_to_child = {this.state} modal_hide = {this.handleModalHide}/>
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            show={this.state.edit_modal_show}
+            onHide={this.editSuccessModalHide}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header><h5>{this.state.edit_modal_message}</h5></Modal.Header>
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.redirectToViewProfile}>
+                Continue to view profiles
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
       </>
     );
   }

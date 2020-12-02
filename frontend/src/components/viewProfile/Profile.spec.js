@@ -105,7 +105,7 @@ describe("Profile", () => {
   });
 
   it("Profile should include h5 tags", () => {
-    expect(wrapper.find("h5").length).toEqual(3);
+    expect(wrapper.find("h5").length).toEqual(4);
   });
 
   it("Profile should include 4 Row tags", () => {
