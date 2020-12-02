@@ -262,3 +262,89 @@ class TestSomething:
         assert response.status_code == 200
         print('*********************',response.data)
         assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'
+
+    
+    def test_edit_profile(self,test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/createProfile' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+        "profile_id": 1,
+        "email":"jimmydoe@gmail.com",
+        "profileName":"profilename",
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "first_name": "first",
+        "last_name": "last",
+        "position": "position",
+        "aboutMe": "Hardworking",
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ],
+        "user_id": "1"
+        }
+        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response != 'null'
+
+
+    def test_edit_profile_for_user_which_does_not_exist(self,test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/createProfile' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+        "profile_id": 1,
+        "email":"test@test78.com",
+        "profileName":profilename,
+        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "first_name": "Test",
+        "last_name": "User",
+        "position": "Developer",
+        "aboutMe": "Hello World",
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ],
+        "user_id": "99999"
+        }
+        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 403
+        assert response.data == b'{"code":2,"error":"User account does not exist"}\n'
+
+    

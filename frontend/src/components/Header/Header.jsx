@@ -22,7 +22,6 @@ class Header extends Component {
   };
 
   render() {
-    let user = ls.get("userid");
     let name = ls.get("name");
     return (
       <>
@@ -43,10 +42,10 @@ class Header extends Component {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end nav-style">
             {/* <Nav.Link href="/home">Home</Nav.Link> */}
-            <Nav.Link href={"/createProfile?userId=" + user}>
+            <Nav.Link href={"/createProfile"}>
               Create Presence
             </Nav.Link>
-            <Nav.Link href={"/viewProfile?userId=" + user}>
+            <Nav.Link href={"/viewProfile"}>
               View Presence
             </Nav.Link>
             <Nav.Link>

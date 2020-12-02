@@ -9,6 +9,7 @@ import Register from "./components/register/register";
 import CreateProfile from "./components/createProfile/createProfile";
 import ViewProfile from "./components/viewProfile/viewProfiles";
 import Login from "./components/Login/login";
+import EmailValidation from "./components/Login/EmailValidation";
 import ViewApplications from "./components/viewApplications/viewApplications";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
@@ -20,6 +21,9 @@ ReactDOM.render(
       </Route>
       <Route path="/login">
         <Login />
+      </Route>
+      <Route path="/emailValidation">
+        <EmailValidation />
       </Route>
       <Route path="/register">
         <Register />
