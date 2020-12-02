@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import EmailValidation from "./emailValidation";
+import EmailValidation from "./EmailValidation";
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
@@ -33,7 +33,7 @@ describe("EmailValidation", () => {
 
   it("should include inputs for login", () => {
     expect(wrapper.find("#otp").length).toEqual(1);
-    
+
   });
 
   it("should include buttons for submit and register", () => {

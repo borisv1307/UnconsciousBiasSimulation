@@ -100,9 +100,9 @@ def get_all_presence_for_reviewer(user_id):
                 })
             if len(output) > 0:
                 return {'count': len(output), 'results': output}
-            return {'code': 4, 'error': "No presence found"}
-        except Exception as e:
-            print("Exception ",e)
+            return {'code': 4, 'error': "User presence not found"}
+        except Exception as error:
+            print("Exception ",error)
             return {'code': 4, 'error': "No presence found"}, 403
 
 @presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
@@ -136,8 +136,8 @@ def update_presence_with_review():
                 "reviewed_by": profile_data['reviewed_by']
             }
         else:
-            result = {'code':4, 'error': "No presence found"}, 200
-    except Exception as e:
-        print("Exception",e)
+            result = {'code':4, 'error': "User presence not found"}, 200
+    except Exception as error:
+        print("Exception",error)
         result = {'code':4, 'error': "No presence found"}, 403
     return result
