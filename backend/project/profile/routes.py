@@ -169,7 +169,7 @@ def edit_profile():
     
     user_id_exists = user.count_documents({'user_id': get_user_id})
     if user_id_exists:
-        edit_profile = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
+        edit_profile_action = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
         {
             "profile_id": profile_data['profile_id'],
             "user_id": profile_data['user_id'],
@@ -184,7 +184,7 @@ def edit_profile():
             "experience": profile_data["experience"]
 
         })
-        if edit_profile:
+        if edit_profile_action:
             output = {
                 "profile_id": profile_data['profile_id'],
                 "user_id": profile_data['user_id'],
