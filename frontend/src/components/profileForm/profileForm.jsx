@@ -592,9 +592,9 @@ render() {
                     delay={{ show:250, hide: 400}}
                     overlay={
                       <Popover id="popover-basic">
-                      <Popover.Title as="h3">What <strong>Image</strong> can I use?</Popover.Title>
+                      <Popover.Title as="h3"><strong>Image</strong> requirements</Popover.Title>
                       <Popover.Content>
-                        Add Constraints Here
+                        <strong>Image</strong> should be less than 2 MB in size
                       </Popover.Content>
                       </Popover>
                         }>
@@ -641,7 +641,7 @@ render() {
                         <Popover id="popover-basic">
                         <Popover.Title as="h3">What's an <strong>Objective</strong>?</Popover.Title>
                         <Popover.Content>
-                          An <strong>Objective</strong> consists of 1-2 sentences explaining why
+                          An <strong>Objective</strong> consists of 1-2 sentences explaining what your goal is and why
                           you are suited for the position.
                         </Popover.Content>
                         </Popover>
