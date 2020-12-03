@@ -93,7 +93,7 @@ class viewApplications extends Component {
   };
 
   start = (e) => {
-    if(this.state.index < (this.state.applications.length - 1)){
+    if(this.state.applications.length>0){
     const newApplication = this.state.applications[this.state.index];
 
     const newView = []
