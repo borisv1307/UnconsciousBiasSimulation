@@ -6,6 +6,12 @@ import { Container } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 
 class HomeHR extends Component {
+  componentDidMount() {
+    const token = ls.get("token");
+    if(token===null || token===""){
+      window.location.href = "/login"
+    }
+  }
   render() {
     let name = ls.get("name");
     return (

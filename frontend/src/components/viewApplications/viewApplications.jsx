@@ -11,14 +11,17 @@ class viewApplications extends Component {
       index: 0,
       view: [],
       started: false,
-      completed: false
+      completed: false,
+      modal_message: "",
+      modal_show: false
     };
   }
 
   componentDidMount() {
+    const userId = ls.get("userid")
     const token = ls.get("token");
     console.log(token)
-    fetch("http://localhost:5000/api/v1/getAllPresence/",
+    fetch("http://localhost:5000/api/v1/getAllPresence/"+ userId + "/",
       {
         headers: {
           "Authorization": "Bearer " + token
@@ -27,15 +30,17 @@ class viewApplications extends Component {
       .then((response) => response.json())
       .then((res) => {
 
-        if (res["results"].error !== 'Applications not found') {
+        if (res["results"]) {
           this.setState({ applications: res["results"] });
         }
-        else {
-          this.modalShow(res["results"].error)
-        }
+        // else {
+        //   this.modalShow(res["error"])
+        // }
       });
   }
-
+  modalShow = (message) => {
+    this.setState({ modal_show: true, modal_message: message });
+  };
   next = () => {
     if(this.state.index < (this.state.applications.length - 1)){
       const newIndex = this.state.index + 1;
@@ -57,18 +62,38 @@ class viewApplications extends Component {
       })
     }   
   }
-
+  updateReviewerDetails(status){
+    const reviewerDetails = {
+      reviewer_id: ls.get("userid"),
+      application_status: status,
+    };
+    const data = {
+      user_id: this.state.applications[this.state.index].user_id,
+      profile_id: this.state.applications[this.state.index].profile_id,
+      feedback: reviewerDetails,
+    };
+    fetch("http://localhost:5000//api/v1/savePresenceReview/", {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  }
   handleAccept = (e) => {
+    this.updateReviewerDetails("Accepted");
     this.next();
     console.log("Accepting application"); 
   };
 
   handleDecline = (e) => {
+    this.updateReviewerDetails("Declined");
     this.next();
     console.log("Declining application");
   };
 
   start = (e) => {
+    if(this.state.applications.length>0){
     const newApplication = this.state.applications[this.state.index];
 
     const newView = []
@@ -78,6 +103,16 @@ class viewApplications extends Component {
       view: newView,
       started: true
     });
+  }
+  else{
+    const newView = []
+      this.setState({
+        view: newView,
+        started: true,
+        completed: true
+      })
+    // this.modalShow("No presences to be reviewed!");
+  }
   };
 
   render() {
@@ -202,16 +237,19 @@ class viewApplications extends Component {
             </Row>
             
             <br />
-            <div class="d-flex justify-content-center">
               <Row>
+                <Col></Col>
                 <Col>
-                  <Button id="accept" variant="success" size="lg" onClick={this.handleAccept}>Accept</Button>
+                  <Button id="accept" variant="success" size="lg" onClick={this.handleAccept} block>Accept</Button>
                 </Col>
                 <Col>
-                  <Button id="decline" variant="danger" size="lg" onClick={this.handleDecline}>Decline</Button>
                 </Col>
-              </Row>
-            </div>
+                <Col> 
+                  <Button id="decline" variant="danger" size="lg" onClick={this.handleDecline} block>Decline</Button>
+                </Col>
+                <Col></Col>
+              </Row>        
+            <br />
             
             </Container>
         ))}

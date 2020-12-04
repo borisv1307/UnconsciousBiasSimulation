@@ -23,9 +23,9 @@ def profile_validation(func):
         except:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
-        if get_user_id is None or re.search("^\s*$", get_user_id):
+        if get_user_id is None or re.search("^\s*$", str(get_user_id)):
             return {"code": 4, "error": "Input fields cannot be blank or null"}, 403
-        if not get_user_id.isdigit():
+        if not str(get_user_id).isdigit():
             return {"code": 4, "error": "Input user ID is not a digit"}, 403
 
         return func(*args, **kwargs)
@@ -155,4 +155,52 @@ def get_user_profiles(user_id):
     except Exception as exception_msg:
         print("Unhandled Error is:- %s" % exception_msg)
         output = {'code': 2, "error": "Error fetching details from DB"}
+    return output
+
+@profile_blueprint.route('/api/v1/editProfile/', methods=['PUT'])
+@profile_validation
+def edit_profile():
+    profile_data = request.get_json()
+    get_user_id = int(profile_data['user_id'])
+    get_profile_id = int(profile_data['profile_id'])
+    # Get collections
+    profile = mongo.db.profile
+    user = mongo.db.user
+    
+    user_id_exists = user.count_documents({'user_id': get_user_id})
+    if user_id_exists:
+        edit_profile_action = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
+        {
+            "profile_id": profile_data['profile_id'],
+            "user_id": profile_data['user_id'],
+
+            "profileName": profile_data["profileName"],
+            "profileImg": profile_data["profileImg"],
+            "first_name": profile_data["first_name"],
+            "last_name": profile_data["last_name"],
+            "position": profile_data["position"],
+            "aboutMe": profile_data["aboutMe"],
+            "education": profile_data["education"],
+            "experience": profile_data["experience"]
+
+        })
+        if edit_profile_action:
+            output = {
+                "profile_id": profile_data['profile_id'],
+                "user_id": profile_data['user_id'],
+
+                "profileName": profile_data["profileName"],
+                "profileImg": profile_data["profileImg"],
+                "first_name": profile_data["first_name"],
+                "last_name": profile_data["last_name"],
+                "position": profile_data["position"],
+                "aboutMe": profile_data["aboutMe"],
+                "education": profile_data["education"],
+                "experience": profile_data["experience"]
+            }
+        else:
+            output = {"code": 2, "error": "Document update failed"}
+    else:
+        output = {'code': 2, "error": "User account does not exist"}, 403
+
     return output

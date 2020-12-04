@@ -47,23 +47,26 @@ class Login extends Component {
             ls.set("userid", res.user_id);
             ls.set("name", res.first_name);
             ls.set("token", res.token);
+            if(res.email_validation==="False"){
+              window.location.href = "/emailValidation";
+            }
+            else{
             if (
               res.registration_type === "jobSeeker" ||
               res.registration_type === "Job Seeker"
             ) {
               this.handleClose();
-              window.location.href = `./home/?id=${+res.user_id}&registration_type=${
-                res.registration_type
-                }&Name=${res.first_name}`;
+              window.location.href = "/home";
             } else {
               this.handleClose();
-              window.location.href = `./homehr/?id=${+res.user_id}&registration_type=${
-                res.registration_type
-                }&Name=${res.first_name}`;
+              window.location.href = "/homehr";
             }
-          } else {
-            this.handleShow("User not found");
           }
+          } else {
+            this.handleShow("Incorrect username or password");
+          }
+
+        
         });
     }
   };
@@ -116,6 +119,7 @@ class Login extends Component {
                   onChange={this.updateField("email")}
                   id="email"
                   aria-describedby="emailHelp"
+                  value={this.state.email}
                   placeholder="Enter email"
                 />
               </div>
@@ -126,6 +130,7 @@ class Login extends Component {
                   type="password"
                   className="form-control"
                   onChange={this.updateField("password")}
+                  value={this.state.password}
                   id="password"
                   placeholder="Password"
                 />
