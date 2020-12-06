@@ -132,9 +132,6 @@ class Profile extends Component {
 
   handleSubmit = (e) => {
     var profile = this.state.profile;
-
-
-    console.log(profile)
     fetch("http://localhost:5000/api/v1/addPresence/", {
       method: "POST",
       headers: {
