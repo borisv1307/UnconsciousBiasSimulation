@@ -67,7 +67,7 @@ describe("EmailValidation", () => {
         wrapper.update();
       };
 
-    expect(wrapper.state("alertMessage")).toEqual("Successfully Sent");
+    expect(wrapper.state("alertMessage")).toEqual("OTP sent successfully");
     expect(wrapper.state("allErrorState")).toEqual(false);
     expect(wrapper.state("allSuccessState")).toEqual(true);
   });

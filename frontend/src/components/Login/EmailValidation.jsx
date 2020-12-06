@@ -80,7 +80,7 @@ class EmailValidation extends Component {
   resendOTP = async (e) => {
 
     this.setState({
-      alertMessage: "Successfully Sent",
+      alertMessage: "OTP sent successfully",
       allSuccessState: true,
       allErrorState: false,
     });
@@ -112,10 +112,7 @@ class EmailValidation extends Component {
             </Navbar.Brand>
 
         </Navbar>
-        <br />
-        <br />
-        <br />
-        <br />
+
         <div className="text-center">
           {this.state.allErrorState ? (
             <Alert variant="danger">{this.state.alertMessage}</Alert>
@@ -128,7 +125,10 @@ class EmailValidation extends Component {
               " "
             )}
         </div>
-
+        <br />
+        <br />
+        <br />
+        <br />
         <Container className="containbody justify-content-center logincard">
           <br />
           <h2 className="text-center">Validate OTP(One Time Passcode)</h2> <br />
@@ -164,7 +164,7 @@ class EmailValidation extends Component {
                 )}
               <div className="form-check"></div>
               <br />
-              <Button
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Button
                 id="validate"
                 className="buttonnprimary"
                 onClick={this.handleValidate}
@@ -179,6 +179,7 @@ class EmailValidation extends Component {
               >
                 Cancel
                 </Button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 id="resendOTP"
                 className="buttonnprimary"
@@ -186,7 +187,7 @@ class EmailValidation extends Component {
               >
                 Resend OTP
                 </Button>
-
+              <br /><br />
             </Form>
 
 
