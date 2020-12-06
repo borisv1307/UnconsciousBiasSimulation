@@ -75,6 +75,13 @@ class EmailValidation extends Component {
         });
     }
   };
+
+
+  resendOTP = async (e) => {
+
+
+  };
+
   render() {
     return (
       <>
@@ -155,6 +162,13 @@ class EmailValidation extends Component {
                 href="/login"
               >
                 Cancel
+                </Button>
+              <Button
+                id="resendOTP"
+                className="buttonnprimary"
+                onClick={this.resendOTP}
+              >
+                Resend OTP
                 </Button>
 
             </Form>
