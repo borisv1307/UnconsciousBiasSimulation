@@ -52,18 +52,18 @@ class Profile extends Component {
 
   editSuccessModalShow = (message) => {
     this.setState({ edit_modal_show: true, edit_modal_message: message });
-};
+  };
 
-redirectToViewProfile = () =>{
-  window.location.href = "/viewProfile"
-};
+  redirectToViewProfile = () => {
+    window.location.href = "/viewProfile"
+  };
 
 
-  handleModalHide = (childSignal) =>{
-    if(childSignal == "cancel"){
+  handleModalHide = (childSignal) => {
+    if (childSignal === "cancel") {
       this.modalHide();
     }
-    else if(childSignal == "edit"){
+    else if (childSignal === "edit") {
       this.modalHide();
       this.editSuccessModalShow("Successfully Edited Profile")
     }
@@ -281,27 +281,27 @@ redirectToViewProfile = () =>{
         </Container>
 
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static" keyboard={false} size="lg">
-            <Modal.Header>
-              <h3> Presence Edit Form </h3>
-            </Modal.Header>
-            <Modal.Body>
-                  <ProfileForm parent_to_child = {this.state} modal_hide = {this.handleModalHide}/>
-            </Modal.Body>
-          </Modal>
+          <Modal.Header>
+            <h3> Presence Edit Form </h3>
+          </Modal.Header>
+          <Modal.Body>
+            <ProfileForm parent_to_child={this.state} modal_hide={this.handleModalHide} />
+          </Modal.Body>
+        </Modal>
 
-          <Modal
-            show={this.state.edit_modal_show}
-            onHide={this.editSuccessModalHide}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header><h5>{this.state.edit_modal_message}</h5></Modal.Header>
-            <Modal.Footer>
-              <Button variant="primary" onClick={this.redirectToViewProfile}>
-                Continue to view profiles
+        <Modal
+          show={this.state.edit_modal_show}
+          onHide={this.editSuccessModalHide}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header><h5>{this.state.edit_modal_message}</h5></Modal.Header>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.redirectToViewProfile}>
+              Continue to view profiles
               </Button>
-            </Modal.Footer>
-          </Modal>
+          </Modal.Footer>
+        </Modal>
 
       </>
     );
