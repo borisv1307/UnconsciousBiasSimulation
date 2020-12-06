@@ -79,7 +79,11 @@ class EmailValidation extends Component {
 
   resendOTP = async (e) => {
 
-
+    this.setState({
+      alertMessage: "Successfully Sent",
+      allSuccessState: true,
+      allErrorState: false,
+    });
   };
 
   render() {
@@ -112,6 +116,18 @@ class EmailValidation extends Component {
         <br />
         <br />
         <br />
+        <div className="text-center">
+          {this.state.allErrorState ? (
+            <Alert variant="danger">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+          {this.state.allSuccessState ? (
+            <Alert variant="success">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+        </div>
 
         <Container className="containbody justify-content-center logincard">
           <br />

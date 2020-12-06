@@ -60,6 +60,19 @@ describe("EmailValidation", () => {
     expect(button.text()).toEqual("Resend OTP");
   });
 
+  it("Resend OTP: should show success message", () => {
+
+    wrapper.find("#resendOTP").simulate("click"),
+      () => {
+        wrapper.update();
+      };
+
+    expect(wrapper.state("alertMessage")).toEqual("Successfully Sent");
+    expect(wrapper.state("allErrorState")).toEqual(false);
+    expect(wrapper.state("allSuccessState")).toEqual(true);
+  });
+
+
   describe("Alerts", () => {
     it("should show an error message when form input is incomplete", () => {
       wrapper.setState({ otp: "" }, () => {
