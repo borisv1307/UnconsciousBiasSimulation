@@ -239,7 +239,7 @@ def resend_otp():
     if user:
         try:
             get_otp = pyotp.random_base32()
-            get_status = send_email(email,RESEND_MESSAGE.format(sender=SENDER_EMAIL,
+            send_email(email,RESEND_MESSAGE.format(sender=SENDER_EMAIL,
                                             receivers=email,
                                             OTP=get_otp,
                                             USER=user['first_name'],
