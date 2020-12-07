@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo, token_required, decrypt
 from pymongo import ReturnDocument
-import smtplib, pyotp, ssl
+import smtplib, pyotp
 from . import user_blueprint
 
 
