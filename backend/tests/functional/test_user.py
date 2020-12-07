@@ -164,7 +164,7 @@ class TestSomething:
     def test_for_user_login(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/login/' page is requested (POST)
         THEN check that the response is valid
         """
 
@@ -179,7 +179,7 @@ class TestSomething:
     def test_for_user_login_incorrect_password(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/login/' page is requested (POST)
         THEN check that the response is valid
         """
 
@@ -195,7 +195,7 @@ class TestSomething:
     def test_for_login_with_missing_details(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/login/' page is requested (POST)
         THEN check that the response is valid
         """
 
@@ -211,7 +211,7 @@ class TestSomething:
     def test_for_login_with_invalid_details(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/login/' page is requested (POST)
         THEN check that the response is valid
         """
         data = {
@@ -227,7 +227,7 @@ class TestSomething:
     def test_for_login_with_unknown_details(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/login/' page is requested (POST)
         THEN check that the response is valid
         """
         fake = Faker()
@@ -243,7 +243,7 @@ class TestSomething:
     def test_get_all_users(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
         data = {
@@ -259,7 +259,7 @@ class TestSomething:
     def test_get_all_users_with_invalid_token(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
 
@@ -271,7 +271,7 @@ class TestSomething:
     def test_get_all_users_when_token_not_provided(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
         response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json'})
@@ -283,7 +283,7 @@ class TestSomething:
     def test_get_one_user(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
 
@@ -295,7 +295,7 @@ class TestSomething:
     def test_get_one_user_non_numerical_user_id(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
 
@@ -343,7 +343,7 @@ class TestSomething:
     def test_delete_user_record_which_is_not_in_db(self, test_client):
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (DELETE)
         THEN check that the response is valid
         """
 
@@ -358,7 +358,7 @@ class TestSomething:
         
         """
         GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/createUser/' page is requested (POST)
+        WHEN the '/api/v1/users/' page is requested (PATCH)
         THEN check that the response is valid
         """
         fake = Faker()
@@ -483,6 +483,37 @@ class TestSomething:
         response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data == b'{"success":"Email validation successful"}\n'
+
+    def test_for_resend_otp(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/resend_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+            "email": "jgeorge69@dxc.com"
+               }
+
+        response = test_client.post('/api/v1/resend_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"success":"OTP sent via email"}\n'
+
+    def test_for_resend_otp_when_email_not_found(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/resend_otp/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        data = {
+               "email": "jgeorge69@some.com"
+               }
+
+        response = test_client.post('/api/v1/resend_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        print('data==================',response.data)
+        assert response.status_code == 403
+        assert response.data == b'{"code":2,"error":"Email not found"}\n'
     
     def test_for_verify_otp_when_user_id_does_not_have_otp(self, test_client):
         """
