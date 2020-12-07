@@ -447,10 +447,7 @@ class TestSomething:
         "user_id":set_user_id,
         "token":get_corresponding_token
         }
-        print('user id:-----',set_user_id)
-        print('user token:-----',get_corresponding_token)
         response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('user token:-----',response.data)
         assert response.status_code == 200
         assert response.data == b'{"success":"Successfully logged out"}\n'
 
