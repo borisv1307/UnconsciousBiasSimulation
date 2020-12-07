@@ -97,12 +97,7 @@ class EmailValidation extends Component {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((res) => {
-
-
-        res
-
-      })
+      .then((res) => res)
       .catch(error => {
         this.setState({
           alertMessage: "OTP not sent",
