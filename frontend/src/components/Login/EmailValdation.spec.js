@@ -60,7 +60,7 @@ describe("EmailValidation", () => {
     expect(button.text()).toEqual("Resend OTP");
   });
 
-  it("Resend OTP: should show success message", () => {
+  it("Resend OTP: should show success or fail message", () => {
 
     wrapper.find("#resendOTP").simulate("click"),
       () => {
@@ -70,6 +70,8 @@ describe("EmailValidation", () => {
     expect(wrapper.state("alertMessage")).toEqual("OTP sent successfully");
     expect(wrapper.state("allErrorState")).toEqual(false);
     expect(wrapper.state("allSuccessState")).toEqual(true);
+
+
   });
 
 

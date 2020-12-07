@@ -77,7 +77,32 @@ class EmailValidation extends Component {
   };
 
 
-  resendOTP = async (e) => {
+  resendOTP = (e) => {
+    const data = {
+
+    };
+
+    fetch("http://localhost:5000/api/v1/resend_otp/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+
+
+        res
+
+      })
+      .catch(error => {
+        this.setState({
+          alertMessage: "OTP not sent",
+          allSuccessState: false,
+          allErrorState: true,
+        })
+      });
 
     this.setState({
       alertMessage: "OTP sent successfully",
