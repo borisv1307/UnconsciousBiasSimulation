@@ -86,7 +86,7 @@ class EmailValidation extends Component {
 
   resendOTP = (e) => {
     const data = {
-
+      email: ls.get("email"),
     };
 
     fetch("http://localhost:5000/api/v1/resend_otp/", {

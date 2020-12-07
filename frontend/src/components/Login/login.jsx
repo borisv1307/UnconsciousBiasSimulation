@@ -48,6 +48,7 @@ class Login extends Component {
             ls.set("name", res.first_name);
             ls.set("token", res.token);
             ls.set("registrationtype", res.registration_type);
+            ls.set("email", res.email);
             if(res.email_validation==="False"){
               window.location.href = "/emailValidation";
             }
