@@ -67,7 +67,14 @@ class EmailValidation extends Component {
             this.successhandleShow(res.success);
             this.delayState();
             this.timeout(5000);
-            window.location.href = "/login";
+            const registration= ls.get("registrationtype");
+            if(registration === "jobSeeker" || registration === "Job Seeker"){
+              window.location.href = "/home";
+            }
+            else{
+              window.location.href = "/homehr";
+            }
+            
 
           } else {
             this.errorhandleShow(res.error);
