@@ -510,7 +510,6 @@ class TestSomething:
                }
 
         response = test_client.post('/api/v1/resend_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('data==================',response.data)
         assert response.status_code == 403
         assert response.data == b'{"code":2,"error":"Email not found"}\n'
     
@@ -534,7 +533,6 @@ class TestSomething:
         for user_with_tok in users_with_otp:
             user_list.append(user_with_tok['user_id'])
         set_user_id = random.choice(user_list)
-        print('iser--',set_user_id)
 
         data = {
         "user_id": set_user_id,
@@ -564,7 +562,6 @@ class TestSomething:
         }
 
         response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        print('res----',response.data)
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
     

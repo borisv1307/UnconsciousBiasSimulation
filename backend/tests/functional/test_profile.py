@@ -260,7 +260,6 @@ class TestSomething:
 
         response = test_client.get('/api/v1/getProfiles/10/',headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        print('*********************',response.data)
         assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'
 
     
