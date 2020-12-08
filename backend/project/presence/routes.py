@@ -148,3 +148,27 @@ def update_presence_with_review():
         print("Exception", error)
         result = {'code': 4, 'error': "No presence found"}, 403
     return result
+
+@presence_blueprint.route('/api/v1/getCount/<reviewer_id>/', methods=['GET'])
+def get_presence_count(reviewer_id):
+    reviewer = int(reviewer_id)
+
+    declined_query = {"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}}
+    accepted_query = {"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}}
+
+    declined_count = mongo.db.presence.count_documents(declined_query)
+    accepted_count = mongo.db.presence.count_documents(accepted_query)
+
+    try:
+        if declined_count >= 0 and accepted_count >= 0:
+            result = {
+                "reviewer_id": reviewer,
+                "accepted_count": accepted_count,
+                "declined_count": declined_count
+            }
+        else:
+            result = {'code': 4, 'error': "Reviwer not found"}, 200
+    except Exception as error:
+        print("Exception", error)
+        result = {'code': 4, 'error': "No presence found"}, 403
+    return result
