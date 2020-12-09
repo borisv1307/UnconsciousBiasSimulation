@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Button, Row, Col, Container, Image, Accordion } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import ls from "local-storage";
+import { MDBIcon } from "mdbreact";
 
 class viewApplications extends Component {
   constructor() {
@@ -194,8 +195,22 @@ class viewApplications extends Component {
                   {a.education.map((edu, i) => (
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                        <strong> {edu.school} </strong> <br /> 
-                        {edu.degree} in {edu.major}
+                        <Row>
+                          <Col >
+                            <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
+                            {edu.major}
+                          </Col>
+                          
+                          <Col xs lg="2">
+                            <div
+                              style={{
+                                position: 'absolute', left: '50%', top: '50%',
+                                transform: 'translate(-50%, -50%)'
+                            }}>
+                                <MDBIcon icon="angle-down" size="2x" />
+                            </div>
+                          </Col>
+                        </Row>  
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey={i + 1}>
                         <Card.Body>
@@ -216,11 +231,26 @@ class viewApplications extends Component {
                   {a.experience.map((exp, i) => (
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                        <strong>
-                          {exp.company} {exp.title}
-                        </strong>
-                        <br />
-                        {exp.duration}
+                        <Row>
+                          <Col >
+                            <strong>
+                              {exp.company} {exp.title}
+                            </strong>
+                            <br />
+                            {exp.duration}
+                          </Col>
+                          
+                          <Col xs lg="2">
+                            <div
+                              style={{
+                                position: 'absolute', left: '50%', top: '50%',
+                                transform: 'translate(-50%, -50%)'
+                            }}>
+                                <MDBIcon icon="angle-down" size="2x" />
+                            </div>
+                          </Col>
+                        </Row>
+                        
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey={i + 1}>
                         <Card.Body>

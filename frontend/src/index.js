@@ -11,7 +11,12 @@ import ViewProfile from "./components/viewProfile/viewProfiles";
 import Login from "./components/Login/login";
 import EmailValidation from "./components/Login/EmailValidation";
 import ViewApplications from "./components/viewApplications/viewApplications";
+
+import '@fortawesome/fontawesome-free/css/all.min.css'; 
+import 'bootstrap-css-only/css/bootstrap.min.css'; 
+
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 
 ReactDOM.render(
   <Router>
