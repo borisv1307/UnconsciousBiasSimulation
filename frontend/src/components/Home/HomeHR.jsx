@@ -11,7 +11,6 @@ class HomeHR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       dataDoughnut: {
         labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
         datasets: [
@@ -59,7 +58,7 @@ class HomeHR extends Component {
     scales: {
       yAxes: [
         {
-          barPercentage: 0.4,
+          barPercentage: 1.0,
           gridLines: {
             display: true,
             color: "rgba(0, 0, 0, 0.1)"
@@ -73,7 +72,8 @@ class HomeHR extends Component {
             color: "rgba(0, 0, 0, 0.1)"
           },
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            max: 100
           }
         }
       ]
@@ -87,12 +87,12 @@ class HomeHR extends Component {
     }
 
     const reviewer_id = ls.get("userid")
-    const bardata = this.state
+    const dataHorizontal = this.state.dataHorizontal;
     fetch("http://localhost:5000/api/v1/getCount/" + reviewer_id)
       .then((res) => res.json())
       .then((res) => {
-        bardata.dataHorizontal.datasets[0].data = [res.accepted_count, res.declined_count];
-
+        dataHorizontal.datasets[0].data = [res.accepted_count, res.declined_count];
+        this.setState({ dataHorizontal })
       })
 
 
@@ -125,12 +125,12 @@ class HomeHR extends Component {
             </h5>
             <br />
             <br />     <br />
-            <Tabs defaultActiveKey="ApplicationData" transition={false} id="noanim-tab-example">
+            <Tabs defaultActiveKey="ApplicationInsight" transition={false} id="noanim-tab-example">
               <Tab eventKey="ApplicationInsight" title=" Application Insight ">
                 <div>
                   <br />
                   <h3 className="text-center"> Application Insight </h3>
-                  <HorizontalBarGraph inputData={this.state.dataHorizontal} />
+                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={400} />
                 </div>
               </Tab>
 
@@ -141,7 +141,7 @@ class HomeHR extends Component {
 
                     <h3 className="text-center">Acceptance Categories</h3>
                     <br />
-                    <DoughnutChart inputData={this.state.dataDoughnut} />
+                    <DoughnutChart inputData={this.state.dataDoughnut} height={250} />
 
                   </Col>
                   <Col>
@@ -149,11 +149,11 @@ class HomeHR extends Component {
 
                     <h3 className="text-center">Rejection Categories</h3>
                     <br />
-                    <DoughnutChart inputData={this.state.dataDoughnut} />
+                    <DoughnutChart inputData={this.state.dataDoughnut} height={250} />
 
                   </Col>
                 </Row>
-                <br /><br />     <br /><br />     <br /><br />     <br /><br />      <br /><br />
+                <br /><br />
               </Tab>
             </Tabs>
 
