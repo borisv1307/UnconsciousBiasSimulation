@@ -6,7 +6,8 @@ class DoughnutChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataDoughnut: this.props.inputData
+            dataDoughnut: this.props.inputData,
+            height: this.props.height ? this.props.height : 150
         }
     }
 
@@ -17,7 +18,7 @@ class DoughnutChart extends React.Component {
                 <Row>
                     <Col></Col>
                     <Col xs={10}>
-                        <Doughnut data={this.state.dataDoughnut} options={{ responsive: true }} />
+                        <Doughnut data={this.state.dataDoughnut} options={{ responsive: true }} height={this.state.height} />
                     </Col>
                     <Col></Col>
                 </Row>
