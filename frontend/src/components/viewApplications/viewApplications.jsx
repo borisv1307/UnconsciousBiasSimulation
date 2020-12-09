@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Card, Button, Row, Col, Container, Image, Accordion } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import ls from "local-storage";
-import { MDBIcon } from "mdbreact";
 
 class viewApplications extends Component {
   constructor() {
