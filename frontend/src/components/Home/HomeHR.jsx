@@ -126,7 +126,7 @@ class HomeHR extends Component {
             <br />
             <br />     <br /><br />
             <Tabs defaultActiveKey="ApplicationData" transition={false} id="noanim-tab-example">
-              <Tab eventKey="ApplicationInsight" title="Application Insight">
+              <Tab eventKey="ApplicationInsight" title=" Application Insight ">
                 <div>
                   <br />
                   <h3 className="text-center"> Application Insight </h3>
@@ -134,7 +134,7 @@ class HomeHR extends Component {
                 </div>
               </Tab>
 
-              <Tab eventKey="Rate" title="Categories Rate%">
+              <Tab eventKey="Rate" title=" Categories Rate% ">
                 <Row>
                   <Col>
                     <br /><br />     <br /><br />
