@@ -32,7 +32,7 @@ class HomeHR extends Component {
         labels: ['Accepted', 'Rejected'],
         datasets: [
           {
-            label: ['Accepted', 'Rejected'],
+            label: 'Value',
             data: [0, 0],
             fill: false,
             backgroundColor: [
@@ -124,7 +124,7 @@ class HomeHR extends Component {
               View real applications and see where your biases lie statistically
             </h5>
             <br />
-            <br />     <br /><br />
+            <br />     <br />
             <Tabs defaultActiveKey="ApplicationData" transition={false} id="noanim-tab-example">
               <Tab eventKey="ApplicationInsight" title=" Application Insight ">
                 <div>
