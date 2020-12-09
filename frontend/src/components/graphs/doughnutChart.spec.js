@@ -6,7 +6,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 configure({ adapter: new Adapter() });
 
-describe("HomeHR", () => {
+describe("DoughnutChart", () => {
   let wrapper;
   let dataDoughnut = {
     labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
@@ -26,7 +26,7 @@ describe("HomeHR", () => {
   }
 
   beforeEach(() => (wrapper = shallow(<DoughnutChart inputData={dataDoughnut} />)));
-  it("HomeHR should exists", () => {
+  it("DoughnutChart should exists", () => {
     expect(wrapper.exists()).toBe(true);
   });
 
