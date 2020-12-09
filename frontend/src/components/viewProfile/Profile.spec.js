@@ -81,15 +81,6 @@ describe("Profile", () => {
     expect(container.length).toEqual(1);
   });
 
-  it("Profile should include row", () => {
-    const container = wrapper.find("Row");
-    expect(container.length).toEqual(4);
-  });
-
-  it("Profile should include Col", () => {
-    const container = wrapper.find("Col");
-    expect(container.length).toEqual(6);
-  });
   it("renders the respective image", () => {
     const fig = wrapper.find("Image");
     expect(fig.prop("src")).toEqual(profile.profileImg);
@@ -101,7 +92,7 @@ describe("Profile", () => {
   });
 
   it("Profile should include labels", () => {
-    expect(wrapper.find("label").length).toEqual(3);
+    expect(wrapper.find("label").length).toEqual(1);
   });
 
   it("Profile should include h5 tags", () => {
@@ -109,18 +100,11 @@ describe("Profile", () => {
   });
 
   it("Profile should include 4 Row tags", () => {
-    expect(wrapper.find("Row").length).toEqual(4);
+    expect(wrapper.find("Row").length).toEqual(8);
   });
 
-  it("Profile should include 6 Col tags", () => {
-    expect(wrapper.find("Col").length).toEqual(6);
-  });
-
-  it("validate duration value", () => {
-    const htmldurations = wrapper.find("label#duration");
-    profile.experience.forEach((exp, i) => {
-      expect(htmldurations.get(i).props.children[0]).toEqual(durations[i]);
-    });
+  it("Profile should include 14 Col tags", () => {
+    expect(wrapper.find("Col").length).toEqual(14);
   });
 
   it("Submit presence: should show success message", () => {
@@ -152,5 +136,6 @@ describe("Profile", () => {
     expect(button).toHaveLength(1);
     expect(button.text()).toEqual("Edit");
   });
+
 });
 

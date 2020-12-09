@@ -194,8 +194,8 @@ class viewApplications extends Component {
                   {a.education.map((edu, i) => (
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                        <strong> {edu.school} </strong> <br /> 
-                        {edu.degree} in {edu.major}
+                          <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
+                          {edu.major}
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey={i + 1}>
                         <Card.Body>
@@ -216,11 +216,11 @@ class viewApplications extends Component {
                   {a.experience.map((exp, i) => (
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                        <strong>
-                          {exp.company} {exp.title}
-                        </strong>
-                        <br />
-                        {exp.duration}
+                          <strong>
+                              {exp.company} {exp.title}
+                          </strong>
+                          <br />
+                          {exp.duration}
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey={i + 1}>
                         <Card.Body>
