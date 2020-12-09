@@ -153,7 +153,7 @@ class HomeHR extends Component {
 
                   </Col>
                 </Row>
-                <br /><br />
+                <br />
               </Tab>
             </Tabs>
 
