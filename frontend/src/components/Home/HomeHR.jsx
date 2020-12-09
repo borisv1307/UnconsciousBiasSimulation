@@ -58,7 +58,7 @@ class HomeHR extends Component {
     scales: {
       yAxes: [
         {
-          barPercentage: 1.0,
+          barPercentage: 0.5,
           gridLines: {
             display: true,
             color: "rgba(0, 0, 0, 0.1)"
@@ -130,7 +130,7 @@ class HomeHR extends Component {
                 <div>
                   <br />
                   <h3 className="text-center"> Application Insight </h3>
-                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={400} />
+                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
                 </div>
               </Tab>
 
@@ -141,7 +141,7 @@ class HomeHR extends Component {
 
                     <h3 className="text-center">Acceptance Categories</h3>
                     <br />
-                    <DoughnutChart inputData={this.state.dataDoughnut} height={250} />
+                    <DoughnutChart inputData={this.state.dataDoughnut} height={220} />
 
                   </Col>
                   <Col>
@@ -149,7 +149,7 @@ class HomeHR extends Component {
 
                     <h3 className="text-center">Rejection Categories</h3>
                     <br />
-                    <DoughnutChart inputData={this.state.dataDoughnut} height={250} />
+                    <DoughnutChart inputData={this.state.dataDoughnut} height={220} />
 
                   </Col>
                 </Row>
