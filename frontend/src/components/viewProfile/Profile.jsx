@@ -35,8 +35,39 @@ class Profile extends Component {
       modal_show: false,
 
       edit_modal_show: false,
-      edit_modal_message: ""
+      edit_modal_message: "",
+
+      mode: this.props.mode
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.profile !== this.props.profile) {
+      this.setState({
+        profile: this.props.profile,
+        profile_id: this.props.profile.profile_id,
+        profileName: this.props.profile.profileName,
+        email: this.props.profile.email,
+        profileImg: this.props.profile.profileImg,
+        first_name: this.props.profile.first_name,
+        last_name: this.props.profile.last_name,
+        position: this.props.profile.position,
+        aboutMe: this.props.profile.aboutMe,
+        school: this.props.profile.school,
+        degree: this.props.profile.degree,
+        major: this.props.profile.major,
+        eduStartDate: this.props.profile.eduStartDate,
+        eduEndDate: this.props.profile.eduEndDate,
+        gpa: this.props.profile.gpa,
+        title: this.props.profile.title,
+        company: this.props.profile.company,
+        location: this.props.profile.location,
+        expStartDate: this.props.profile.expStartDate,
+        expEndDate: this.props.profile.expEndDate,
+        education: this.props.profile.education,
+        experience: this.props.profile.experience,
+      });
+    }
   }
 
   updateField = (stateKey) => (e) => {
@@ -296,14 +327,24 @@ class Profile extends Component {
           </Row>
           <br />
           <br />
-          <Row className="justify-content-center">
-            <Col sm={2}>
-              <Button id="Send" className="submit" onClick={this.handleSubmit}>
-                Send
-              </Button>
-              &nbsp;&nbsp; <Button id="Edit" onClick={this.modalShow}>Edit</Button>{" "}
+
+          { this.state.mode === 'jobseeker' ?
+
+          <Row>
+            <Col></Col>
+            <Col>
+            <Button id="Send" className="submit" onClick={this.handleSubmit} size="lg" block>Send</Button>
             </Col>
-          </Row>
+            <Col>
+            </Col>
+            <Col> 
+              <Button id="Edit" onClick={this.modalShow} size="lg" block>Edit</Button>
+            </Col>
+            <Col></Col>
+          </Row>  
+
+          : null }
+
           <br />
         </Container>
 

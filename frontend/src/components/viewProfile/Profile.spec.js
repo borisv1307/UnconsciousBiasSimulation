@@ -60,7 +60,7 @@ describe("Profile", () => {
 
   var durations = ["2", "6"];
 
-  beforeEach(() => (wrapper = shallow(<Profile profile={profile} />)));
+  beforeEach(() => (wrapper = shallow(<Profile profile={profile} mode={"jobseeker"}/>)));
 
   it("Profile should exist", () => {
     expect(wrapper.exists()).toBe(true);
@@ -104,7 +104,7 @@ describe("Profile", () => {
   });
 
   it("Profile should include 14 Col tags", () => {
-    expect(wrapper.find("Col").length).toEqual(14);
+    expect(wrapper.find("Col").length).toEqual(18);
   });
 
   it("Submit presence: should show success message", () => {

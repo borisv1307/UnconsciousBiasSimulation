@@ -124,7 +124,7 @@ class HomeHR extends Component {
               View real applications and see where your biases lie statistically
             </h5>
             <br />
-            <br />     <br />
+            <br /> 
             <Tabs defaultActiveKey="ApplicationInsight" transition={false} id="noanim-tab-example">
               <Tab eventKey="ApplicationInsight" title=" Application Insight ">
                 <div>
