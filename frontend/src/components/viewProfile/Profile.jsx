@@ -41,32 +41,36 @@ class Profile extends Component {
     };
   }
 
+  setProfile(profile) {
+    this.setState({
+      profile: profile.profile,
+      profile_id: profile.profile.profile_id,
+      profileName: profile.profile.profileName,
+      email: profile.profile.email,
+      profileImg: profile.profile.profileImg,
+      first_name: profile.profile.first_name,
+      last_name: profile.profile.last_name,
+      position: profile.profile.position,
+      aboutMe: profile.profile.aboutMe,
+      school: profile.profile.school,
+      degree: profile.profile.degree,
+      major: profile.profile.major,
+      eduStartDate: profile.profile.eduStartDate,
+      eduEndDate: profile.profile.eduEndDate,
+      gpa: profile.profile.gpa,
+      title: profile.profile.title,
+      company: profile.profile.company,
+      location: profile.profile.location,
+      expStartDate: profile.profile.expStartDate,
+      expEndDate: profile.profile.expEndDate,
+      education: profile.profile.education,
+      experience: profile.profile.experience,
+    });
+  }
+
   componentDidUpdate(prevProps) {
     if(prevProps.profile !== this.props.profile) {
-      this.setState({
-        profile: this.props.profile,
-        profile_id: this.props.profile.profile_id,
-        profileName: this.props.profile.profileName,
-        email: this.props.profile.email,
-        profileImg: this.props.profile.profileImg,
-        first_name: this.props.profile.first_name,
-        last_name: this.props.profile.last_name,
-        position: this.props.profile.position,
-        aboutMe: this.props.profile.aboutMe,
-        school: this.props.profile.school,
-        degree: this.props.profile.degree,
-        major: this.props.profile.major,
-        eduStartDate: this.props.profile.eduStartDate,
-        eduEndDate: this.props.profile.eduEndDate,
-        gpa: this.props.profile.gpa,
-        title: this.props.profile.title,
-        company: this.props.profile.company,
-        location: this.props.profile.location,
-        expStartDate: this.props.profile.expStartDate,
-        expEndDate: this.props.profile.expEndDate,
-        education: this.props.profile.education,
-        experience: this.props.profile.experience,
-      });
+      this.setProfile(this.props);
     }
   }
 
