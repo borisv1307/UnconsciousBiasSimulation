@@ -36,7 +36,7 @@ class Header extends Component {
           `}
         </style>
         <Navbar className=" header font-weight-bold">
-          <Navbar.Brand className="nav-style-title " href="/home">
+          <Navbar.Brand className="nav-style-title " href="/homeHR">
             {"Unconscious Bias Simulation: " + name}
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">

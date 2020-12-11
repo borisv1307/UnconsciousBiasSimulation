@@ -36,26 +36,48 @@ describe("EmailValidation", () => {
 
   });
 
-  it("should include buttons for submit and register", () => {
+  it("should include buttons for validate OTP , cancel and resend OTP", () => {
     expect(wrapper.find("Button#validate").length).toEqual(1);
     expect(wrapper.find("Button#cancel").length).toEqual(1);
+    expect(wrapper.find("Button#resendOTP").length).toEqual(1);
   });
 
-  it("render submit button with custom text", () => {
+  it("render validate OTP button with custom text", () => {
     const button = wrapper.find("Button#validate");
     expect(button).toHaveLength(1);
     expect(button.text()).toEqual("Validate OTP");
   });
 
-  it("render register button with custom text", () => {
+  it("render cancel button with custom text", () => {
     const button = wrapper.find("Button#cancel");
     expect(button).toHaveLength(1);
     expect(button.text()).toEqual("Cancel");
   });
 
+  it("render resend OTP button with custom text", () => {
+    const button = wrapper.find("Button#resendOTP");
+    expect(button).toHaveLength(1);
+    expect(button.text()).toEqual("Resend OTP");
+  });
+
+  it("Resend OTP: should show success or fail message", () => {
+
+    wrapper.find("#resendOTP").simulate("click"),
+      () => {
+        wrapper.update();
+      };
+
+    expect(wrapper.state("alertMessage")).toEqual("OTP sent successfully");
+    expect(wrapper.state("allErrorState")).toEqual(false);
+    expect(wrapper.state("allSuccessState")).toEqual(true);
+
+
+  });
+
+
   describe("Alerts", () => {
     it("should show an error message when form input is incomplete", () => {
-      wrapper.setState({ otp: ""}, () => {
+      wrapper.setState({ otp: "" }, () => {
         wrapper.find("#validate").simulate("click"),
           () => {
             //submit form

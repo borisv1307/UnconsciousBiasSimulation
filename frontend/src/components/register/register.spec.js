@@ -22,7 +22,19 @@ describe("Register", () => {
     expect(wrapper.find("Form").length).toEqual(1);
   });
 
-  it("should include inputs for registration", () => {
+  it("should include the base number of inputs for registration where a registration type has not been chosen yet", () => {
+    expect(wrapper.find("#first_name").length).toEqual(1);
+    expect(wrapper.find("#last_name").length).toEqual(1);
+    expect(wrapper.find("#email").length).toEqual(1);
+    expect(wrapper.find("#password").length).toEqual(1);
+    expect(wrapper.find("#registration_type").length).toEqual(1);
+    expect(wrapper.find("#gender").length).toEqual(1);
+    expect(wrapper.find("#date_of_birth").length).toEqual(1);
+  });
+
+  it("should include an extended number of inputs from the default number when choosing Job Seeker as the registration type", () => {
+    const registrationTypeInput = simulateChangeOnInput(wrapper, "#registration_type", "Job Seeker");
+
     expect(wrapper.find("#first_name").length).toEqual(1);
     expect(wrapper.find("#last_name").length).toEqual(1);
     expect(wrapper.find("#email").length).toEqual(1);
@@ -36,6 +48,19 @@ describe("Register", () => {
     expect(wrapper.find("#state").length).toEqual(1);
     expect(wrapper.find("#zip").length).toEqual(1);
     expect(wrapper.find("#contact_number").length).toEqual(1);
+  });
+
+
+  it("should include the same number of inputs from the default form when choosing HR Professional as the registration type", () => {
+    const registrationTypeInput = simulateChangeOnInput(wrapper, "#registration_type", "HR Professional");
+
+    expect(wrapper.find("#first_name").length).toEqual(1);
+    expect(wrapper.find("#last_name").length).toEqual(1);
+    expect(wrapper.find("#email").length).toEqual(1);
+    expect(wrapper.find("#password").length).toEqual(1);
+    expect(wrapper.find("#registration_type").length).toEqual(1);
+    expect(wrapper.find("#gender").length).toEqual(1);
+    expect(wrapper.find("#date_of_birth").length).toEqual(1);
   });
 
   it("should update input forms ", () => {
@@ -69,7 +94,7 @@ describe("Register", () => {
   });
 
   describe("Alerts", () => {
-    it("should show success message when inputs are valid", () => {
+    it("should show success message when inputs are valid for a JOBSEEKER", () => {
       wrapper.setState({ "first_name": "John",
                         "last_name": "Doe",
                         "email": "jdoe@test.com",
@@ -90,7 +115,27 @@ describe("Register", () => {
   
         expect(wrapper.state("error_message")).toEqual("");
         expect(wrapper.state("error_show")).toEqual(false);
-        expect(wrapper.state("modal_message")).toEqual("Successfully Registered an Account!");
+        expect(wrapper.state("modal_message")).toEqual("An OTP will be sent to your email. It is required for your first login.");
+        expect(wrapper.state("modal_show")).toEqual(true);
+      });
+    });
+
+    it("should show success message when inputs are valid for a HR PROFESSIONAL", () => {
+      wrapper.setState({ "first_name": "John",
+                        "last_name": "Doe",
+                        "email": "jdoe@test.com",
+                        "password": "12345",
+                        "gender": "Male",
+                        "date_of_birth": "2020-01-01",
+                        "registration_type": "HR Professional" }, () => {
+
+        wrapper.find("#submitButton").simulate('click'), () => { //submit form
+          wrapper.update();
+        };
+  
+        expect(wrapper.state("error_message")).toEqual("");
+        expect(wrapper.state("error_show")).toEqual(false);
+        expect(wrapper.state("modal_message")).toEqual("An OTP will be sent to your email. It is required for your first login.");
         expect(wrapper.state("modal_show")).toEqual(true);
       });
     });

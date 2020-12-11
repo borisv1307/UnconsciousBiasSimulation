@@ -32,6 +32,8 @@ class Register extends Component {
     error_show: false,
     modal_message: "",
     modal_show: false,
+
+    chose_a_registration_type: false,
   };
 
   redirectToLogin = () => {
@@ -56,6 +58,18 @@ class Register extends Component {
   updateField = (stateKey) => (e) => {
     this.setState({ [stateKey]: e.target.value });
   };
+
+  updateRegistrationType = (registrationType) => (e) => {
+    this.setState({ [registrationType]: e.target.value });
+
+    if(registrationType.localeCompare("Job Seeker")){
+      this.setState({chose_a_registration_type: true})
+    }
+    else{
+      this.setState({chose_a_registration_type: false})
+    }
+  };
+
 
   collectContactDetails = (e) => {
     const contactDetailsData = {
@@ -106,27 +120,34 @@ class Register extends Component {
     var containsLetters = /[a-zA-Z]/g;
 
     if (
-      !this.state.first_name ||
+      ((!this.state.first_name ||
       !this.state.last_name ||
       !this.state.email ||
       !this.state.password ||
       !this.state.gender ||
       !this.state.date_of_birth ||
-      !this.state.registration_type ||
       !this.state.address ||
       !this.state.address2 ||
       !this.state.city ||
       !this.state.state ||
       !this.state.zip ||
-      !this.state.contact_number
+      !this.state.contact_number) && this.state.registration_type === 'Job Seeker') || 
+      ((!this.state.first_name ||
+        !this.state.last_name ||
+        !this.state.email ||
+        !this.state.password ||
+        !this.state.gender ||
+        !this.state.date_of_birth) && this.state.registration_type === 'HR Professional') ||
+        !this.state.registration_type
     ) {
       this.handleShow("Incomplete input");
     } else if (
-      containsLetters.test(this.state.contact_number) ||
-      this.state.contact_number.length < 10
+      (containsLetters.test(this.state.contact_number) ||
+      this.state.contact_number.length < 10) &&
+      this.state.registration_type === 'Job Seeker'
     ) {
       this.handleShow("Invalid phone number");
-    } else if (containsLetters.test(this.state.zip)) {
+    } else if (containsLetters.test(this.state.zip) && this.state.registration_type === 'Job Seeker') {
       this.handleShow("Invalid zip code");
     } else if (
       !this.state.email.includes("@") ||
@@ -144,7 +165,7 @@ class Register extends Component {
         body: JSON.stringify(data),
       })
         .then((res) => res.json())
-        .then(this.modalShow("Successfully Registered an Account!"));
+        .then(this.modalShow("An OTP will be sent to your email. It is required for your first login."));
 
       this.setState({
         first_name: "",
@@ -315,24 +336,6 @@ class Register extends Component {
                   />
                 </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Registration Type</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={this.state.registration_type}
-                    onChange={this.updateField("registration_type")}
-                    id="registration_type"
-                    name="registration_type"
-                  >
-                    <option value="" selected disabled hidden>
-                      {" "}
-                      Type{" "}
-                    </option>
-                    <option value="jobSeeker">Job Seeker</option>
-                    <option value="HR Professional">HR Professional</option>
-                  </Form.Control>
-                </Form.Group>
-
                 <Row>
                   <Col>
                     <Form.Group>
@@ -372,6 +375,27 @@ class Register extends Component {
                 </Row>
 
                 <Form.Group>
+                  <Form.Label>Registration Type</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.registration_type}
+                    onChange={this.updateField("registration_type")}
+                    id="registration_type"
+                    name="registration_type"
+                  >
+                    <option value="" selected disabled hidden>
+                      {" "}
+                      Type{" "}
+                    </option>
+                    <option value="Job Seeker">Job Seeker</option>
+                    <option value="HR Professional">HR Professional</option>
+                  </Form.Control>
+                </Form.Group>
+                
+                {
+                this.state.registration_type === 'Job Seeker' ?
+                  <div>
+                    <Form.Group>
                   <Form.Label>Address</Form.Label>
                   <Form.Control
                     type="text"
@@ -455,6 +479,10 @@ class Register extends Component {
                     placeholder="contact_number"
                   />
                 </Form.Group>
+                  </div>
+                : null}
+                
+                
               </Form>
             </Container>
             <br />
@@ -496,6 +524,10 @@ class Register extends Component {
             backdrop="static"
             keyboard={false}
           >
+            <Modal.Header>
+            <Modal.Title>Successful Registration</Modal.Title>
+            </Modal.Header>
+            
             <Modal.Body>{this.state.modal_message}</Modal.Body>
             <Modal.Footer>
               <Button variant="primary" onClick={this.redirectToLogin}>

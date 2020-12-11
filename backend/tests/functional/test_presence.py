@@ -4,7 +4,6 @@ test create profile and view profile.
 
 """
 # pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
-from project import create_app
 from bson.objectid import ObjectId
 
 import pytest
@@ -17,6 +16,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 PARENT_ROOT = os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
 GRANDPAPA_ROOT = os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
 sys.path.insert(0, GRANDPAPA_ROOT)
+from project import create_app
 
 profilename = "Profile B"
 
@@ -200,3 +200,28 @@ class TestPool:
             '/api/v1/getAllPresence/Seven/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"reviewer id must be numeric"}\n'
+
+    def test_for_get_count(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get(
+            '/api/v1/getCount/4/', headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data != b'{"error": "No presence found"}\n'
+
+
+    def test_for_get_count_validation(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get(
+            '/api/v1/getCount/99/', headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+        assert response.data == b'{"accepted_count":0,"declined_count":0,"reviewer_id":99}\n'

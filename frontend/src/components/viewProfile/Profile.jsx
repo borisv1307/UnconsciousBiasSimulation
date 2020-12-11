@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Image, Container, Button, Col, Row, Alert, Modal, Card, Accordion } from "react-bootstrap";
 import ProfileForm from "../profileForm/profileForm";
+import { MDBIcon } from "mdbreact";
+
 class Profile extends Component {
 
   constructor(props) {
@@ -33,8 +35,43 @@ class Profile extends Component {
       modal_show: false,
 
       edit_modal_show: false,
-      edit_modal_message: ""
+      edit_modal_message: "",
+
+      mode: this.props.mode
     };
+  }
+
+  setProfile(profile) {
+    this.setState({
+      profile: profile.profile,
+      profile_id: profile.profile.profile_id,
+      profileName: profile.profile.profileName,
+      email: profile.profile.email,
+      profileImg: profile.profile.profileImg,
+      first_name: profile.profile.first_name,
+      last_name: profile.profile.last_name,
+      position: profile.profile.position,
+      aboutMe: profile.profile.aboutMe,
+      school: profile.profile.school,
+      degree: profile.profile.degree,
+      major: profile.profile.major,
+      eduStartDate: profile.profile.eduStartDate,
+      eduEndDate: profile.profile.eduEndDate,
+      gpa: profile.profile.gpa,
+      title: profile.profile.title,
+      company: profile.profile.company,
+      location: profile.profile.location,
+      expStartDate: profile.profile.expStartDate,
+      expEndDate: profile.profile.expEndDate,
+      education: profile.profile.education,
+      experience: profile.profile.experience,
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.profile !== this.props.profile) {
+      this.setProfile(this.props);
+    }
   }
 
   updateField = (stateKey) => (e) => {
@@ -52,18 +89,18 @@ class Profile extends Component {
 
   editSuccessModalShow = (message) => {
     this.setState({ edit_modal_show: true, edit_modal_message: message });
-};
+  };
 
-redirectToViewProfile = () =>{
-  window.location.href = "/viewProfile"
-};
+  redirectToViewProfile = () => {
+    window.location.href = "/viewProfile"
+  };
 
 
-  handleModalHide = (childSignal) =>{
-    if(childSignal == "cancel"){
+  handleModalHide = (childSignal) => {
+    if (childSignal === "cancel") {
       this.modalHide();
     }
-    else if(childSignal == "edit"){
+    else if (childSignal === "edit") {
       this.modalHide();
       this.editSuccessModalShow("Successfully Edited Profile")
     }
@@ -132,9 +169,6 @@ redirectToViewProfile = () =>{
 
   handleSubmit = (e) => {
     var profile = this.state.profile;
-
-
-    console.log(profile)
     fetch("http://localhost:5000/api/v1/addPresence/", {
       method: "POST",
       headers: {
@@ -225,8 +259,22 @@ redirectToViewProfile = () =>{
                 {this.state.profile.education.map((edu, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
-                      {edu.major}
+                      <Row>
+                        <Col >
+                          <strong> {edu.school} </strong> <br /> {edu.degree} in{" "}
+                          {edu.major}
+                        </Col>
+                        
+                        <Col xs lg="2">
+                          <div
+                            style={{
+                              position: 'absolute', left: '50%', top: '50%',
+                              transform: 'translate(-50%, -50%)'
+                          }}>
+                              <MDBIcon icon="angle-down" size="2x" />
+                          </div>
+                        </Col>
+                      </Row>                      
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
@@ -247,12 +295,26 @@ redirectToViewProfile = () =>{
                 {this.state.profile.experience.map((exp, i) => (
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey={i + 1}>
-                      <strong>
-                        {" "}
-                        {exp.company} {exp.title}{" "}
-                      </strong>{" "}
-                      <br />
-                      <label id="duration">{exp.duration}</label>
+                      <Row>
+                        <Col >
+                          <strong>
+                          {" "}
+                          {exp.company} {exp.title}{" "}
+                          </strong>{" "}
+                          <br />
+                          {exp.duration}
+                        </Col>
+                        
+                        <Col xs lg="2">
+                          <div
+                            style={{
+                              position: 'absolute', left: '50%', top: '50%',
+                              transform: 'translate(-50%, -50%)'
+                          }}>
+                              <MDBIcon icon="angle-down" size="2x" />
+                          </div>
+                        </Col>
+                      </Row>
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey={i + 1}>
                       <Card.Body>
@@ -269,39 +331,49 @@ redirectToViewProfile = () =>{
           </Row>
           <br />
           <br />
-          <Row className="justify-content-center">
-            <Col sm={2}>
-              <Button id="Send" className="submit" onClick={this.handleSubmit}>
-                Send
-              </Button>
-              &nbsp;&nbsp; <Button id="Edit" onClick={this.modalShow}>Edit</Button>{" "}
+
+          { this.state.mode === 'jobseeker' ?
+
+          <Row>
+            <Col></Col>
+            <Col>
+            <Button id="Send" className="submit" onClick={this.handleSubmit} size="lg" block>Send</Button>
             </Col>
-          </Row>
+            <Col>
+            </Col>
+            <Col> 
+              <Button id="Edit" onClick={this.modalShow} size="lg" block>Edit</Button>
+            </Col>
+            <Col></Col>
+          </Row>  
+
+          : null }
+
           <br />
         </Container>
 
         <Modal show={this.state.modal_show} onHide={this.modalHide} backdrop="static" keyboard={false} size="lg">
-            <Modal.Header>
-              <h3> Presence Edit Form </h3>
-            </Modal.Header>
-            <Modal.Body>
-                  <ProfileForm parent_to_child = {this.state} modal_hide = {this.handleModalHide}/>
-            </Modal.Body>
-          </Modal>
+          <Modal.Header>
+            <h3> Presence Edit Form </h3>
+          </Modal.Header>
+          <Modal.Body>
+            <ProfileForm parent_to_child={this.state} modal_hide={this.handleModalHide} />
+          </Modal.Body>
+        </Modal>
 
-          <Modal
-            show={this.state.edit_modal_show}
-            onHide={this.editSuccessModalHide}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header><h5>{this.state.edit_modal_message}</h5></Modal.Header>
-            <Modal.Footer>
-              <Button variant="primary" onClick={this.redirectToViewProfile}>
-                Continue to view profiles
+        <Modal
+          show={this.state.edit_modal_show}
+          onHide={this.editSuccessModalHide}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header><h5>{this.state.edit_modal_message}</h5></Modal.Header>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.redirectToViewProfile}>
+              Continue to view profiles
               </Button>
-            </Modal.Footer>
-          </Modal>
+          </Modal.Footer>
+        </Modal>
 
       </>
     );

@@ -61,7 +61,7 @@ class ViewProfiles extends Component {
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={i + 1}>
                   <Card.Body>
-                    <Profile profile={profile} />
+                    <Profile profile={profile} mode={"jobseeker"}/>
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>

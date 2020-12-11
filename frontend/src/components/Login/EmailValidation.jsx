@@ -67,7 +67,14 @@ class EmailValidation extends Component {
             this.successhandleShow(res.success);
             this.delayState();
             this.timeout(5000);
-            window.location.href = "/login";
+            const registration= ls.get("registrationtype");
+            if(registration === "jobSeeker" || registration === "Job Seeker"){
+              window.location.href = "/home";
+            }
+            else{
+              window.location.href = "/homehr";
+            }
+            
 
           } else {
             this.errorhandleShow(res.error);
@@ -75,6 +82,37 @@ class EmailValidation extends Component {
         });
     }
   };
+
+
+  resendOTP = (e) => {
+    const data = {
+      email: ls.get("email"),
+    };
+
+    fetch("http://localhost:5000/api/v1/resend_otp/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch(error => {
+        this.setState({
+          alertMessage: "OTP not sent",
+          allSuccessState: false,
+          allErrorState: true,
+        })
+      });
+
+    this.setState({
+      alertMessage: "OTP sent successfully",
+      allSuccessState: true,
+      allErrorState: false,
+    });
+  };
+
   render() {
     return (
       <>
@@ -101,11 +139,23 @@ class EmailValidation extends Component {
             </Navbar.Brand>
 
         </Navbar>
-        <br />
-        <br />
-        <br />
-        <br />
 
+        <div className="text-center">
+          {this.state.allErrorState ? (
+            <Alert variant="danger">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+          {this.state.allSuccessState ? (
+            <Alert variant="success">{this.state.alertMessage}</Alert>
+          ) : (
+              " "
+            )}
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
         <Container className="containbody justify-content-center logincard">
           <br />
           <h2 className="text-center">Validate OTP(One Time Passcode)</h2> <br />
@@ -141,7 +191,7 @@ class EmailValidation extends Component {
                 )}
               <div className="form-check"></div>
               <br />
-              <Button
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Button
                 id="validate"
                 className="buttonnprimary"
                 onClick={this.handleValidate}
@@ -156,7 +206,15 @@ class EmailValidation extends Component {
               >
                 Cancel
                 </Button>
-
+                &nbsp;&nbsp;&nbsp;&nbsp;
+              <Button
+                id="resendOTP"
+                className="buttonnprimary"
+                onClick={this.resendOTP}
+              >
+                Resend OTP
+                </Button>
+              <br /><br />
             </Form>
 
 
