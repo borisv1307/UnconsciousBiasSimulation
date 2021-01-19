@@ -159,9 +159,9 @@ class TestPool:
             "profile_id": "9",
             "user_id": "1",
             "feedback": {
-                "reviewer_id": "4",
+                "reviewer_id": 4,
                 "reviewed_on": "1122",
-                "status": "rejected"
+                "application_status": "Declined"
             }
         }
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
@@ -179,9 +179,9 @@ class TestPool:
             "profile_id": "93",
             "user_id": "71",
             "feedback": {
-                "reviewer_id": "4",
+                "reviewer_id": 4,
                 "reviewed_on": "1122",
-                "status": "rejected"
+                "application_status": "Declined"
             }
         }
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
@@ -224,4 +224,4 @@ class TestPool:
         response = test_client.get(
             '/api/v1/getCount/99/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
-        assert response.data == b'{"accepted_count":0,"declined_count":0,"reviewer_id":99}\n'
+        assert response.data == b'{"accepted_female_count":0,"accepted_male_count":0,"declined_female_count":0,"declined_male_count":0,"reviewer_id":99}\n'

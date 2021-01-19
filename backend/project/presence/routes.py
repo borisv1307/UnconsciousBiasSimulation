@@ -29,6 +29,7 @@ def add_presence_to_pool():
                 "city": profile_data['city'],
                 "email": profile_data['email'],
                 "position": profile_data['position'],
+                "gender": "Male",
                 "aboutMe":  profile_data['aboutMe'],
                 "education": profile_data['education'],
                 "experience": profile_data['experience'],
@@ -59,6 +60,7 @@ def insert_data(profile_information):
         "email": profile_information['email'],
         "user_id": profile_information['user_id'],
         "profileName": profile_information['profileName'],
+        "gender": "Male",
         "profileImg": profile_information['profileImg'],
         "first_name": profile_information['first_name'],
         "last_name": profile_information['last_name'],
@@ -131,6 +133,7 @@ def update_presence_with_review():
                 "city": profile_data['city'],
                 "email": profile_data['email'],
                 "position": profile_data['position'],
+                "gender": "Male",
                 "aboutMe":  profile_data['aboutMe'],
                 "education": profile_data['education'],
                 "experience": profile_data['experience'],
@@ -153,21 +156,25 @@ def update_presence_with_review():
 def get_presence_count(reviewer_id):
     reviewer = int(reviewer_id)
 
-    declined_query = {"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}}
-    accepted_query = {"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}}
 
-    declined_count = mongo.db.presence.count_documents(declined_query)
-    accepted_count = mongo.db.presence.count_documents(accepted_query)
+    declined_male_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}},{"gender":"Male"}]}
+    declined_female_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}},{"gender":"Female"}]}
+    accepted_male_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}},{"gender":"Male"}]}
+    accepted_female_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}},{"gender":"Female"}]}
+
+    declined_male_count = mongo.db.presence.count_documents(declined_male_query)
+    declined_female_count = mongo.db.presence.count_documents(declined_female_query)
+    accepted_male_count = mongo.db.presence.count_documents(accepted_male_query)
+    accepted_female_count = mongo.db.presence.count_documents(accepted_female_query)
 
     try:
-        if declined_count >= 0 and accepted_count >= 0:
-            result = {
-                "reviewer_id": reviewer,
-                "accepted_count": accepted_count,
-                "declined_count": declined_count
-            }
-        else:
-            result = {'code': 4, 'error': "Reviwer not found"}, 200
+        result = {
+            "reviewer_id": reviewer,
+            "declined_male_count": declined_male_count,
+            "declined_female_count": declined_female_count,
+            "accepted_male_count": accepted_male_count,
+            "accepted_female_count": accepted_female_count
+        }
     except Exception as error:
         print("Exception", error)
         result = {'code': 4, 'error': "No presence found"}, 403
