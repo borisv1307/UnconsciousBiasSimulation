@@ -81,7 +81,7 @@ def get_all_presence_for_reviewer(reviewer_id):
     if request.method == 'GET':
         try:
             reviewer_id = int(reviewer_id)
-        except:
+        except TypeError:
             return {'error': 'reviewer id must be numeric'}, 403
         presences = mongo.db.presence
         output = []
@@ -149,7 +149,7 @@ def update_presence_with_review():
             result = {'code': 4, 'error': "User presence not found"}, 200
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No presence found"}, 403
+        result = {'code': 4, 'error': error}, 403
     return result
 
 @presence_blueprint.route('/api/v1/getCount/<reviewer_id>/', methods=['GET'])
@@ -177,5 +177,5 @@ def get_presence_count(reviewer_id):
         }
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No presence found"}, 403
+        result = {'code': 4, 'error': "No reviews found"}, 403
     return result

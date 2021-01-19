@@ -20,7 +20,7 @@ def profile_validation(func):
         try:
             profile_data = request.get_json()
             get_user_id = profile_data['user_id']
-        except:
+        except Exception as e:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
         if get_user_id is None or re.search("^\s*$", str(get_user_id)):
@@ -46,7 +46,7 @@ def create_user_profile():
     try:
         profile_id = int(profile.find().skip(
             profile.count_documents({}) - 1)[0]['profile_id'])+1
-    except:
+    except Exception as e:
         profile_id = 1
 
     # check if email is already in database
@@ -166,7 +166,7 @@ def edit_profile():
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
-    
+
     user_id_exists = user.count_documents({'user_id': get_user_id})
     if user_id_exists:
         edit_profile_action = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},

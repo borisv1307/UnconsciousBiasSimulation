@@ -32,14 +32,14 @@ def token_required(f):
     def decorated(*args, **kwargs):
         try:
             header_token = request.headers['Authorization']
-        except:
+        except Exception as e:
             return jsonify({'message': 'Token is missing!'}), 403
 
         tokens = mongo.db.authtoken
         if not tokens.find_one({'key': header_token}):
             return jsonify({'message': 'Token is Invalid!'}), 403
         return f(*args, **kwargs)
-    return decorated  
+    return decorated
 
 def encrypt(n, plaintext):
     """Encrypt the string and return the ciphertext"""
