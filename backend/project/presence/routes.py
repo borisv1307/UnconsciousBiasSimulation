@@ -126,26 +126,26 @@ def update_presence_with_review():
 
     try:
         if mongo.db.presence.count_documents(query) == 1:
-            profile_data = mongo.db.presence.find_one_and_update(
+            profile_details = mongo.db.presence.find_one_and_update(
                 query, {"$push": {'reviewed_by': feedback}}, return_document=ReturnDocument.AFTER)
             result = {
-                "profile_id": profile_data['profile_id'],
-                "state": profile_data['state'],
-                "zip": profile_data['zip'],
-                "city": profile_data['city'],
-                "email": profile_data['email'],
-                "position": profile_data['position'],
-                "gender": profile_data['gender'],
-                "aboutMe":  profile_data['aboutMe'],
-                "education": profile_data['education'],
-                "experience": profile_data['experience'],
-                "user_id": profile_data['user_id'],
-                "profileName": profile_data['profileName'],
-                "profileImg": profile_data['profileImg'],
-                "first_name": profile_data['first_name'],
-                "last_name": profile_data['last_name'],
+                "profile_id": profile_details['profile_id'],
+                "state": profile_details['state'],
+                "zip": profile_details['zip'],
+                "city": profile_details['city'],
+                "email": profile_details['email'],
+                "position": profile_details['position'],
+                "gender": profile_details['gender'],
+                "aboutMe":  profile_details['aboutMe'],
+                "education": profile_details['education'],
+                "experience": profile_details['experience'],
+                "user_id": profile_details['user_id'],
+                "profileName": profile_details['profileName'],
+                "profileImg": profile_details['profileImg'],
+                "first_name": profile_details['first_name'],
+                "last_name": profile_details['last_name'],
                 "added_on": date_joined,
-                "reviewed_by": profile_data['reviewed_by']
+                "reviewed_by": profile_details['reviewed_by']
             }
         else:
             result = {'code': 4, 'error': "User presence not found"}, 200
