@@ -32,7 +32,7 @@ def token_required(f):
     def decorated(*args, **kwargs):
         try:
             header_token = request.headers['Authorization']
-        except Exception as e:
+        except Exception:
             return jsonify({'message': 'Token is missing!'}), 403
 
         tokens = mongo.db.authtoken

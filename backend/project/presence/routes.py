@@ -52,6 +52,7 @@ def add_presence_to_pool():
 def insert_data(profile_information):
     date_joined = datetime.utcnow()
     presence = mongo.db.presence
+    print("Print Gender", profile_information['gender'])
     create_presence = presence.insert_one({
         "profile_id": profile_information['profile_id'],
         "state": profile_information['state'],
@@ -155,13 +156,18 @@ def update_presence_with_review():
 
 @presence_blueprint.route('/api/v1/getCount/<reviewer_id>/', methods=['GET'])
 def get_presence_count(reviewer_id):
-    reviewer = int(reviewer_id)
+    try:
+        reviewer_id = int(reviewer_id)
+    except TypeError:
+        return {'error': 'reviewer id must be numeric'}, 403
+
+    action = "$elemMatch"
 
 
-    declined_male_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}},{"gender":"Male"}]}
-    declined_female_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Declined"}}},{"gender":"Female"}]}
-    accepted_male_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}},{"gender":"Male"}]}
-    accepted_female_query = {"$and":[{"reviewed_by": {"$elemMatch": {"reviewer_id" : reviewer, "application_status": "Accepted"}}},{"gender":"Female"}]}
+    declined_male_query = {"$and":[{"reviewed_by": {action: {"reviewer_id" : reviewer_id, "application_status": "Declined"}}},{"gender":"Male"}]}
+    declined_female_query = {"$and":[{"reviewed_by": {action: {"reviewer_id" : reviewer_id, "application_status": "Declined"}}},{"gender":"Female"}]}
+    accepted_male_query = {"$and":[{"reviewed_by": {action: {"reviewer_id" : reviewer_id, "application_status": "Accepted"}}},{"gender":"Male"}]}
+    accepted_female_query = {"$and":[{"reviewed_by": {action: {"reviewer_id" : reviewer_id, "application_status": "Accepted"}}},{"gender":"Female"}]}
 
     declined_male_count = mongo.db.presence.count_documents(declined_male_query)
     declined_female_count = mongo.db.presence.count_documents(declined_female_query)
@@ -170,7 +176,7 @@ def get_presence_count(reviewer_id):
 
     try:
         result = {
-            "reviewer_id": reviewer,
+            "reviewer_id": reviewer_id,
             "declined_male_count": declined_male_count,
             "declined_female_count": declined_female_count,
             "accepted_male_count": accepted_male_count,

@@ -20,7 +20,7 @@ def profile_validation(func):
         try:
             profile_data = request.get_json()
             get_user_id = profile_data['user_id']
-        except Exception as e:
+        except Exception:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
         if get_user_id is None or re.search("^\s*$", str(get_user_id)):
@@ -46,7 +46,7 @@ def create_user_profile():
     try:
         profile_id = int(profile.find().skip(
             profile.count_documents({}) - 1)[0]['profile_id'])+1
-    except Exception as e:
+    except Exception:
         profile_id = 1
 
     # check if email is already in database
