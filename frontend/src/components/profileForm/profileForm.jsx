@@ -250,7 +250,7 @@ class ProfileForm extends Component{
     
           console.log(JSON.stringify(data));
     
-          fetch("http://localhost:5000/api/v1/createProfile/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
             method: "POST",
             headers: {
               "Content-type": "application/json",
@@ -290,7 +290,7 @@ class ProfileForm extends Component{
     
           console.log(JSON.stringify(data));
     
-          fetch("http://localhost:5000/api/v1/editProfile/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/editProfile/", {
             method: "PUT",
             headers: {
               "Content-type": "application/json",

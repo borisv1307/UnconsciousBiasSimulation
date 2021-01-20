@@ -5,21 +5,24 @@ test create profile and view profile.
 Command to run tests:- pytest --setup-show tests/functional
 
 """
-import pytest, os, sys , datetime , random
+from bson.objectid import ObjectId
+from project import mongo
+from project import create_app
+import pytest
+import os
+import sys
+import datetime
+import random
 from json import loads
 from bson.json_util import dumps
 from faker import Faker
 from flask import jsonify, request, json
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-PARENT_ROOT=os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
-GRANDPAPA_ROOT=os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
-sys.path.insert(0,GRANDPAPA_ROOT)
-from project import create_app
-from project import mongo
-from bson.objectid import ObjectId
+PARENT_ROOT = os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
+GRANDPAPA_ROOT = os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
+sys.path.insert(0, GRANDPAPA_ROOT)
 
 SET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDUzMzkxNjksIm5iZiI6MTYwNTMzOTE2OSwianRpIjoiNzAyMzczOGYtNjc2OS00NzdkLWFhN2ItYjAzOTcyMWQwZWJlIiwiZXhwIjoxNjA1MzQwMDY5LCJpZGVudGl0eSI6eyJpZCI6MywiZGF0ZV9qb2luZWQiOiJUaHUsIDI5IE9jdCAyMDIwIDA0OjA0OjI2IEdNVCJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.6NR0py5qQ49bI6Lt1GIp_INnlXeCgasid9NndXJuslk"
-
 
 
 @pytest.fixture
@@ -45,33 +48,33 @@ class TestSomething:
         time_between_dates = end_date - start_date
         days_between_dates = time_between_dates.days
         random_number_of_days = random.randrange(days_between_dates)
-        random_date = start_date + datetime.timedelta(days=random_number_of_days)
-
+        random_date = start_date + \
+            datetime.timedelta(days=random_number_of_days)
 
         data = {
-        "first_name":fake.first_name(),
-        "last_name":fake.last_name(),
-        "email":fake.email(),
-        "password": "Hello",
-        "registration_type": "jobSeeker",
-        "gender": "Male",
-        "date_of_birth": random_date,
-        'email_validation':'False',
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contact_number":"12345678"
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "email": fake.email(),
+            "password": "Hello",
+            "registration_type": "jobSeeker",
+            "gender": "Male",
+            "date_of_birth": random_date,
+            'email_validation': 'False',
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contact_number": "12345678"
+            }
         }
-        }
-        response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        get_user= json.loads(response.data)
+        response = test_client.post(
+            '/api/v1/createUser/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+        get_user = json.loads(response.data)
         get_user_details = get_user['user']['otp_delivery_status']
         assert response.status_code == 200
         assert get_user_details == 'Successfully sent email'
-
 
     def test_for_missing_user_details(self, test_client):
         """
@@ -81,25 +84,25 @@ class TestSomething:
         """
 
         data = {
-        "first_name":"testFName",
-        "last_name":"testLName",
-        "registrationType": "jobSeeker",
-        "gender": "Male",
-        "date_of_birth": "1992-10-01",
-        'email_validation':'False',
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contactNumber":"12345678"
+            "first_name": "testFName",
+            "last_name": "testLName",
+            "registrationType": "jobSeeker",
+            "gender": "Male",
+            "date_of_birth": "1992-10-01",
+            'email_validation': 'False',
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contactNumber": "12345678"
+            }
         }
-        }
-        response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/createUser/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
-
 
     def test_for_invalid_user_details(self, test_client):
         """
@@ -109,57 +112,57 @@ class TestSomething:
         """
 
         data = {
-        "first_name":"",
-        "last_name":"",
-        "email":"test@test.com",
-        "password": "Hello",
-        "registration_type": "",
-        "gender": "Male",
-        "date_of_birth": "1992-10-01",
-        'email_validation':'False',
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contactNumber":"12345678"
+            "first_name": "",
+            "last_name": "",
+            "email": "test@test.com",
+            "password": "Hello",
+            "registration_type": "",
+            "gender": "Male",
+            "date_of_birth": "1992-10-01",
+            'email_validation': 'False',
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contactNumber": "12345678"
+            }
         }
-        }
-        response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/createUser/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Field/s cannot be blank"}\n'
-
 
     def test_for_existing_email(self, test_client):
         fake = Faker()
         users = mongo.db.user
         user_id = 1
-        getemail = users.find_one( { "user_id": int(user_id) },{ 'email': 1, '_id': 0 })
+        getemail = users.find_one({"user_id": int(user_id)}, {
+                                  'email': 1, '_id': 0})
 
         data = {
-        "first_name":fake.first_name(),
-        "last_name":fake.last_name(),
-        "email":getemail['email'],
-        "password": "Hello",
-        "registration_type": "jobSeeker",
-        "gender": "Male",
-        "date_of_birth": "1992-10-01",
-        'email_validation':'False',
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contactNumber":"12345678"
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "email": getemail['email'],
+            "password": "Hello",
+            "registration_type": "jobSeeker",
+            "gender": "Male",
+            "date_of_birth": "1992-10-01",
+            'email_validation': 'False',
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contactNumber": "12345678"
+            }
         }
-        }
-        response = test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/createUser/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Email is already in use"}\n'
-
-
 
     def test_for_user_login(self, test_client):
         """
@@ -169,10 +172,11 @@ class TestSomething:
         """
 
         data = {
-        "email":"jasonmax@gmail.com",
-        "password": "Hello3"
+            "email": "jasonmax@gmail.com",
+            "password": "Hello3"
         }
-        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -184,13 +188,13 @@ class TestSomething:
         """
 
         data = {
-        "email":"jasonmax@gmail.com",
-        "password": "Hello234"
+            "email": "jasonmax@gmail.com",
+            "password": "Hello234"
         }
-        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Invalid password"}\n'
-
 
     def test_for_login_with_missing_details(self, test_client):
         """
@@ -200,13 +204,13 @@ class TestSomething:
         """
 
         data = {
-        "email":"justin97@yahoo.com"
+            "email": "justin97@yahoo.com"
         }
 
-        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
-
 
     def test_for_login_with_invalid_details(self, test_client):
         """
@@ -215,14 +219,14 @@ class TestSomething:
         THEN check that the response is valid
         """
         data = {
-        "email":"",
-        "password": ""
+            "email": "",
+            "password": ""
         }
 
-        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Field/s cannot be blank"}\n'
-
 
     def test_for_login_with_unknown_details(self, test_client):
         """
@@ -232,29 +236,30 @@ class TestSomething:
         """
         fake = Faker()
         data = {
-        "email":fake.email(),
-        "password": "Hello"
+            "email": fake.email(),
+            "password": "Hello"
         }
 
-        response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User not found"}\n'
 
-    def test_get_all_users(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/users/' page is requested (GET)
-        THEN check that the response is valid
-        """
-        data = {
-        "email":"jasonmax@gmail.com",
-        "password": "Hello3"
-        }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
-        get_token = json.loads(post_response.data)
-        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
-        assert response.status_code == 200
-        assert response.data != 'null'
+    # def test_get_all_users(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/users/' page is requested (GET)
+    #     THEN check that the response is valid
+    #     """
+    #     data = {
+    #     "email":"jasonmax@gmail.com",
+    #     "password": "Hello3"
+    #     }
+    #     post_response = test_client.post('/api/v1/login/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+    #     get_token = json.loads(post_response.data)
+    #     response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
+    #     assert response.status_code == 200
+    #     assert response.data != 'null'
 
     def test_get_all_users_with_invalid_token(self, test_client):
         """
@@ -264,7 +269,8 @@ class TestSomething:
         """
 
         get_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
-        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json','Authorization':get_token})
+        response = test_client.get(
+            '/api/v1/users/', headers={'Content-Type': 'application/json', 'Authorization': get_token})
         assert response.status_code == 403
         assert response.data == b'{"message":"Token is Invalid!"}\n'
 
@@ -274,11 +280,10 @@ class TestSomething:
         WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
-        response = test_client.get('/api/v1/users/',headers={'Content-Type': 'application/json'})
+        response = test_client.get(
+            '/api/v1/users/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"message":"Token is missing!"}\n'
-
-
 
     def test_get_one_user(self, test_client):
         """
@@ -287,8 +292,8 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-
-        response = test_client.get('/api/v1/users/1/',headers={'Content-Type': 'application/json'})
+        response = test_client.get(
+            '/api/v1/users/1/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -299,8 +304,8 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-
-        response = test_client.get('/api/v1/users/one/',headers={'Content-Type': 'application/json'})
+        response = test_client.get(
+            '/api/v1/users/one/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":5,"error":"id must be numerical"}\n'
 
@@ -312,31 +317,33 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-
         data = {
-        "first_name":fake.first_name(),
-        "last_name":fake.last_name(),
-        "email":fake.email(),
-        "password": "Hello",
-        "registration_type": "jobSeeker",
-        "gender": "Male",
-        "date_of_birth": "1992-10-01",
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contact_number":"12345678"
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "email": fake.email(),
+            "password": "Hello",
+            "registration_type": "jobSeeker",
+            "gender": "Male",
+            "date_of_birth": "1992-10-01",
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contact_number": "12345678"
+            }
         }
-        }
-        test_client.post('/api/v1/createUser/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        test_client.post('/api/v1/createUser/', data=json.dumps(data),
+                         headers={'Content-Type': 'application/json'})
         users = mongo.db.user
-        user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id'])
-        convert_to_str= str(user_id)
+        user_id = int(users.find().skip(
+            users.count_documents({}) - 1)[0]['user_id'])
+        convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
 
-        response = test_client.delete(url,headers={'Content-Type': 'application/json'})
+        response = test_client.delete(
+            url, headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -347,15 +354,15 @@ class TestSomething:
         THEN check that the response is valid
         """
 
-        convert_to_str= str(10000)
+        convert_to_str = str(10000)
         url = '/api/v1/users/'+convert_to_str+'/'
 
-        response = test_client.delete(url,headers={'Content-Type': 'application/json'})
+        response = test_client.delete(
+            url, headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":5,"error":"User does not exist"}\n'
 
     def test_for_update_user(self, test_client):
-        
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/users/' page is requested (PATCH)
@@ -368,31 +375,34 @@ class TestSomething:
         time_between_dates = end_date - start_date
         days_between_dates = time_between_dates.days
         random_number_of_days = random.randrange(days_between_dates)
-        random_date = start_date + datetime.timedelta(days=random_number_of_days)
+        random_date = start_date + \
+            datetime.timedelta(days=random_number_of_days)
 
         data = {
-        "first_name":fake.first_name(),
-        "last_name":fake.last_name(),
-        "email":"update@gmail.com",
-        "password": "Hello",
-        "registration_type": "jobSeeker",
-        "gender": "Male",
-        "date_of_birth": random_date,
-        "contact_details": {
-            "address": "test Street",
-            "address2": "test Street 2",
-            "city": "Philadelphia",
-            "state":"PA",
-            "zip":"19104",
-            "contact_number":"12345678"
-        }
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "email": "update@gmail.com",
+            "password": "Hello",
+            "registration_type": "jobSeeker",
+            "gender": "Male",
+            "date_of_birth": random_date,
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contact_number": "12345678"
+            }
         }
         users = mongo.db.user
-        user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id'])
-        convert_to_str= str(user_id)
+        user_id = int(users.find().skip(
+            users.count_documents({}) - 1)[0]['user_id'])
+        convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
 
-        response = test_client.patch(url, data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.patch(url, data=json.dumps(data), headers={
+                                     'Content-Type': 'application/json'})
 
         assert response.status_code == 200
         assert response.data != 'null'
@@ -409,24 +419,24 @@ class TestSomething:
         tokens = mongo.db.authtoken
         users = mongo.db.user
 
-        get_user_id = tokens.find({},{"user_id":1})
+        get_user_id = tokens.find({}, {"user_id": 1})
         for user in get_user_id:
             number_list.append(user['user_id'])
 
-        users_without_token = users.find( { 'user_id': { '$nin': number_list } } )
+        users_without_token = users.find({'user_id': {'$nin': number_list}})
         for user_without_tok in users_without_token:
             user_list.append(user_without_tok['user_id'])
         set_user_id = random.choice(user_list)
 
         data = {
-        "user_id":set_user_id,
-        "token":SET_TOKEN
+            "user_id": set_user_id,
+            "token": SET_TOKEN
         }
 
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not have existing token"}\n'
-
 
     def test_for_logout_when_user_exists(self, test_client):
         """
@@ -435,19 +445,21 @@ class TestSomething:
         THEN check that the response is valid
         """
         tokens = mongo.db.authtoken
-        get_user_id = tokens.find({},{"user_id":1})
+        get_user_id = tokens.find({}, {"user_id": 1})
         number_list = []
         for user in get_user_id:
             number_list.append(user['user_id'])
         set_user_id = random.choice(number_list)
-        get_token = tokens.find_one( { "user_id": set_user_id },{ 'key': 1, '_id': 0 })
+        get_token = tokens.find_one(
+            {"user_id": set_user_id}, {'key': 1, '_id': 0})
         get_corresponding_token = get_token['key']
 
         data = {
-        "user_id":set_user_id,
-        "token":get_corresponding_token
+            "user_id": set_user_id,
+            "token": get_corresponding_token
         }
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data == b'{"success":"Successfully logged out"}\n'
 
@@ -463,23 +475,24 @@ class TestSomething:
         otp = mongo.db.users_otp
         users = mongo.db.user
 
-        get_user_id = otp.find({},{"user_id":1})
+        get_user_id = otp.find({}, {"user_id": 1})
         for user in get_user_id:
             number_list.append(user['user_id'])
 
-        users_with_otp = users.find( { 'user_id': { '$in': number_list } } )
+        users_with_otp = users.find({'user_id': {'$in': number_list}})
         for user_with_tok in users_with_otp:
             user_list.append(user_with_tok['user_id'])
         set_user_id = random.choice(user_list)
-        get_otp = otp.find_one( { "user_id": set_user_id },{ 'otp': 1, '_id': 0 })
+        get_otp = otp.find_one({"user_id": set_user_id}, {'otp': 1, '_id': 0})
         get_corresponding_otp = get_otp['otp']
 
         data = {
-        "user_id":set_user_id,
-        "otp":get_corresponding_otp
+            "user_id": set_user_id,
+            "otp": get_corresponding_otp
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data == b'{"success":"Email validation successful"}\n'
 
@@ -492,9 +505,10 @@ class TestSomething:
 
         data = {
             "email": "jgeorge69@dxc.com"
-               }
+        }
 
-        response = test_client.post('/api/v1/resend_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
         assert response.data == b'{"success":"OTP sent via email"}\n'
 
@@ -506,13 +520,14 @@ class TestSomething:
         """
 
         data = {
-               "email": "jgeorge69@some.com"
-               }
+            "email": "jgeorge69@some.com"
+        }
 
-        response = test_client.post('/api/v1/resend_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":2,"error":"Email not found"}\n'
-    
+
     def test_for_verify_otp_when_user_id_does_not_have_otp(self, test_client):
         """
         GIVEN a Flask application configured for testing
@@ -525,21 +540,22 @@ class TestSomething:
         otp = mongo.db.users_otp
         users = mongo.db.user
 
-        get_user_id = otp.find({},{"user_id":1})
+        get_user_id = otp.find({}, {"user_id": 1})
         for user in get_user_id:
             number_list.append(user['user_id'])
 
-        users_with_otp = users.find( { 'user_id': { '$in': number_list } } )
+        users_with_otp = users.find({'user_id': {'$in': number_list}})
         for user_with_tok in users_with_otp:
             user_list.append(user_with_tok['user_id'])
         set_user_id = random.choice(user_list)
 
         data = {
-        "user_id": set_user_id,
-        "otp": 'fbLGnQruBM'
+            "user_id": set_user_id,
+            "otp": 'fbLGnQruBM'
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id and OTP mismatch"}\n'
 
@@ -551,49 +567,52 @@ class TestSomething:
         """
         try:
             users = mongo.db.user
-            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 10
+            user_id = int(users.find().skip(
+                users.count_documents({}) - 1)[0]['user_id']) + 10
         except:
-            user_id= 100000
-
+            user_id = 100000
 
         data = {
-        "user_id":user_id,
-        "otp":'jdhd@RT'
+            "user_id": user_id,
+            "otp": 'jdhd@RT'
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
-    
+
     def test_for_verify_otp_when_user_id_not_an_integer(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/verify_otp/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        "user_id":"one",
-        "otp":SET_TOKEN
+            "user_id": "one",
+            "otp": SET_TOKEN
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"user_id must be numerical"}\n'
-    
+
     def test_for_verify_otp_when_otp_is_blank(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/verify_otp/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        "user_id":"6",
-        "otp":"  "
+            "user_id": "6",
+            "otp": "  "
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"OTP cannot be blank or null"}\n'
 
@@ -603,12 +622,13 @@ class TestSomething:
         WHEN the '/api/v1/logout/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        
+
         }
 
-        response = test_client.post('/api/v1/verify_otp/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         print(response.data)
         assert response.status_code == 403
         assert response.data == b'{"error":"Missing request body"}\n'
@@ -621,16 +641,18 @@ class TestSomething:
         """
         try:
             users = mongo.db.user
-            user_id = int(users.find().skip(users.count_documents({}) - 1)[0]['user_id']) + 10
+            user_id = int(users.find().skip(
+                users.count_documents({}) - 1)[0]['user_id']) + 10
         except:
-            user_id= 100000
-        
+            user_id = 100000
+
         data = {
-        "user_id":user_id,
-        "token":SET_TOKEN
+            "user_id": user_id,
+            "token": SET_TOKEN
         }
-        
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
 
@@ -640,28 +662,30 @@ class TestSomething:
         WHEN the '/api/v1/logout/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        
+
         }
 
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"Missing request body"}\n'
-        
+
     def test_for_logout_when_user_id_not_an_integer(self, test_client):
         """
         GIVEN a Flask application configured for testing
         WHEN the '/api/v1/logout/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        "user_id":"one",
-        "token":SET_TOKEN
+            "user_id": "one",
+            "token": SET_TOKEN
         }
 
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"user_id must be numerical"}\n'
 
@@ -671,13 +695,14 @@ class TestSomething:
         WHEN the '/api/v1/logout/' page is requested (POST)
         THEN check that the response is valid
         """
-        
+
         data = {
-        "user_id":"6",
-        "token":"  "
+            "user_id": "6",
+            "token": "  "
         }
 
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"Token cannot be blank or null"}\n'
 
@@ -689,10 +714,11 @@ class TestSomething:
         """
         setnull = None
         data = {
-        "user_id":"6",
-        "token": setnull
+            "user_id": "6",
+            "token": setnull
         }
 
-        response = test_client.post('/api/v1/logout/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        response = test_client.post(
+            '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"Token cannot be blank or null"}\n'

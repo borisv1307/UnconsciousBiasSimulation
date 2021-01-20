@@ -156,7 +156,7 @@ class Register extends Component {
       this.handleShow("Invalid email");
     } else {
       this.handleClose();
-      fetch("http://localhost:5000/api/v1/createUser/", {
+      fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createUser/", {
         method: "POST",
         action: "/login",
         headers: {

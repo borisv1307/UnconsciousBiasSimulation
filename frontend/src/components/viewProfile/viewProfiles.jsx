@@ -30,7 +30,7 @@ class ViewProfiles extends Component {
     }
 
     console.log(token)
-    fetch("http://localhost:5000/api/v1/getProfiles/" + userId + "/",
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getProfiles/" + userId + "/",
       {
         headers: {
           "Authorization": "Bearer " + token

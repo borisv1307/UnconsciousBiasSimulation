@@ -34,7 +34,7 @@ class Login extends Component {
     if (!this.state.email || !this.state.password) {
       this.handleShow("Field/s cannot be blank");
     } else {
-      fetch("http://localhost:5000/api/v1/login/", {
+      fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/login/", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

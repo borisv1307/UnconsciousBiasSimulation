@@ -22,7 +22,7 @@ class viewApplications extends Component {
     const userId = ls.get("userid")
     const token = ls.get("token");
     console.log(token)
-    fetch("http://localhost:5000/api/v1/getAllPresence/" + userId + "/",
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getAllPresence/" + userId + "/",
       {
         headers: {
           "Authorization": "Bearer " + token
@@ -73,7 +73,7 @@ class viewApplications extends Component {
       profile_id: this.state.applications[this.state.index].profile_id,
       feedback: reviewerDetails,
     };
-    fetch("http://localhost:5000//api/v1/savePresenceReview/", {
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/savePresenceReview/", {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",

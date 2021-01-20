@@ -88,7 +88,7 @@ class HomeHR extends Component {
 
     const reviewer_id = ls.get("userid")
     const dataHorizontal = this.state.dataHorizontal;
-    fetch("http://localhost:5000/api/v1/getCount/" + reviewer_id)
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id)
       .then((res) => res.json())
       .then((res) => {
         dataHorizontal.datasets[0].data = [res.accepted_count, res.declined_count];
