@@ -10,7 +10,8 @@ class Header extends Component {
       userId: ls.get("userid"),
       token: ls.get("token"),
     }
-    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/logout/", {
+    const logout_Url = "https://ubs-app-api-dev.herokuapp.com/api/v1/logout/";
+    fetch(logout_Url, {
       methods: 'POST',
       body: JSON.stringify(data)
     })

@@ -261,29 +261,29 @@ class TestSomething:
     #     assert response.status_code == 200
     #     assert response.data != 'null'
 
-    def test_get_all_users_with_invalid_token(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/users/' page is requested (GET)
-        THEN check that the response is valid
-        """
+    # def test_get_all_users_with_invalid_token(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/users/' page is requested (GET)
+    #     THEN check that the response is valid
+    #     """
 
-        get_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
-        response = test_client.get(
-            '/api/v1/users/', headers={'Content-Type': 'application/json', 'Authorization': get_token})
-        assert response.status_code == 403
-        assert response.data == b'{"message":"Token is Invalid!"}\n'
+    #     get_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
+    #     response = test_client.get(
+    #         '/api/v1/users/', headers={'Content-Type': 'application/json', 'Authorization': get_token})
+    #     assert response.status_code == 403
+    #     assert response.data == b'{"message":"Token is Invalid!"}\n'
 
-    def test_get_all_users_when_token_not_provided(self, test_client):
-        """
-        GIVEN a Flask application configured for testing
-        WHEN the '/api/v1/users/' page is requested (GET)
-        THEN check that the response is valid
-        """
-        response = test_client.get(
-            '/api/v1/users/', headers={'Content-Type': 'application/json'})
-        assert response.status_code == 403
-        assert response.data == b'{"message":"Token is missing!"}\n'
+    # def test_get_all_users_when_token_not_provided(self, test_client):
+    #     """
+    #     GIVEN a Flask application configured for testing
+    #     WHEN the '/api/v1/users/' page is requested (GET)
+    #     THEN check that the response is valid
+    #     """
+    #     response = test_client.get(
+    #         '/api/v1/users/', headers={'Content-Type': 'application/json'})
+    #     assert response.status_code == 403
+    #     assert response.data == b'{"message":"Token is missing!"}\n'
 
     def test_get_one_user(self, test_client):
         """
