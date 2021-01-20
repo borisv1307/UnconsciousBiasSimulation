@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Row, Col, Container, Image, Accordion } from "react-bootstrap";
+import { Button, Row, Col, Container } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import ls from "local-storage";
 import Profile from "../viewProfile/Profile";
@@ -154,8 +154,8 @@ class viewApplications extends Component {
 
           {this.state.view.map((a) => (
             <Container>
-            <Profile profile={a} mode={"hr"}/>
-            <br />
+              <Profile profile={a} mode={"hr"} />
+              <br />
               <Row>
                 <Col></Col>
                 <Col>
@@ -163,13 +163,13 @@ class viewApplications extends Component {
                 </Col>
                 <Col>
                 </Col>
-                <Col> 
+                <Col>
                   <Button id="decline" variant="danger" size="lg" onClick={this.handleDecline} block>Decline</Button>
                 </Col>
                 <Col></Col>
-              </Row>        
-            <br />
-            </Container>            
+              </Row>
+              <br />
+            </Container>
           ))}
           <br />
 
