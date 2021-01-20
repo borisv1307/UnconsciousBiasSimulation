@@ -21,7 +21,7 @@ get_password = get_details['password']
 decrypted = decrypt(10, get_password)
 # Perform slicing
 res = decrypted[0].upper() + decrypted[1:]
-print('password:-',res)
+
 
 
 # Message template for Signup
