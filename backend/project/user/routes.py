@@ -14,13 +14,14 @@ MISSING_MSG = 'Missing request body'
 # Get collections
 emails = mongo.db.email
 # Login email and password for account sending emails
-SENDER_EMAIL = "Noreply.ubsapp@gmail.com"
+SENDER_EMAIL = "npreply.ubs@gmail.com"
 get_details = emails.find_one({"email" : SENDER_EMAIL})
 get_password = get_details['password']
 # Set decryption offset to 10
 decrypted = decrypt(10, get_password)
 # Perform slicing
 res = decrypted[0].upper() + decrypted[1:]
+print('password:-',res)
 
 
 # Message template for Signup
