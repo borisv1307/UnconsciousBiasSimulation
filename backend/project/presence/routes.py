@@ -29,7 +29,6 @@ def add_presence_to_pool():
                 "city": profile_data['city'],
                 "email": profile_data['email'],
                 "position": profile_data['position'],
-                "gender": profile_data['gender'],
                 "aboutMe":  profile_data['aboutMe'],
                 "education": profile_data['education'],
                 "experience": profile_data['experience'],
@@ -39,7 +38,8 @@ def add_presence_to_pool():
                 "first_name": profile_data['first_name'],
                 "last_name": profile_data['last_name'],
                 "added_on": date_joined,
-                "reviewed_by": output['reviewed_by']
+                "reviewed_by": output['reviewed_by'],
+                "gender": profile_data['gender']
             }
         else:
             result = {'code': 4, "error": "User account does not exist"}, 403
@@ -61,7 +61,6 @@ def insert_data(profile_information):
         "email": profile_information['email'],
         "user_id": profile_information['user_id'],
         "profileName": profile_information['profileName'],
-        "gender": profile_information['gender'],
         "profileImg": profile_information['profileImg'],
         "first_name": profile_information['first_name'],
         "last_name": profile_information['last_name'],
@@ -70,7 +69,8 @@ def insert_data(profile_information):
         "education": profile_information['education'],
         "experience": profile_information['experience'],
         "added_on": date_joined,
-        "reviewed_by": []
+        "reviewed_by": [],
+        "gender": profile_information['gender'],
     })
     if create_presence:
         return profile_information
@@ -219,9 +219,9 @@ def get_acceptance_rate_for_jobseeker(user_id):
 
         for response in reviewer_response:
             status = response["application_status"]
-            if(status == "Accepted"):
+            if status == "Accepted":
                 accepted_count += 1
-            elif(status == "Declined"):
+            elif status == "Declined":
                 declined_count += 1
 
         temp = {}

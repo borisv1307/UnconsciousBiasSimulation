@@ -80,7 +80,8 @@ class TestPool:
                     "status": ""
                 }
             ],
-            "added_on": datetime.utcnow()
+            "added_on": datetime.utcnow(),
+            "gender": "Male"
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -127,7 +128,8 @@ class TestPool:
                 }
             ],
             "reviewed_by": [],
-            "added_on": datetime.utcnow()
+            "added_on": datetime.utcnow(),
+            "gender": "Male"
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
