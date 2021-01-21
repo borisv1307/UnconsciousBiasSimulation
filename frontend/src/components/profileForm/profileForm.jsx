@@ -295,9 +295,7 @@ class ProfileForm extends Component{
           };
     
           console.log(JSON.stringify(data));
-          ///"https://ubs-app-api-dev.herokuapp.com/api/v1/editProfile/"
-          ///fetch("http://localhost:5000/api/v1/getAcceptanceRate/" + user_id)
-          fetch("http://localhost:5000/api/v1/editProfile/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/editProfile/", {
             method: "PUT",
             headers: {
               "Content-type": "application/json",
