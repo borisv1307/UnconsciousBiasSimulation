@@ -81,7 +81,8 @@ class TestPool:
                 }
             ],
             "added_on": datetime.utcnow(),
-            "gender": "Male"
+            "gender": "Male",
+            "ethnicity": "White"
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -129,7 +130,8 @@ class TestPool:
             ],
             "reviewed_by": [],
             "added_on": datetime.utcnow(),
-            "gender": "Male"
+            "gender": "Male",
+            "ethnicity": "White"
         }
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -157,9 +159,9 @@ class TestPool:
             "profile_id": "9",
             "user_id": "1",
             "feedback": {
-                "reviewer_id": "4",
+                "reviewer_id": 4,
                 "reviewed_on": "1122",
-                "application_status": "Declined"
+                "application_status": "Accepted"
             }
         }
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
@@ -232,4 +234,15 @@ class TestPool:
 
         response = test_client.get(
             '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json'})
+        assert response.status_code == 200
+
+    def test_for_get_count_by_ethnicity(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllPresence/' page is requested (POST)
+        THEN check that the response is valid
+        """
+
+        response = test_client.get(
+            '/api/v1/getCountByEthnicity/99/', headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
