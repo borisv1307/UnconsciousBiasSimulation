@@ -194,7 +194,7 @@ def user_login():
         user = users.find_one_and_update({"user_id": int(user['user_id'])}, {"$set": {
                                          'last_login': datetime.utcnow()}}, return_document=ReturnDocument.AFTER)
         output = {"user_id": user['user_id'], "email": user['email'], "token": access_token, "registration_type": user['registration_type'], "first_name": user['first_name'],
-                  "last_name": user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth'], "email_validation": user['email_validation']}
+                  "last_name": user['last_name'], "gender": user['gender'], "date_of_birth": user['date_of_birth'], "email_validation": user['email_validation'], "ethnicity": user['ethnicity']}
 
     else:
         return {'code': 4, "error": "Invalid password"}, 403
@@ -352,6 +352,7 @@ def get_all_users():
                     'date_joined': user['date_joined'],
                     'registration_type': user['registration_type'],
                     'gender': user['gender'],
+                    'ethnicity': user['ethnicity'],
                     'date_of_birth': user['date_of_birth'],
                     'contact_details': user['contact_details']
                 })
@@ -392,6 +393,7 @@ def edit_one_user(user_id):
                 'date_joined': user['date_joined'],
                 'registration_type': user['registration_type'],
                 'gender': user['gender'],
+                'ethnicity': user['ethnicity'],
                 'date_of_birth': user['date_of_birth'],
                 'contact_details': user['contact_details'],
                 'count_of_profiles_deleted': countprofile
@@ -427,6 +429,7 @@ def edit_one_user(user_id):
             'date_joined': user['date_joined'],
             'registration_type': user['registration_type'],
             'gender': user['gender'],
+            'ethnicity': user['ethnicity'],
             'date_of_birth': user['date_of_birth'],
             'contact_details': user['contact_details']
         }
