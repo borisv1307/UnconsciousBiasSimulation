@@ -1,7 +1,7 @@
 # pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
 import bcrypt
-import re, json
+import re
 from flask_jwt_extended import create_access_token
 from flask import request
 from project import mongo, decrypt, token_required
