@@ -504,7 +504,11 @@ class TestSomething:
             "user_id": set_user_id,
             "otp": get_corresponding_otp
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        login_data1 = {
+        "email":"lauramontgomery@gmail.com",
+        "password": "Hello"
+        }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data1),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
