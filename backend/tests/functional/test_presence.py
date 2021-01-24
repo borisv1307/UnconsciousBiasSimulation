@@ -21,7 +21,7 @@ from bson.objectid import ObjectId
 profilename = "Profile B"
 
 login_data = {
-        "email":"mcdonaldnancy@gmail.com",
+        "email":"justin43@yahoo.com",
         "password": "Hello"
 }
 

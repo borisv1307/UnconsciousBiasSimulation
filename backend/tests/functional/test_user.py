@@ -24,7 +24,7 @@ sys.path.insert(0, GRANDPAPA_ROOT)
 
 SET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDUzMzkxNjksIm5iZiI6MTYwNTMzOTE2OSwianRpIjoiNzAyMzczOGYtNjc2OS00NzdkLWFhN2ItYjAzOTcyMWQwZWJlIiwiZXhwIjoxNjA1MzQwMDY5LCJpZGVudGl0eSI6eyJpZCI6MywiZGF0ZV9qb2luZWQiOiJUaHUsIDI5IE9jdCAyMDIwIDA0OjA0OjI2IEdNVCJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.6NR0py5qQ49bI6Lt1GIp_INnlXeCgasid9NndXJuslk"
 login_data = {
-        "email":"mcdonaldnancy@gmail.com",
+        "email":"jamesthomas@gmail.com",
         "password": "Hello"
 }
 
