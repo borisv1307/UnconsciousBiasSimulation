@@ -4,7 +4,7 @@ from json import loads
 from functools import wraps
 from bson.json_util import dumps
 from flask import request
-from project import mongo, token_required
+from project import mongo
 from . import profile_blueprint
 
 ################
