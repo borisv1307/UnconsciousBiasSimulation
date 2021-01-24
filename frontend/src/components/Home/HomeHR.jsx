@@ -1,98 +1,56 @@
 import React, { Component } from "react";
-import { Col, Row } from "react-bootstrap";
 import ls from "local-storage";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import HorizontalBarGraph from "../graphs/horizontalBarGraph";
-import DoughnutChart from "../graphs/doughnutChart";
+
 
 class HomeHR extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dataDoughnutMale: {
-        labels: ["Accepted", "Rejected"],
-        datasets: [
-          {
-            data: [300, 50],
-            backgroundColor: ["#F7464A", "#FDB45C"],
-            hoverBackgroundColor: [
-              "#FF5A5E",
-
-              "#FFC870"
-
-            ]
-          }
-        ]
-      },
-      dataDoughnutFemale: {
-        labels: ["Accepted", "Rejected"],
-        datasets: [
-          {
-            data: [300, 50],
-            backgroundColor: ["#F7464A", "#FDB45C"],
-            hoverBackgroundColor: [
-              "#FF5A5E",
-
-              "#FFC870"
-
-            ]
-          }
-        ]
-      },
       dataHorizontal: {
-        labels: ['Accepted', 'Rejected'],
+        labels: ["Male", "Female", "Other", "Prefer Not to Say"],
         datasets: [
           {
-            label: 'Value',
-            data: [0, 0],
+            label: 'Acceptance',
+            data: [],
             fill: false,
-            backgroundColor: [
-              '#46BFBD',
-              '#F7464A'
-
-            ],
-            borderColor: [
-              '#46BFBD',
-              '#F7464A'
-
-            ],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1
+          },
+          {
+            label: 'Rejection',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
             borderWidth: 1
           }
         ]
       }
     };
-
   }
 
   barChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-      yAxes: [
-        {
-          barPercentage: 0.5,
-          gridLines: {
-            display: true,
-            color: "rgba(0, 0, 0, 0.1)"
-          }
+      xAxes: [{
+        stacked: true,
+        ticks: {
+          beginAtZero: true
         }
-      ],
-      xAxes: [
-        {
-          gridLines: {
-            display: true,
-            color: "rgba(0, 0, 0, 0.1)"
-          },
-          ticks: {
-            beginAtZero: true,
-            max: 100
-          }
-        }
-      ]
+      }],
+      yAxes: [{
+        barPercentage: 0.5,
+        stacked: true
+      }]
     }
   };
+
 
   componentDidMount() {
     const token = ls.get("token");
@@ -101,18 +59,57 @@ class HomeHR extends Component {
     }
 
     const reviewer_id = ls.get("userid")
+    const acceptBgColor = "rgba(75, 192, 192, 0.2)"
+    const acceptBorderColor = "rgb(75, 192, 192)"
+    const rejectBgColor = "rgba(255, 99, 132, 0.2)"
+    const rejectBorderColor = "rgb(255, 99, 132)"
     const dataHorizontal = this.state.dataHorizontal;
-    const dataDoughnutMale = this.state.dataDoughnutMale;
-    const dataDoughnutFemale = this.state.dataDoughnutFemale;
+    var acceptance = []
+    var rejection = []
+
     fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id)
       .then((res) => res.json())
       .then((res) => {
+        Object.keys(res).forEach(function (key) {
+          if (key === "accepted_male_count") {
+            acceptance.push(res.accepted_male_count)
+          }
+          else {
+            rejection.push(res.declined_male_count)
+          }
+          if (key === "accepted_female_count") {
+            acceptance.push(res.accepted_female_count)
+          }
+          else {
+            rejection.push(res.declined_female_count)
+          }
 
-        dataHorizontal.datasets[0].data = [res.accepted_count, res.declined_count];
-        dataDoughnutMale.datasets[0].data = [res.accepted_male_count, res.declined_male_count];
-        dataDoughnutFemale.datasets[0].data = [res.accepted_female_count, res.declined_female_count];
+          if (key === "accepted_other_count") {
+            acceptance.push(res.accepted_other_count)
+          }
+          else {
+            rejection.push(res.declined_other_count)
+          }
+          if (key === "accepted_undisclosed_count") {
+            acceptance.push(res.accepted_undisclosed_count)
+          }
+          else {
+            rejection.push(res.declined_undisclosed_count)
+          }
 
-        this.setState({ dataHorizontal, dataDoughnutMale, dataDoughnutFemale })
+        });
+
+        dataHorizontal.datasets[0].data = acceptance;
+        dataHorizontal.datasets[0].backgroundColor = new Array(acceptance.length).fill(acceptBgColor);
+        dataHorizontal.datasets[0].borderColor = new Array(acceptance.length).fill(acceptBorderColor);
+
+        dataHorizontal.datasets[1].data = rejection;
+        dataHorizontal.datasets[1].backgroundColor = new Array(rejection.length).fill(rejectBgColor);
+        dataHorizontal.datasets[1].borderColor = new Array(rejection.length).fill(rejectBorderColor);
+
+
+
+        this.setState({ dataHorizontal })
 
       })
 
@@ -146,10 +143,25 @@ class HomeHR extends Component {
             </h5>
             <br />
             <br />
-            <Tabs defaultActiveKey="Rate" transition={false} id="noanim-tab-example">
+            <Tabs defaultActiveKey="GenderCategoryInsight" transition={false} id="noanim-tab-example">
 
 
-              <Tab eventKey="Rate" title=" Categories Rate% ">
+
+              <Tab eventKey="GenderCategoryInsight" title=" Gender(category) Insight ">
+                <div>
+                  <br />
+                  <h3 className="text-center"> Gender(category) Insight </h3>
+                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
+                </div>
+              </Tab>
+              <Tab eventKey="EthnicityCategoryInsight" title=" Ethnicity(category) Insight ">
+                <div>
+                  <br />
+                  <h3 className="text-center"> Ethnicity(category) Insight </h3>
+                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
+                </div>
+              </Tab>
+              {/* <Tab eventKey="Rate" title=" Categories Rate% ">
                 <Row>
                   <Col>
                     <br /><br />     <br /><br />
@@ -169,14 +181,7 @@ class HomeHR extends Component {
                   </Col>
                 </Row>
                 <br />
-              </Tab>
-              <Tab eventKey="ApplicationInsight" title=" Application Insight ">
-                <div>
-                  <br />
-                  <h3 className="text-center"> Application Insight </h3>
-                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
-                </div>
-              </Tab>
+              </Tab> */}
             </Tabs>
 
           </Container>
