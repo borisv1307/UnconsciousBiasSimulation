@@ -9,7 +9,7 @@ from pymongo import ReturnDocument
 import smtplib
 import pyotp
 from . import user_blueprint
-from bson.json_util import dumps, loads 
+
 
 
 MISSING_MSG = 'Missing request body'
