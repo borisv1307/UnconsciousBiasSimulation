@@ -67,6 +67,15 @@ def decrypt(n, ciphertext):
 
     return result
 
+# def get_jwt_token(mongo):
+#     tokens = mongo.db.authtoken
+#     get_output = list(tokens.aggregate([ { '$sample': { 'size': 1 } } ]))
+#     output = []
+#     for value in get_output:
+#         output= {'key':value['key']}
+    
+#     return output
+
 def register_blueprints(app):
     from project.home import home_blueprint
     from project.profile import profile_blueprint

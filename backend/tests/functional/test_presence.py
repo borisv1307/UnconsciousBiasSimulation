@@ -20,6 +20,11 @@ from bson.objectid import ObjectId
 
 profilename = "Profile B"
 
+login_data = {
+        "email":"mcdonaldnancy@gmail.com",
+        "password": "Hello"
+}
+
 
 @pytest.fixture
 def test_client():
@@ -84,8 +89,10 @@ class TestPool:
             "gender": "Male",
             "ethnicity": "White"
         }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response != 'null'
 
@@ -133,8 +140,10 @@ class TestPool:
             "gender": "Male",
             "ethnicity": "White"
         }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User presence already exists"}\n'
 
@@ -144,8 +153,10 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json'})
+            '/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
 
@@ -164,8 +175,10 @@ class TestPool:
                 "application_status": "Accepted"
             }
         }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
-            data), headers={'Content-Type': 'application/json'})
+            data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
 
@@ -184,8 +197,10 @@ class TestPool:
                 "application_status": "Declined"
             }
         }
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
-            data), headers={'Content-Type': 'application/json'})
+            data), headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data == b'{"code":4,"error":"User presence not found"}\n'
 
@@ -207,9 +222,10 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/getCount/4/', headers={'Content-Type': 'application/json'})
+            '/api/v1/getCount/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != b'{"error": "No presence found"}\n'
 
@@ -219,9 +235,10 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/getCount/99/', headers={'Content-Type': 'application/json'})
+            '/api/v1/getCount/99/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         # assert response.data == b'{"accepted_female_count":0,"accepted_male_count":0,"accepted_other_count":0,"accepted_undisclosed_count":0,"declined_female_count":0,"declined_male_count":0,"declined_other_count":0,"declined_undisclosed_count":0,"reviewer_id":99}\n'
 
@@ -231,9 +248,10 @@ class TestPool:
         WHEN the '/api/v1/getAcceptanceRate/' page is requested (POST)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json'})
+            '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
         assert response.status_code == 200
 
     def test_for_get_count_by_ethnicity(self, test_client):
@@ -242,7 +260,8 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/getCountByEthnicity/99/', headers={'Content-Type': 'application/json'})
+            '/api/v1/getCountByEthnicity/99/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200

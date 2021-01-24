@@ -19,6 +19,11 @@ from random import randint
 
 profilename = "Profile A"
 
+login_data = {
+        "email":"mcdonaldnancy@gmail.com",
+        "password": "Hello"
+}
+
 @pytest.fixture
 def test_client():
     flask_app = create_app('test')
@@ -65,7 +70,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Missing request body"}\n'
 
@@ -107,7 +114,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Input fields cannot be blank or null"}\n'
 
@@ -150,7 +159,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"Input fields cannot be blank or null"}\n'
 
@@ -193,7 +204,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response != 'null'
 
@@ -235,7 +248,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":2,"error":"User account does not exist"}\n'
 
@@ -245,8 +260,9 @@ class TestSomething:
         WHEN the '/getProfileCount' page is requested (GET)
         THEN check that the response is valid
         """
-
-        response = test_client.get('/api/v1/getProfiles/1/',headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get('/api/v1/getProfiles/1/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -256,8 +272,9 @@ class TestSomething:
         WHEN the '/getProfileCount' page is requested (GET)
         THEN check that the response is valid
         """
-
-        response = test_client.get('/api/v1/getProfiles/999/',headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get('/api/v1/getProfiles/999/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data == b'{"count":1,"results":{"error":"User not found"}}\n'
 
@@ -267,8 +284,9 @@ class TestSomething:
         WHEN the '/getProfileCount' page is requested (GET)
         THEN check that the response is valid
         """
-
-        response = test_client.get('/api/v1/getProfiles/10/',headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get('/api/v1/getProfiles/10/',headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data == b'{"count":1,"results":{"error":"Profiles not found"}}\n'
 
@@ -312,7 +330,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response != 'null'
 
@@ -356,7 +376,9 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
-        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)       
+        response = test_client.put('/api/v1/editProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":2,"error":"User account does not exist"}\n'
 

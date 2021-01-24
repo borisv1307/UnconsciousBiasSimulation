@@ -23,7 +23,10 @@ GRANDPAPA_ROOT = os.path.abspath(os.path.join(PARENT_ROOT, os.pardir))
 sys.path.insert(0, GRANDPAPA_ROOT)
 
 SET_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDUzMzkxNjksIm5iZiI6MTYwNTMzOTE2OSwianRpIjoiNzAyMzczOGYtNjc2OS00NzdkLWFhN2ItYjAzOTcyMWQwZWJlIiwiZXhwIjoxNjA1MzQwMDY5LCJpZGVudGl0eSI6eyJpZCI6MywiZGF0ZV9qb2luZWQiOiJUaHUsIDI5IE9jdCAyMDIwIDA0OjA0OjI2IEdNVCJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.6NR0py5qQ49bI6Lt1GIp_INnlXeCgasid9NndXJuslk"
-
+login_data = {
+        "email":"mcdonaldnancy@gmail.com",
+        "password": "Hello"
+}
 
 @pytest.fixture
 def test_client():
@@ -31,6 +34,7 @@ def test_client():
     flask_app.config['TESTING'] = True
     with flask_app.test_client() as testing_client:
         yield testing_client
+
 
 
 class TestSomething:
@@ -176,8 +180,8 @@ class TestSomething:
         """
 
         data = {
-            "email": "jasonmax@gmail.com",
-            "password": "Hello3"
+        "email":"mcdonaldnancy@gmail.com",
+        "password": "Hello"
         }
         response = test_client.post(
             '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -192,8 +196,8 @@ class TestSomething:
         """
 
         data = {
-            "email": "jasonmax@gmail.com",
-            "password": "Hello234"
+        "email":"mcdonaldnancy@gmail.com",
+        "password": "Hello75757"
         }
         response = test_client.post(
             '/api/v1/login/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
@@ -295,9 +299,10 @@ class TestSomething:
         WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/users/1/', headers={'Content-Type': 'application/json'})
+            '/api/v1/users/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -307,9 +312,10 @@ class TestSomething:
         WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/users/one/', headers={'Content-Type': 'application/json'})
+            '/api/v1/users/one/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":5,"error":"id must be numerical"}\n'
 
@@ -345,9 +351,10 @@ class TestSomething:
             users.count_documents({}) - 1)[0]['user_id'])
         convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.delete(
-            url, headers={'Content-Type': 'application/json'})
+            url, headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != 'null'
 
@@ -360,9 +367,11 @@ class TestSomething:
 
         convert_to_str = str(10000)
         url = '/api/v1/users/'+convert_to_str+'/'
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        print('get token********************88',get_token)
         response = test_client.delete(
-            url, headers={'Content-Type': 'application/json'})
+            url, headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":5,"error":"User does not exist"}\n'
 
@@ -404,9 +413,10 @@ class TestSomething:
             users.count_documents({}) - 1)[0]['user_id'])
         convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.patch(url, data=json.dumps(data), headers={
-                                     'Content-Type': 'application/json'})
+                                     'Content-Type': 'application/json','Authorization':get_token['token']})
 
         assert response.status_code == 200
         assert response.data != 'null'
@@ -494,9 +504,10 @@ class TestSomething:
             "user_id": set_user_id,
             "otp": get_corresponding_otp
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data == b'{"success":"Email validation successful"}\n'
 
@@ -510,9 +521,10 @@ class TestSomething:
         data = {
             "email": "jgeorge69@dxc.com"
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data == b'{"success":"OTP sent via email"}\n'
 
@@ -526,9 +538,10 @@ class TestSomething:
         data = {
             "email": "jgeorge69@some.com"
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":2,"error":"Email not found"}\n'
 
@@ -557,9 +570,10 @@ class TestSomething:
             "user_id": set_user_id,
             "otp": 'fbLGnQruBM'
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id and OTP mismatch"}\n'
 
@@ -580,9 +594,10 @@ class TestSomething:
             "user_id": user_id,
             "otp": 'jdhd@RT'
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"code":4,"error":"User_id does not exist"}\n'
 
@@ -597,9 +612,10 @@ class TestSomething:
             "user_id": "one",
             "otp": SET_TOKEN
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"error":"user_id must be numerical"}\n'
 
@@ -614,9 +630,10 @@ class TestSomething:
             "user_id": "6",
             "otp": "  "
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
         assert response.data == b'{"error":"OTP cannot be blank or null"}\n'
 
@@ -630,9 +647,10 @@ class TestSomething:
         data = {
 
         }
-
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
         response = test_client.post(
-            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         print(response.data)
         assert response.status_code == 403
         assert response.data == b'{"error":"Missing request body"}\n'
@@ -654,7 +672,6 @@ class TestSomething:
             "user_id": user_id,
             "token": SET_TOKEN
         }
-
         response = test_client.post(
             '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
