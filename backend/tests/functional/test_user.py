@@ -27,6 +27,10 @@ login_data = {
         "email":"jamesthomas@gmail.com",
         "password": "Hello"
 }
+login_data_2 = {
+        "email":"harrisjames@yahoo.com",
+        "password": "Hello"
+}
 
 @pytest.fixture
 def test_client():
@@ -312,7 +316,7 @@ class TestSomething:
         WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/users/one/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -367,9 +371,8 @@ class TestSomething:
 
         convert_to_str = str(10000)
         url = '/api/v1/users/'+convert_to_str+'/'
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
-        print('get token********************88',get_token)
         response = test_client.delete(
             url, headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 403
@@ -504,11 +507,11 @@ class TestSomething:
             "user_id": set_user_id,
             "otp": get_corresponding_otp
         }
-        login_data1 = {
+        login_data_1 = {
         "email":"lauramontgomery@gmail.com",
         "password": "Hello"
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data1),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_1),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -542,7 +545,7 @@ class TestSomething:
         data = {
             "email": "jgeorge69@some.com"
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/resend_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -598,7 +601,7 @@ class TestSomething:
             "user_id": user_id,
             "otp": 'jdhd@RT'
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -634,7 +637,7 @@ class TestSomething:
             "user_id": "6",
             "otp": "  "
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})

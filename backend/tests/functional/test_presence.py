@@ -24,6 +24,10 @@ login_data = {
         "email":"justin43@yahoo.com",
         "password": "Hello"
 }
+login_data_2 = {
+        "email":"osbornbrett@jones.com",
+        "password": "Hello"
+}
 
 
 @pytest.fixture
@@ -140,7 +144,7 @@ class TestPool:
             "gender": "Male",
             "ethnicity": "White"
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/addPresence/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -175,7 +179,7 @@ class TestPool:
                 "application_status": "Accepted"
             }
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
             data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -222,7 +226,7 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCount/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -248,7 +252,7 @@ class TestPool:
         WHEN the '/api/v1/getAcceptanceRate/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
