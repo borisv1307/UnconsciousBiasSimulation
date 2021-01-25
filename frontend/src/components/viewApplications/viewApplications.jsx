@@ -21,11 +21,15 @@ class viewApplications extends Component {
   componentDidMount() {
     const userId = ls.get("userid")
     const token = ls.get("token");
+    if(token===null || token===""){
+      window.location.href = "/login"
+    }
     console.log(token)
     fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getAllPresence/" + userId + "/",
       {
         headers: {
-          "Authorization": "Bearer " + token
+          "Content-type": "application/json",
+          "Authorization": token
         }
       })
       .then((response) => response.json())
