@@ -10,8 +10,8 @@ class HomeHR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataHorizontal: {
-        labels: ["Male", "Female", "Other", "Prefer Not to Say"],
+      dataHorizontalGender: {
+        labels: ["Male", "Female", "Other", "Prefer not to say"],
         datasets: [
           {
             label: 'Acceptance',
@@ -19,7 +19,8 @@ class HomeHR extends Component {
             fill: false,
             backgroundColor: [],
             borderColor: [],
-            borderWidth: 1
+            borderWidth: 1,
+            stack: '2',
           },
           {
             label: 'Rejection',
@@ -27,29 +28,51 @@ class HomeHR extends Component {
             fill: false,
             backgroundColor: [],
             borderColor: [],
-            borderWidth: 1
+            borderWidth: 1,
+            stack: '2',
           }
         ]
+      },
+      dataHorizontalEthnicity: {
+        labels: ["American Indian", "Asian", "Black American", "Hispanic Latino", "Pacific Islander", "White", "Other", "Prefer not to say "],
+        datasets: [
+          {
+            label: 'Acceptance',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+            stack: '2',
+          },
+          {
+            label: 'Rejection',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+            stack: '2',
+          }
+        ]
+      },
+
+      barChartOptions: {
+        scales: {
+          xAxes: [{
+
+            stacked: true,
+          }],
+          yAxes: [{
+
+            stacked: true,
+          }]
+        }
       }
     };
   }
 
-  barChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      xAxes: [{
-        stacked: true,
-        ticks: {
-          beginAtZero: true
-        }
-      }],
-      yAxes: [{
-        barPercentage: 0.5,
-        stacked: true
-      }]
-    }
-  };
+
 
 
   componentDidMount() {
@@ -63,56 +86,126 @@ class HomeHR extends Component {
     const acceptBorderColor = "rgb(75, 192, 192)"
     const rejectBgColor = "rgba(255, 99, 132, 0.2)"
     const rejectBorderColor = "rgb(255, 99, 132)"
-    const dataHorizontal = this.state.dataHorizontal;
-    var acceptance = []
-    var rejection = []
+    const dataHorizontalGender = this.state.dataHorizontalGender;
+    const dataHorizontalEthnicity = this.state.dataHorizontalEthnicity;
+    var acceptance_gender = []
+    var rejection_gender = []
+    var acceptance_ethnicity = []
+    var rejection_ethnicity = []
 
-    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id)
-      .then((res) => res.json())
-      .then((res) => {
-        Object.keys(res).forEach(function (key) {
+    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id), fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id)])
+
+      .then(([res1, res2]) => {
+        return Promise.all([res1.json(), res2.json()])
+
+      })
+      .then(([res1, res2]) => {
+        Object.keys(res1).forEach(function (key) {
           if (key === "accepted_male_count") {
-            acceptance.push(res.accepted_male_count)
+            acceptance_gender.push(res1.accepted_male_count)
           }
           else {
-            rejection.push(res.declined_male_count)
+            rejection_gender.push(res1.declined_male_count)
           }
           if (key === "accepted_female_count") {
-            acceptance.push(res.accepted_female_count)
+            acceptance_gender.push(res1.accepted_female_count)
           }
           else {
-            rejection.push(res.declined_female_count)
+            rejection_gender.push(res1.declined_female_count)
           }
 
           if (key === "accepted_other_count") {
-            acceptance.push(res.accepted_other_count)
+            acceptance_gender.push(res1.accepted_other_count)
           }
           else {
-            rejection.push(res.declined_other_count)
+            rejection_gender.push(res1.declined_other_count)
           }
           if (key === "accepted_undisclosed_count") {
-            acceptance.push(res.accepted_undisclosed_count)
+            acceptance_gender.push(res1.accepted_undisclosed_count)
           }
           else {
-            rejection.push(res.declined_undisclosed_count)
+            rejection_gender.push(res1.declined_undisclosed_count)
+          }
+        });
+
+        dataHorizontalGender.datasets[0].data = acceptance_gender;
+        dataHorizontalGender.datasets[0].backgroundColor = new Array(acceptance_gender.length).fill(acceptBgColor);
+        dataHorizontalGender.datasets[0].borderColor = new Array(acceptance_gender.length).fill(acceptBorderColor);
+
+        dataHorizontalGender.datasets[1].data = rejection_gender;
+        dataHorizontalGender.datasets[1].backgroundColor = new Array(rejection_gender.length).fill(rejectBgColor);
+        dataHorizontalGender.datasets[1].borderColor = new Array(rejection_gender.length).fill(rejectBorderColor);
+
+
+        Object.keys(res2).forEach(function (key) {
+          if (key === "accepted_american_indian_count") {
+            acceptance_ethnicity.push(res2.accepted_american_indian_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_american_indian_count)
+          }
+          if (key === "accepted_asian_count") {
+            acceptance_ethnicity.push(res2.accepted_asian_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_asian_count)
+          }
+          if (key === "accepted_black_american_count") {
+            acceptance_ethnicity.push(res2.accepted_black_american_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_black_american_count)
+          }
+
+          if (key === "accepted_hispanic_latino_count") {
+            acceptance_ethnicity.push(res2.accepted_hispanic_latino_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_hispanic_latino_count)
+          }
+
+          if (key === "accepted_pacific_islander_count") {
+            acceptance_ethnicity.push(res2.accepted_pacific_islander_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_pacific_islander_count)
+          }
+
+          if (key === "accepted_white_count") {
+            acceptance_ethnicity.push(res2.accepted_white_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_white_count)
+          }
+
+          if (key === "accepted_other_count") {
+            acceptance_ethnicity.push(res2.accepted_other_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_other_count)
+          }
+
+          if (key === "accepted_undisclosed_count") {
+            acceptance_ethnicity.push(res2.accepted_undisclosed_count)
+          }
+          else {
+            rejection_ethnicity.push(res2.declined_undisclosed_count)
           }
 
         });
 
-        dataHorizontal.datasets[0].data = acceptance;
-        dataHorizontal.datasets[0].backgroundColor = new Array(acceptance.length).fill(acceptBgColor);
-        dataHorizontal.datasets[0].borderColor = new Array(acceptance.length).fill(acceptBorderColor);
+        dataHorizontalEthnicity.datasets[0].data = acceptance_ethnicity;
+        dataHorizontalEthnicity.datasets[0].backgroundColor = new Array(acceptance_ethnicity.length).fill(acceptBgColor);
+        dataHorizontalEthnicity.datasets[0].borderColor = new Array(acceptance_ethnicity.length).fill(acceptBorderColor);
 
-        dataHorizontal.datasets[1].data = rejection;
-        dataHorizontal.datasets[1].backgroundColor = new Array(rejection.length).fill(rejectBgColor);
-        dataHorizontal.datasets[1].borderColor = new Array(rejection.length).fill(rejectBorderColor);
+        dataHorizontalEthnicity.datasets[1].data = rejection_ethnicity;
+        dataHorizontalEthnicity.datasets[1].backgroundColor = new Array(rejection_ethnicity.length).fill(rejectBgColor);
+        dataHorizontalEthnicity.datasets[1].borderColor = new Array(rejection_ethnicity.length).fill(rejectBorderColor);
 
+        this.setState({ dataHorizontalGender, dataHorizontalEthnicity })
 
-
-        this.setState({ dataHorizontal })
 
       })
-
 
   }
   render() {
@@ -143,45 +236,23 @@ class HomeHR extends Component {
             </h5>
             <br />
             <br />
-            <Tabs defaultActiveKey="GenderCategoryInsight" transition={false} id="noanim-tab-example">
-
-
+            <Tabs defaultActiveKey="GenderCategoryInsight" transition={false} id="HRAnalysis">
 
               <Tab eventKey="GenderCategoryInsight" title=" Gender(category) Insight ">
                 <div>
                   <br />
                   <h3 className="text-center"> Gender(category) Insight </h3>
-                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
+                  <HorizontalBarGraph inputData={this.state.dataHorizontalGender} barChartOptions={this.barChartOptions} />
                 </div>
               </Tab>
               <Tab eventKey="EthnicityCategoryInsight" title=" Ethnicity(category) Insight ">
                 <div>
                   <br />
                   <h3 className="text-center"> Ethnicity(category) Insight </h3>
-                  <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.barChartOptions} height={450} />
+                  <HorizontalBarGraph inputData={this.state.dataHorizontalEthnicity} barChartOptions={this.barChartOptions} />
                 </div>
               </Tab>
-              {/* <Tab eventKey="Rate" title=" Categories Rate% ">
-                <Row>
-                  <Col>
-                    <br /><br />     <br /><br />
 
-                    <h3 className="text-center">Male Application Analysis</h3>
-                    <br />
-                    <DoughnutChart inputData={this.state.dataDoughnutMale} height={220} />
-
-                  </Col>
-                  <Col>
-                    <br /><br />     <br /><br />
-
-                    <h3 className="text-center">Female Application Analysis</h3>
-                    <br />
-                    <DoughnutChart inputData={this.state.dataDoughnutFemale} height={220} />
-
-                  </Col>
-                </Row>
-                <br />
-              </Tab> */}
             </Tabs>
 
           </Container>
