@@ -54,7 +54,7 @@ class EmailValidation extends Component {
     if (!this.state.otp) {
       this.errorhandleShow("Field/s cannot be blank");
     } else {
-      fetch("http://localhost:5000/api/v1/verify_otp/", {
+      fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/verify_otp/", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -89,7 +89,7 @@ class EmailValidation extends Component {
       email: ls.get("email"),
     };
 
-    fetch("http://localhost:5000/api/v1/resend_otp/", {
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/resend_otp/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

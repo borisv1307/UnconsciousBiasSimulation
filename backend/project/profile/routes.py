@@ -4,7 +4,7 @@ from json import loads
 from functools import wraps
 from bson.json_util import dumps
 from flask import request
-from project import mongo
+from project import mongo ,token_required
 from . import profile_blueprint
 
 ################
@@ -20,7 +20,7 @@ def profile_validation(func):
         try:
             profile_data = request.get_json()
             get_user_id = profile_data['user_id']
-        except:
+        except Exception:
             return {'code': 4, 'error': 'Missing request body'}, 403
 
         if get_user_id is None or re.search("^\s*$", str(get_user_id)):
@@ -33,6 +33,7 @@ def profile_validation(func):
 
 
 @profile_blueprint.route('/api/v1/createProfile/', methods=['POST'])
+@token_required
 @profile_validation
 def create_user_profile():
    # Get fields from request body, check for missing fields
@@ -46,7 +47,7 @@ def create_user_profile():
     try:
         profile_id = int(profile.find().skip(
             profile.count_documents({}) - 1)[0]['profile_id'])+1
-    except:
+    except Exception:
         profile_id = 1
 
     # check if email is already in database
@@ -62,7 +63,10 @@ def create_user_profile():
             "position": profile_data['position'],
             "aboutMe":  profile_data['aboutMe'],
             "education": profile_data['education'],
-            "experience": profile_data['experience']
+            "experience": profile_data['experience'],
+            "gender": profile_data['gender'],
+            "email": profile_data['email'],
+            "ethnicity": profile_data['ethnicity']
         })
 
         if create_profile:
@@ -76,7 +80,10 @@ def create_user_profile():
                 "position": profile_data['position'],
                 "aboutMe":  profile_data['aboutMe'],
                 "education": profile_data['education'],
-                "experience": profile_data['experience']
+                "experience": profile_data['experience'],
+                "gender": profile_data['gender'],
+                "email": profile_data['email'],
+                "ethnicity": profile_data['ethnicity']
             }
         else:
             output = {'code': 2, "error": "Insert Failed"}
@@ -87,6 +94,7 @@ def create_user_profile():
 
 
 @profile_blueprint.route('/api/v1/getProfiles/<user_id>/', methods=['GET'])
+@token_required
 def get_user_profiles(user_id):
     # Get user_id
     int_user_id = int(user_id)
@@ -118,14 +126,16 @@ def get_user_profiles(user_id):
                             "state": user[0]['contact_details']['state'],
                             "zip": user[0]['contact_details']['zip'],
                             "city": user[0]['contact_details']['city'],
-                            "email": user[0]['email'],
+                            "email": getprofile['email'],
                             "profileImg": getprofile['profileImg'],
                             "first_name": getprofile['first_name'],
                             "last_name": getprofile['last_name'],
                             "position": getprofile['position'],
                             "aboutMe":  getprofile['aboutMe'],
                             "education": getprofile['education'],
-                            "experience": getprofile['experience']
+                            "experience": getprofile['experience'],
+                            "gender": getprofile['gender'],
+                            "ethnicity": getprofile['ethnicity']
                         })
                     else:
                         output.append({
@@ -135,14 +145,16 @@ def get_user_profiles(user_id):
                             "state": get_contact[0]['state'],
                             "zip": get_contact[0]['zip'],
                             "city": get_contact[0]['city'],
-                            "email": user[0]['email'],
+                            "email": getprofile['email'],
                             "profileImg": getprofile['profileImg'],
                             "first_name": getprofile['first_name'],
                             "last_name": getprofile['last_name'],
                             "position": getprofile['position'],
                             "aboutMe":  getprofile['aboutMe'],
                             "education": getprofile['education'],
-                            "experience": getprofile['experience']
+                            "experience": getprofile['experience'],
+                            "gender": getprofile['gender'],
+                            "ethnicity": getprofile['ethnicity']
                         })
             else:
                 output = {"error": "Profiles not found"}
@@ -158,6 +170,7 @@ def get_user_profiles(user_id):
     return output
 
 @profile_blueprint.route('/api/v1/editProfile/', methods=['PUT'])
+@token_required
 @profile_validation
 def edit_profile():
     profile_data = request.get_json()
@@ -166,14 +179,13 @@ def edit_profile():
     # Get collections
     profile = mongo.db.profile
     user = mongo.db.user
-    
+
     user_id_exists = user.count_documents({'user_id': get_user_id})
     if user_id_exists:
         edit_profile_action = profile.replace_one({"user_id": get_user_id, "profile_id": get_profile_id},
         {
             "profile_id": profile_data['profile_id'],
             "user_id": profile_data['user_id'],
-
             "profileName": profile_data["profileName"],
             "profileImg": profile_data["profileImg"],
             "first_name": profile_data["first_name"],
@@ -181,7 +193,11 @@ def edit_profile():
             "position": profile_data["position"],
             "aboutMe": profile_data["aboutMe"],
             "education": profile_data["education"],
-            "experience": profile_data["experience"]
+            "experience": profile_data["experience"],
+            "gender": profile_data["gender"],
+            "email": profile_data["email"],
+            "ethnicity": profile_data["ethnicity"]
+
 
         })
         if edit_profile_action:
@@ -196,7 +212,11 @@ def edit_profile():
                 "position": profile_data["position"],
                 "aboutMe": profile_data["aboutMe"],
                 "education": profile_data["education"],
-                "experience": profile_data["experience"]
+                "experience": profile_data["experience"],
+                "gender": profile_data["gender"],
+                "email": profile_data["email"],
+                "ethnicity": profile_data["ethnicity"]
+
             }
         else:
             output = {"code": 2, "error": "Document update failed"}

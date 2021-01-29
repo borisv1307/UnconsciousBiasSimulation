@@ -41,6 +41,8 @@ class ProfileForm extends Component{
            education: this.props.parent_to_child.education,
            experience: this.props.parent_to_child.experience,
            formMode: this.props.parent_to_child.formMode,
+           gender: "",
+           ethnicity: "",
 
            editState: false,
 
@@ -95,7 +97,9 @@ class ProfileForm extends Component{
             expEndDate: "",
             education: [],
             experience: [],
- 
+            gender: "",
+            ethnicity: "",
+
             editState: false,
  
             editSchool: "",
@@ -120,6 +124,13 @@ class ProfileForm extends Component{
             
          });
       }
+
+    componentDidMount() {
+        const token = ls.get("token");
+        if(token===null || token===""){
+          window.location.href = "/login"
+        }
+    }
 
     updateField = (stateKey) => (e) => {
         this.setState({ [stateKey]: e.target.value });
@@ -232,6 +243,10 @@ class ProfileForm extends Component{
 
       handleSubmit = (e) => {
         const userId = ls.get("userid")
+        const gender = ls.get("gender")
+        const ethnicity = ls.get("ethnicity")
+        const token = ls.get("token")
+
         console.log(userId)
         const isValid = this.validateSubmit();
         if (isValid) {
@@ -246,14 +261,16 @@ class ProfileForm extends Component{
             education: this.state.education,
             experience: this.state.experience,
             user_id: userId,
+            gender: gender,
+            ethnicity: ethnicity
           };
     
           console.log(JSON.stringify(data));
-    
-          fetch("http://localhost:5000/api/v1/createProfile/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
             method: "POST",
             headers: {
               "Content-type": "application/json",
+              "Authorization": token
             },
             body: JSON.stringify(data),
           })
@@ -269,8 +286,10 @@ class ProfileForm extends Component{
       };
 
       handleEditSubmit = (mode) => (e) => {
-        
+        const token = ls.get("token")
         const userId = ls.get("userid")
+        const gender = ls.get("gender")
+        const ethnicity = ls.get("ethnicity")
         const isValid = this.validateSubmit();
         const profile_id = this.props.parent_to_child.profile_id;
         if (isValid) {
@@ -285,15 +304,17 @@ class ProfileForm extends Component{
             education: this.state.education,
             experience: this.state.experience,
             user_id: userId,
-            profile_id: profile_id
+            profile_id: profile_id,
+            gender: gender,
+            ethnicity: ethnicity
           };
     
           console.log(JSON.stringify(data));
-    
-          fetch("http://localhost:5000/api/v1/editProfile/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/editProfile/", {
             method: "PUT",
             headers: {
               "Content-type": "application/json",
+              "Authorization": token
             },
             body: JSON.stringify(data),
           })

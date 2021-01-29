@@ -27,26 +27,38 @@ class Home extends Component {
       },
 
       dataHorizontal: {
-        labels: ['Red', 'Orange', 'Yellow'],
+        labels: [],
         datasets: [
           {
-            label: 'My First Dataset',
-            data: [22, 33, 55],
+            label: 'Acceptance',
+            data: [],
             fill: false,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-            ],
-            borderColor: [
-              'rgb(255, 99, 132)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 205, 86)',
-            ],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1
+          },
+          {
+            label: 'Rejection',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
             borderWidth: 1
           }
         ]
+      },
+
+      barChartOptions: {
+        scales: {
+            xAxes: [{
+                stacked: true
+            }],
+            yAxes: [{
+                stacked: true
+            }]
+        }
       }
+      
     };
   }
 
@@ -55,6 +67,45 @@ class Home extends Component {
     if (token === null || token === "") {
       window.location.href = "/login"
     }
+
+    const user_id = ls.get("userid")
+    
+    const acceptBgColor = "rgba(98,  182, 239,0.4)"
+    const acceptBorderColor = "rgba(98,  182, 239, 1)"
+    const rejectBgColor = "rgba(255, 99, 132, 0.2)"
+    const rejectBorderColor = "rgb(255, 99, 132)"
+    
+    const dataHorizontal = this.state.dataHorizontal;
+
+    var acceptance = []
+    var rejection = []
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getAcceptanceRate/" + user_id + "/", {
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": token
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        dataHorizontal.labels = Object.keys(res)
+
+        Object.keys(res).forEach(function(key) {
+          acceptance.push(res[key]["accepted"])
+          rejection.push(res[key]["declined"])
+        });
+
+        dataHorizontal.datasets[0].data = acceptance;
+        dataHorizontal.datasets[0].backgroundColor = new Array(acceptance.length).fill(acceptBgColor);
+        dataHorizontal.datasets[0].borderColor = new Array(acceptance.length).fill(acceptBorderColor);
+      
+        dataHorizontal.datasets[1].data = rejection;
+        dataHorizontal.datasets[1].backgroundColor = new Array(rejection.length).fill(rejectBgColor);
+        dataHorizontal.datasets[1].borderColor = new Array(rejection.length).fill(rejectBorderColor);
+      
+        this.setState({ dataHorizontal })
+        
+      })
+
   }
 
   render() {
@@ -73,16 +124,15 @@ class Home extends Component {
             <Tab eventKey="acceptance" title="Acceptance">
               <div>
                 <br />
-                <h3 className="text-center"> Acceptance and Rejection Rates Example </h3>
-                <PieChart inputData={this.state.dataPie} />
+                <h3 className="text-center"> Acceptance and Rejection Rates </h3>
+                <HorizontalBarGraph inputData={this.state.dataHorizontal} barChartOptions={this.state.barChartOptions}/>
               </div>
             </Tab>
-
-            <Tab eventKey="bar" title="Bar Graph">
+            <Tab eventKey="donut" title="Donut">
               <div>
                 <br />
-                <h3 className="text-center"> Bar Graph Example </h3>
-                <HorizontalBarGraph inputData={this.state.dataHorizontal} />
+                <h3 className="text-center"> Donut Graph Example </h3>
+                <PieChart inputData={this.state.dataPie} />
               </div>
             </Tab>
           </Tabs>

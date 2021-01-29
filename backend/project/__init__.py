@@ -32,14 +32,14 @@ def token_required(f):
     def decorated(*args, **kwargs):
         try:
             header_token = request.headers['Authorization']
-        except:
+        except Exception:
             return jsonify({'message': 'Token is missing!'}), 403
 
         tokens = mongo.db.authtoken
         if not tokens.find_one({'key': header_token}):
             return jsonify({'message': 'Token is Invalid!'}), 403
         return f(*args, **kwargs)
-    return decorated  
+    return decorated
 
 def encrypt(n, plaintext):
     """Encrypt the string and return the ciphertext"""
@@ -66,6 +66,15 @@ def decrypt(n, ciphertext):
             result += l
 
     return result
+
+# def get_jwt_token(mongo):
+#     tokens = mongo.db.authtoken
+#     get_output = list(tokens.aggregate([ { '$sample': { 'size': 1 } } ]))
+#     output = []
+#     for value in get_output:
+#         output= {'key':value['key']}
+    
+#     return output
 
 def register_blueprints(app):
     from project.home import home_blueprint
