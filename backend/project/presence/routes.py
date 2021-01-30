@@ -1,7 +1,7 @@
 # pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
 from flask import request
-from project import mongo, token_required
+from project import mongo, token_required, get_batch_count
 from pymongo.collection import ReturnDocument
 from . import presence_blueprint
 
@@ -10,6 +10,7 @@ from . import presence_blueprint
 ################
 
 # ALL FUTURE DATA VALIDATION
+
 
 
 @presence_blueprint.route('/api/v1/addPresence/', methods=['POST'])
@@ -91,14 +92,13 @@ def get_all_presence_for_reviewer(reviewer_id):
         presences = mongo.db.presence
         output = []
         try:
-            for presence in presences.find({"reviewed_by": {"$not": {'$elemMatch': {"reviewer_id": reviewer_id}}}}):
+            for presence in presences.find({"reviewed_by": {"$not": {'$elemMatch': {"reviewer_id": reviewer_id}}}}).limit(int(get_batch_count())):
                 output.append({
                     'user_id': int(presence['user_id']),
                     'profile_id': presence['profile_id'],
                     'profile_name': presence['profileName'],
                     'profileImg': presence['profileImg'],
                     'gender': presence['gender'],
-                    'ethnicity': presence['ethnicity'],
                     'state': presence['state'],
                     'zip': presence['zip'],
                     'city': presence['city'],

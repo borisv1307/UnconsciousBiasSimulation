@@ -28,6 +28,10 @@ login_data_2 = {
         "email":"osbornbrett@jones.com",
         "password": "Hello"
 }
+login_data_3 = {
+        "email":"rgeorge@yahoo.com",
+        "password": "Hello"
+}
 
 
 @pytest.fixture
@@ -157,12 +161,13 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getAllPresence/7/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != b'{"code":4,"error":"No presence found"}\n'
+
 
     def test_save_presence_feedback(self, test_client):
         """
