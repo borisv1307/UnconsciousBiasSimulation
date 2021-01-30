@@ -6,6 +6,8 @@ from flask_jwt_extended import JWTManager
 from functools import wraps
 
 SET_KEY = 'abcdefghijklmnopqrstuvwxyz'
+BATCH_COUNT = 10
+
 mongo = PyMongo()
 
 def create_app(env_name):
@@ -66,6 +68,10 @@ def decrypt(n, ciphertext):
             result += l
 
     return result
+
+# Set default batch count for presence.
+def get_batch_count():
+    return BATCH_COUNT
 
 # def get_jwt_token(mongo):
 #     tokens = mongo.db.authtoken

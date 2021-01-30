@@ -11,7 +11,6 @@ import pyotp
 from . import user_blueprint
 
 
-
 MISSING_MSG = 'Missing request body'
 
 # Get collections
