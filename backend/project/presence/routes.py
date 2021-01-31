@@ -118,6 +118,19 @@ def get_all_presence_for_reviewer(reviewer_id):
             print("Exception ", error)
             return {'code': 4, 'error': "No presence found"}, 403
 
+# Checks for existence of a particular batch
+def batch_existence(reviewer_id):
+    # Get collections
+    batch_details_col = mongo.db.batch_details
+    # Check if a batch exists which can accept more entries based on batch size
+    get_details = batch_details_col.find_one({'$and': [
+    {
+      'hr_user_id': int(reviewer_id)
+    },
+    {
+      'can_accept_more': int(1)
+    }]})
+    return get_details
 
 @presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
 @token_required
@@ -126,39 +139,127 @@ def update_presence_with_review():
     reviewer = request.get_json()
     presence_profile_id = int(reviewer['profile_id'])
     presence_user_id = int(reviewer['user_id'])
-    feedback = reviewer['feedback']
+
+    try:
+        feedback = reviewer['feedback']
+        reviewer_id = int(feedback['reviewer_id']) 
+        application_status = feedback['application_status']
+    except TypeError:
+        return {'error': 'feedback details cannot be empty'}, 403
+
+     
     query = {"$and": [{"user_id": presence_user_id},
                       {"profile_id": presence_profile_id}]}
 
+    query_2 = {'$and': [
+    {
+      'hr_user_id': int(reviewer_id)
+    },
+    {
+      'can_accept_more': int(1)
+    }]}
+
+    options = {"upsert": False}
+
+
+    # Get collections
+    presence_col = mongo.db.presence
+    batch_details_col = mongo.db.batch_details
+
     try:
-        if mongo.db.presence.count_documents(query) == 1:
-            profile_details = mongo.db.presence.find_one_and_update(
-                query, {"$push": {'reviewed_by': feedback}}, return_document=ReturnDocument.AFTER)
-            result = {
-                "profile_id": profile_details['profile_id'],
-                "state": profile_details['state'],
-                "zip": profile_details['zip'],
-                "city": profile_details['city'],
-                "email": profile_details['email'],
-                "position": profile_details['position'],
-                "gender": profile_details['gender'],
-                "ethnicity": profile_details['ethnicity'],
-                "aboutMe":  profile_details['aboutMe'],
-                "education": profile_details['education'],
-                "experience": profile_details['experience'],
-                "user_id": profile_details['user_id'],
-                "profileName": profile_details['profileName'],
-                "profileImg": profile_details['profileImg'],
-                "first_name": profile_details['first_name'],
-                "last_name": profile_details['last_name'],
-                "added_on": date_joined,
-                "reviewed_by": profile_details['reviewed_by']
-            }
+        get_acceptance_status = batch_existence(reviewer_id)
+        if get_acceptance_status == None:
+            use_same_batch = False
         else:
-            result = {'code': 4, 'error': "User presence not found"}, 200
+            use_same_batch = True
+    except:
+        use_same_batch = False
+
+    
+    try:
+        if presence_col.count_documents(query) == 1:
+            profile_details = presence_col.find_one_and_update(
+                    query, {"$push": {'reviewed_by': feedback}}, return_document=ReturnDocument.AFTER)
+            result = {
+                    "profile_id": profile_details['profile_id'],
+                    "state": profile_details['state'],
+                    "zip": profile_details['zip'],
+                    "city": profile_details['city'],
+                    "email": profile_details['email'],
+                    "position": profile_details['position'],
+                    "gender": profile_details['gender'],
+                    "aboutMe":  profile_details['aboutMe'],
+                    "education": profile_details['education'],
+                    "experience": profile_details['experience'],
+                    "user_id": profile_details['user_id'],
+                    "profileName": profile_details['profileName'],
+                    "profileImg": profile_details['profileImg'],
+                    "first_name": profile_details['first_name'],
+                    "last_name": profile_details['last_name'],
+                    "added_on": date_joined,
+                    "reviewed_by": profile_details['reviewed_by']
+                }
+            if use_same_batch == False:
+                set_batch_details = batch_details_col.insert_one({
+                    "hr_user_id": reviewer_id,
+                    "batch_no": 1,
+                    "batch_size": int(get_batch_count()),
+                    "can_accept_more": 1,
+                    "reviewed_count":1,
+                    "reviewed_by": [{
+                        "profile_id": presence_profile_id,
+                        "user_id": presence_user_id,
+                        "reviewer_id": reviewer_id,
+                        "application_status": application_status
+                                }]
+                })
+            elif use_same_batch:
+                get_one_batch = batch_existence(reviewer_id)
+                get_batch_size = int(get_one_batch['batch_size'])
+                get_reviewed_count = int(get_one_batch['reviewed_count'])
+                reviewed_by_data = {
+                                "profile_id": presence_profile_id,
+                                "user_id": presence_user_id,
+                                "reviewer_id": reviewer_id,
+                                "application_status": application_status
+                                }
+                if get_reviewed_count < get_batch_size:
+
+                    increment_reviewed_count = int(get_one_batch['reviewed_count']+1)
+
+                    update = {
+                                "$set": {"reviewed_count":increment_reviewed_count},
+                                "$push": {"reviewed_by": reviewed_by_data}
+                            }
+
+                    update_batch_details = batch_details_col.find_one_and_update(query_2, update, options)
+                else:
+                    update_status = {
+                                "$set": {"can_accept_more": 0}
+                            }
+
+                    update_acceptance_status = batch_details_col.find_one_and_update(query_2, update_status, options)
+                    increment_batch_no = int(get_one_batch['batch_no']+1)
+                    create_batch_details = batch_details_col.insert_one({
+                                        "hr_user_id": reviewer_id,
+                                        "batch_no": increment_batch_no,
+                                        "batch_size": int(get_batch_count()),
+                                        "can_accept_more": 1,
+                                        "reviewed_count":1,
+                                        "reviewed_by": [{
+                                            "profile_id": presence_profile_id,
+                                            "user_id": presence_user_id,
+                                            "reviewer_id": reviewer_id,
+                                            "application_status": application_status
+                                                    }]
+                })
+            else:
+                return {'code': 1, 'error': 'Unable to update batch details, Please delete duplicate instance of batch details'}, 403
+        else:
+            result = {'code': 2, 'error': "User presence not found"}, 200      
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': error}, 403
+        result = {'code': 3, 'error': error}, 403
     return result
 
 

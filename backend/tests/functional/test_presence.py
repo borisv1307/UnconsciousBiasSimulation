@@ -211,7 +211,7 @@ class TestPool:
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
             data), headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
         assert response.status_code == 200
-        assert response.data == b'{"code":4,"error":"User presence not found"}\n'
+        assert response.data == b'{"code":2,"error":"User presence not found"}\n'
 
     # def test_for_get_all_presence_when_user_id_not_an_integer(self, test_client):
     #     """
