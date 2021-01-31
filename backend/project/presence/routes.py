@@ -132,6 +132,15 @@ def batch_existence(reviewer_id):
     }]})
     return get_details
 
+# Fetch all details of one particular user
+def get_user_details(user_id):
+    # Get collections
+    user_details_col = mongo.db.user
+    # Check if a batch exists which can accept more entries based on batch size
+    get_user_details = user_details_col.find_one({"user_id": user_id})
+
+    return get_user_details
+
 @presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
 @token_required
 def update_presence_with_review():
@@ -166,18 +175,20 @@ def update_presence_with_review():
     presence_col = mongo.db.presence
     batch_details_col = mongo.db.batch_details
 
+
     try:
         get_acceptance_status = batch_existence(reviewer_id)
         if get_acceptance_status is None:
             use_same_batch = False
         else:
             use_same_batch = True
-    except:
+    except ValueError:
         use_same_batch = False
 
     
     try:
         if presence_col.count_documents(query) == 1:
+            user = get_user_details(presence_user_id)
             profile_details = presence_col.find_one_and_update(
                     query, {"$push": {'reviewed_by': feedback}}, return_document=ReturnDocument.AFTER)
             result = {
@@ -209,6 +220,9 @@ def update_presence_with_review():
                     "reviewed_by": [{
                         "profile_id": presence_profile_id,
                         "user_id": presence_user_id,
+                        "gender":user['gender'],
+                        "ethnicity":user['ethnicity'],
+                        "date_of_birth":user['date_of_birth'],
                         "reviewer_id": reviewer_id,
                         "application_status": application_status
                                 }]
@@ -220,15 +234,16 @@ def update_presence_with_review():
                 reviewed_by_data = {
                                 "profile_id": presence_profile_id,
                                 "user_id": presence_user_id,
+                                "gender":user['gender'],
+                                "ethnicity":user['ethnicity'],
+                                "date_of_birth":user['date_of_birth'],
                                 "reviewer_id": reviewer_id,
                                 "application_status": application_status
                                 }
                 if get_reviewed_count < get_batch_size:
 
-                    increment_reviewed_count = int(get_one_batch['reviewed_count']+1)
-
                     update = {
-                                "$set": {"reviewed_count":increment_reviewed_count},
+                                "$set": {"reviewed_count":int(get_reviewed_count + 1)},
                                 "$push": {"reviewed_by": reviewed_by_data}
                             }
 
@@ -239,7 +254,7 @@ def update_presence_with_review():
                             }
 
                     update_acceptance_status = batch_details_col.find_one_and_update(query_2, update_status, options)
-                    increment_batch_no = int(get_one_batch['batch_no']+1)
+                    increment_batch_no = int(get_one_batch['batch_no'] + 1)
                     create_batch_details = batch_details_col.insert_one({
                                         "hr_user_id": reviewer_id,
                                         "batch_no": increment_batch_no,
@@ -249,6 +264,9 @@ def update_presence_with_review():
                                         "reviewed_by": [{
                                             "profile_id": presence_profile_id,
                                             "user_id": presence_user_id,
+                                            "gender":user['gender'],
+                                            "ethnicity":user['ethnicity'],
+                                            "date_of_birth":user['date_of_birth'],
                                             "reviewer_id": reviewer_id,
                                             "application_status": application_status
                                                     }]
@@ -259,7 +277,7 @@ def update_presence_with_review():
             result = {'code': 2, 'error': "User presence not found"}, 200      
     except Exception as error:
         print("Exception", error)
-        result = {'code': 3, 'error': error}, 403
+        result = {'code': 3, 'error': str(error)}, 403
     return result
 
 
@@ -306,6 +324,70 @@ def get_presence_count(reviewer_id):
     accepted_other_count = mongo.db.presence.count_documents(
         accepted_other_query)
     accepted_undisclosed_count = mongo.db.presence.count_documents(
+        accepted_undisclosed_query)
+
+    try:
+        result = {
+            "reviewer_id": reviewer_id,
+            "declined_male_count": declined_male_count,
+            "declined_female_count": declined_female_count,
+            "declined_other_count": declined_other_count,
+            "declined_undisclosed_count": declined_undisclosed_count,
+            "accepted_male_count": accepted_male_count,
+            "accepted_female_count": accepted_female_count,
+            "accepted_other_count": accepted_other_count,
+            "accepted_undisclosed_count" : accepted_undisclosed_count
+        }
+    except Exception as error:
+        print("Exception", error)
+        result = {'code': 4, 'error': "No reviews found"}, 403
+    return result
+
+@presence_blueprint.route('/api/v1/getCount/<reviewer_id>/<batch_no>/', methods=['GET'])
+# @token_required
+def get_batch_presence_count(reviewer_id, batch_no):
+    try:
+        reviewer_id = int(reviewer_id)
+        batch_no = int(batch_no)
+    except TypeError:
+        return {'error': 'reviewer id and batch no must be numeric'}, 403
+
+    action = "$elemMatch"
+
+    declined_male_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Declined", "gender": "Male"}}}, {"batch_no": batch_no}]}
+    declined_female_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Female"}}}, {"batch_no": batch_no}]}
+    declined_other_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Other"}}}, {"batch_no": batch_no}]}
+    declined_undisclosed_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}]}
+    accepted_male_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Male"}}}, {"batch_no": batch_no}]}
+    accepted_female_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Female"}}}, {"batch_no": batch_no}]}
+    accepted_other_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Other"}}}, {"batch_no": batch_no}]}
+    accepted_undisclosed_query = {"$and": [{"reviewed_by": {action: {
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}]}
+
+
+
+    declined_male_count = mongo.db.batch_details.count_documents(
+        declined_male_query)
+    declined_female_count = mongo.db.batch_details.count_documents(
+        declined_female_query)
+    declined_other_count = mongo.db.batch_details.count_documents(
+        declined_other_query)
+    declined_undisclosed_count = mongo.db.batch_details.count_documents(
+        declined_undisclosed_query)
+    accepted_male_count = mongo.db.batch_details.count_documents(
+        accepted_male_query)
+    accepted_female_count = mongo.db.batch_details.count_documents(
+        accepted_female_query)
+    accepted_other_count = mongo.db.batch_details.count_documents(
+        accepted_other_query)
+    accepted_undisclosed_count = mongo.db.batch_details.count_documents(
         accepted_undisclosed_query)
 
     try:
