@@ -168,7 +168,7 @@ def update_presence_with_review():
 
     try:
         get_acceptance_status = batch_existence(reviewer_id)
-        if get_acceptance_status == None:
+        if get_acceptance_status is None:
             use_same_batch = False
         else:
             use_same_batch = True
@@ -199,7 +199,7 @@ def update_presence_with_review():
                     "added_on": date_joined,
                     "reviewed_by": profile_details['reviewed_by']
                 }
-            if use_same_batch == False:
+            if use_same_batch is False:
                 set_batch_details = batch_details_col.insert_one({
                     "hr_user_id": reviewer_id,
                     "batch_no": 1,
