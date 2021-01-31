@@ -355,21 +355,21 @@ def get_batch_presence_count(reviewer_id, batch_no):
     action = "$elemMatch"
 
     declined_male_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "gender": "Male"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "gender": "Male"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_female_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Female"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Female"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Other"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Other"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_male_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Male"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Male"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_female_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Female"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Female"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Other"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Other"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": "Prefer Not To Say"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
 
 
 
