@@ -137,9 +137,9 @@ def get_user_details(user_id):
     # Get collections
     user_details_col = mongo.db.user
     # Check if a batch exists which can accept more entries based on batch size
-    get_user_details = user_details_col.find_one({"user_id": user_id})
+    send_user_details = user_details_col.find_one({"user_id": user_id})
 
-    return get_user_details
+    return send_user_details
 
 @presence_blueprint.route('/api/v1/savePresenceReview/', methods=['PATCH'])
 @token_required
