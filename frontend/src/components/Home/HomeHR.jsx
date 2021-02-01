@@ -82,10 +82,10 @@ class HomeHR extends Component {
     }
 
     const reviewer_id = ls.get("userid")
-    const acceptBgColor = "rgba(75, 192, 192, 0.2)"
-    const acceptBorderColor = "rgb(75, 192, 192)"
-    const rejectBgColor = "rgba(255, 99, 132, 0.2)"
-    const rejectBorderColor = "rgb(255, 99, 132)"
+    const acceptBgColor = "rgba(29, 183, 40, 0.5)"
+    const acceptBorderColor = "rgba(0,  150, 15, 1)"
+    const rejectBgColor = "rgba(240, 30, 30, 0.5)"
+    const rejectBorderColor = "rgba(220, 0, 0, 1)"
     const dataHorizontalGender = this.state.dataHorizontalGender;
     const dataHorizontalEthnicity = this.state.dataHorizontalEthnicity;
     var acceptance_gender = []
@@ -93,9 +93,9 @@ class HomeHR extends Component {
     var acceptance_ethnicity = []
     var rejection_ethnicity = []
 
-    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/", {headers: {"Content-type": "application/json", "Authorization": token}}), 
-    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id + "/", {headers: {"Content-type": "application/json", "Authorization": token}})])
-      
+    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/", { headers: { "Content-type": "application/json", "Authorization": token } }),
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id + "/", { headers: { "Content-type": "application/json", "Authorization": token } })])
+
       .then(([res1, res2]) => {
         return Promise.all([res1.json(), res2.json()])
 
