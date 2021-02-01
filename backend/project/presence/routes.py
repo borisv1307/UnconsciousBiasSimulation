@@ -14,7 +14,7 @@ WHITEAMERICAN = "White"
 OTHER = "Other"
 UNDISCLOSED = "Prefer Not To Say"
 ERROR = "No reviews found"
-
+GENDER_LIST = ['Male', 'Female', 'Other', 'Prefer Not To Say']
 
 ################
 #### routes ####
@@ -221,7 +221,7 @@ def update_presence_with_review():
                     "reviewed_by": profile_details['reviewed_by']
                 }
             if use_same_batch is False:
-                set_batch_details = batch_details_col.insert_one({
+                batch_details_col.insert_one({
                     "hr_user_id": reviewer_id,
                     "batch_no": 1,
                     "batch_size": int(get_batch_count()),
@@ -257,7 +257,7 @@ def update_presence_with_review():
                                 "$push": {"reviewed_by": reviewed_by_data}
                             }
 
-                    update_batch_details = batch_details_col.find_one_and_update(query_2, update, options)
+                    batch_details_col.find_one_and_update(query_2, update, options)
                 else:
                     update_status = {
                                 "$set": {"can_accept_more": 0}
@@ -265,7 +265,7 @@ def update_presence_with_review():
 
                     update_acceptance_status = batch_details_col.find_one_and_update(query_2, update_status, options)
                     increment_batch_no = int(get_one_batch['batch_no'] + 1)
-                    create_batch_details = batch_details_col.insert_one({
+                    batch_details_col.insert_one({
                                         "hr_user_id": reviewer_id,
                                         "batch_no": increment_batch_no,
                                         "batch_size": int(get_batch_count()),
@@ -300,23 +300,22 @@ def get_presence_count(reviewer_id):
         return {'error': 'reviewer id must be numeric'}, 403
 
 
-
     declined_male_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": "Male"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": GENDER_LIST[0]}]}
     declined_female_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": "Female"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": GENDER_LIST[1]}]}
     declined_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": "Other"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": GENDER_LIST[2]}]}
     declined_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": "Prefer Not To Say"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": GENDER_LIST[3]}]}
     accepted_male_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": "Male"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": GENDER_LIST[0]}]}
     accepted_female_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": "Female"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": GENDER_LIST[1]}]}
     accepted_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": "Other"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": GENDER_LIST[2]}]}
     accepted_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": "Prefer Not To Say"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"gender": GENDER_LIST[3]}]}
 
 
     declined_male_count = mongo.db.presence.count_documents(
