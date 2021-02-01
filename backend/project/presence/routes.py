@@ -4,6 +4,17 @@ from flask import request
 from project import mongo, token_required, get_batch_count
 from pymongo.collection import ReturnDocument
 from . import presence_blueprint
+action = "$elemMatch"
+americanIndian = "American Indian"
+asian = "Asian"
+afroAmerican = "Black or African American"
+hispLatino = "Hispanic or Latino"
+pacificIslander = "Pacific Islander"
+white = "White"
+other = "Other"
+undisclosed = "Prefer Not To Say"
+error = "No reviews found"
+
 
 ################
 #### routes ####
@@ -288,7 +299,7 @@ def get_presence_count(reviewer_id):
     except TypeError:
         return {'error': 'reviewer id must be numeric'}, 403
 
-    action = "$elemMatch"
+
 
     declined_male_query = {"$and": [{"reviewed_by": {action: {
         "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"gender": "Male"}]}
@@ -339,7 +350,7 @@ def get_presence_count(reviewer_id):
         }
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No reviews found"}, 403
+        result = {'code': 4, 'error': error}, 403
     return result
 
 @presence_blueprint.route('/api/v1/getCount/<reviewer_id>/<batch_no>/', methods=['GET'])
@@ -351,7 +362,6 @@ def get_batch_presence_count(reviewer_id, batch_no):
     except TypeError:
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
-    action = "$elemMatch"
 
     declined_male_query = {"$and": [{"reviewed_by": {action: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "gender": "Male"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
@@ -403,7 +413,7 @@ def get_batch_presence_count(reviewer_id, batch_no):
         }
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No reviews found"}, 403
+        result = {'code': 4, 'error': error}, 403
     return result
 
 
@@ -445,7 +455,7 @@ def get_acceptance_rate_for_jobseeker(user_id):
     return result
 
 @presence_blueprint.route('/api/v1/getCount/Ethnicity/<reviewer_id>/<batch_no>/', methods=['GET'])
-@token_required
+# @token_required
 def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
     try:
         reviewer_id = int(reviewer_id)
@@ -453,41 +463,40 @@ def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
     except TypeError:
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
-    action = "$elemMatch"
 
     declined_american_indian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "American Indian"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": americanIndian}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_asian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Asian"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": asian}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_black_american_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Black or African American"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": afroAmerican}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_hispanic_latino__query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Hispanic or Latino"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": hispLatino}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_pacific_islander_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Pacific Islander"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": pacificIslander}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_white_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "White"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": white}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Other"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": other}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     declined_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": "Prefer Not To Say"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": undisclosed}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
 
     accepted_american_indian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "American Indian"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": americanIndian}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_asian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Asian"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": asian}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_black_american_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Black or African American"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": afroAmerican}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_hispanic_latino_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Hispanic or Latino"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": hispLatino}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_pacific_islander_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Pacific Islander"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": pacificIslander}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_white_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "White"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": white}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Other"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": other}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     accepted_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": "Prefer Not To Say"}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": undisclosed}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
 
 
     declined_american_indian_count = mongo.db.presence.count_documents(
@@ -549,7 +558,7 @@ def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
         }
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No reviews found"}, 403
+        result = {'code': 4, 'error': error}, 403
     return result
 
 
@@ -561,41 +570,40 @@ def get_presence_count_by_ethnicity(reviewer_id):
     except TypeError:
         return {'error': 'reviewer id must be numeric'}, 403
 
-    action = "$elemMatch"
 
     declined_american_indian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "American Indian"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": americanIndian}]}
     declined_asian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Asian"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": asian}]}
     declined_black_american_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Black or African American"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": afroAmerican}]}
     declined_hispanic_latino__query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Hispanic or Latino"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": hispLatino}]}
     declined_pacific_islander_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Pacific Islander"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": pacificIslander}]}
     declined_white_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "White"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": white}]}
     declined_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Other"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": other}]}
     declined_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": "Prefer Not To Say"}]}
+        "reviewer_id": reviewer_id, "application_status": "Declined"}}}, {"ethnicity": undisclosed}]}
 
     accepted_american_indian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "American Indian"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": americanIndian}]}
     accepted_asian_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Asian"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": asian}]}
     accepted_black_american_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Black or African American"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": afroAmerican}]}
     accepted_hispanic_latino_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Hispanic or Latino"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": hispLatino}]}
     accepted_pacific_islander_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Pacific Islander"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": pacificIslander}]}
     accepted_white_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "White"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": white}]}
     accepted_other_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Other"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": other}]}
     accepted_undisclosed_query = {"$and": [{"reviewed_by": {action: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": "Prefer Not To Say"}]}
+        "reviewer_id": reviewer_id, "application_status": "Accepted"}}}, {"ethnicity": undisclosed}]}
 
 
     declined_american_indian_count = mongo.db.presence.count_documents(
@@ -657,5 +665,5 @@ def get_presence_count_by_ethnicity(reviewer_id):
         }
     except Exception as error:
         print("Exception", error)
-        result = {'code': 4, 'error': "No reviews found"}, 403
+        result = {'code': 4, 'error': error}, 403
     return result
