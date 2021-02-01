@@ -464,97 +464,97 @@ def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
 
-    declined_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": AMERICANINDIAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_asian_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_asian_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": ASIANAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": AFROAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_hispanic_latino__query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_hispanic_latino__query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": HISPLATINO}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": PACIFICISLANDER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_white_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_white_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": WHITEAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_other_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_other_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": OTHER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_declined_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": UNDISCLOSED}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
 
-    accepted_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": AMERICANINDIAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_asian_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_asian_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": ASIANAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": AFROAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_hispanic_latino_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_hispanic_latino_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": HISPLATINO}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": PACIFICISLANDER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_white_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_white_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": WHITEAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_other_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_other_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": OTHER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
+    batch_accepted_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
         "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": UNDISCLOSED}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
 
 
-    declined_american_indian_count = mongo.db.presence.count_documents(
-        declined_american_indian_query)
-    declined_asian_count = mongo.db.presence.count_documents(
-        declined_asian_query)
-    declined_black_american_count = mongo.db.presence.count_documents(
-        declined_black_american_query)
-    declined_hispanic_latino_count = mongo.db.presence.count_documents(
-        declined_hispanic_latino__query)
-    declined_pacific_islander_count = mongo.db.presence.count_documents(
-        declined_pacific_islander_query)
-    declined_white_count = mongo.db.presence.count_documents(
-        declined_white_query)
-    declined_other_count = mongo.db.presence.count_documents(
-        declined_other_query)
-    declined_undisclosed_count = mongo.db.presence.count_documents(
-        declined_undisclosed_query)
+    batch_declined_american_indian_count = mongo.db.batch_details.count_documents(
+        batch_declined_american_indian_query)
+    batch_declined_asian_count = mongo.db.batch_details.count_documents(
+        batch_declined_asian_query)
+    batch_declined_black_american_count = mongo.db.batch_details.count_documents(
+        batch_declined_black_american_query)
+    batch_declined_hispanic_latino_count = mongo.db.batch_details.count_documents(
+        batch_declined_hispanic_latino__query)
+    batch_declined_pacific_islander_count = mongo.db.batch_details.count_documents(
+        batch_declined_pacific_islander_query)
+    batch_declined_white_count = mongo.db.batch_details.count_documents(
+        batch_declined_white_query)
+    batch_declined_other_count = mongo.db.batch_details.count_documents(
+        batch_declined_other_query)
+    batch_declined_undisclosed_count = mongo.db.batch_details.count_documents(
+        batch_declined_undisclosed_query)
 
 
-    accepted_american_indian_count = mongo.db.presence.count_documents(
-        accepted_american_indian_query)
-    accepted_asian_count = mongo.db.presence.count_documents(
-        accepted_asian_query)
-    accepted_black_american_count = mongo.db.presence.count_documents(
-        accepted_black_american_query)
-    accepted_hispanic_latino_count = mongo.db.presence.count_documents(
-        accepted_hispanic_latino_query)
-    accepted_pacific_islander_count = mongo.db.presence.count_documents(
-        accepted_pacific_islander_query)
-    accepted_white_count = mongo.db.presence.count_documents(
-        accepted_white_query)
-    accepted_other_count = mongo.db.presence.count_documents(
-        accepted_other_query)
-    accepted_undisclosed_count = mongo.db.presence.count_documents(
-        accepted_undisclosed_query)
+    batch_accepted_american_indian_count = mongo.db.batch_details.count_documents(
+        batch_accepted_american_indian_query)
+    batch_accepted_asian_count = mongo.db.batch_details.count_documents(
+        batch_accepted_asian_query)
+    batch_accepted_black_american_count = mongo.db.batch_details.count_documents(
+        batch_accepted_black_american_query)
+    batch_accepted_hispanic_latino_count = mongo.db.batch_details.count_documents(
+        batch_accepted_hispanic_latino_query)
+    batch_accepted_pacific_islander_count = mongo.db.batch_details.count_documents(
+        batch_accepted_pacific_islander_query)
+    batch_accepted_white_count = mongo.db.batch_details.count_documents(
+        batch_accepted_white_query)
+    batch_accepted_other_count = mongo.db.batch_details.count_documents(
+        batch_accepted_other_query)
+    batch_accepted_undisclosed_count = mongo.db.batch_details.count_documents(
+        batch_accepted_undisclosed_query)
 
 
     try:
         result = {
             "reviewer_id": reviewer_id,
-            "declined_american_indian_count": declined_american_indian_count,
-            "declined_asian_count": declined_asian_count,
-            "declined_black_american_count": declined_black_american_count,
-            "declined_hispanic_latino_count": declined_hispanic_latino_count,
-            "declined_pacific_islander_count": declined_pacific_islander_count,
-            "declined_white_count": declined_white_count,
-            "declined_other_count": declined_other_count,
-            "declined_undisclosed_count": declined_undisclosed_count,
+            "declined_american_indian_count": batch_declined_american_indian_count,
+            "declined_asian_count": batch_declined_asian_count,
+            "declined_black_american_count": batch_declined_black_american_count,
+            "declined_hispanic_latino_count": batch_declined_hispanic_latino_count,
+            "declined_pacific_islander_count": batch_declined_pacific_islander_count,
+            "declined_white_count": batch_declined_white_count,
+            "declined_other_count": batch_declined_other_count,
+            "declined_undisclosed_count": batch_declined_undisclosed_count,
 
-            "accepted_american_indian_count": accepted_american_indian_count,
-            "accepted_asian_count": accepted_asian_count,
-            "accepted_black_american_count": accepted_black_american_count,
-            "accepted_hispanic_latino_count": accepted_hispanic_latino_count,
-            "accepted_pacific_islander_count" : accepted_pacific_islander_count,
-            "accepted_white_count": accepted_white_count,
-            "accepted_other_count": accepted_other_count,
-            "accepted_undisclosed_count": accepted_undisclosed_count
+            "accepted_american_indian_count": batch_accepted_american_indian_count,
+            "accepted_asian_count": batch_accepted_asian_count,
+            "accepted_black_american_count": batch_accepted_black_american_count,
+            "accepted_hispanic_latino_count": batch_accepted_hispanic_latino_count,
+            "accepted_pacific_islander_count" : batch_accepted_pacific_islander_count,
+            "accepted_white_count": batch_accepted_white_count,
+            "accepted_other_count": batch_accepted_other_count,
+            "accepted_undisclosed_count": batch_accepted_undisclosed_count
         }
     except Exception as error:
         print("Exception", error)
