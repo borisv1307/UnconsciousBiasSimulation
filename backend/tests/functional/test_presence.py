@@ -237,7 +237,7 @@ class TestPool:
             '/api/v1/getCount/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
         assert response.data != b'{"error": "No presence found"}\n'
-    
+
     def test_for_get_count_for_each_batch(self, test_client):
         """
         GIVEN a Flask application configured for testing
@@ -262,7 +262,6 @@ class TestPool:
         response = test_client.get(
             '/api/v1/getCount/99/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
-        
 
     def test_for_get_acceptance_rate(self, test_client):
         """
@@ -274,6 +273,19 @@ class TestPool:
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
+        assert response.status_code == 200
+
+
+    def test_for_get_count_by_ethnicity_batch_validation(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getCount/' page is requested (POST)
+        THEN check that the response is valid
+        """
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get(
+            '/api/v1/getCount/Ethnicity/99/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
 
     def test_for_get_count_by_ethnicity(self, test_client):
