@@ -673,7 +673,7 @@ def get_all_batch_details_for_a_reviewer(reviewer_id):
                     'batch_size': int(batch['batch_size'])
                 })
         return {'count': len(output), 'results': output}
-    except:
+    except ValueError:
         return {'code': 4, 'error': "Batch details for this reviewer not found"}, 403
 
     return output
