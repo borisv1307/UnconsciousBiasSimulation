@@ -352,27 +352,13 @@ def get_presence_count(reviewer_id):
         result = {'code': 4, 'error': ERROR}, 403
     return result
 
-@presence_blueprint.route('/api/v1/getCount/<reviewer_id>/<batch_no>/', methods=['GET'])
-# @token_required
-def get_batch_presence_count(reviewer_id, batch_no):
-    try:
-        reviewer_id = int(reviewer_id)
-        batch_no = int(batch_no)
-    except TypeError:
-        return {'error': 'reviewer id and batch no must be numeric'}, 403
+
+def get_accepted_gender_count(data):
 
     accepted_male_count = 0
     accepted_female_count = 0
     accepted_other_count = 0
     accepted_undisclosed_count = 0
-
-    declined_male_count = 0
-    declined_female_count = 0
-    declined_other_count = 0
-    declined_undisclosed_count = 0
-
-    batch_gender_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    data = mongo.db.batch_details.find(batch_gender_query)
 
     for record in data:
         for review in record['reviewed_by']:
@@ -385,8 +371,24 @@ def get_batch_presence_count(reviewer_id, batch_no):
                     accepted_other_count +=1
                 elif review['gender'] == GENDER_LIST[3]:
                     accepted_undisclosed_count +=1
+    output = {
+        "accepted_male_count": accepted_male_count,
+        "accepted_female_count": accepted_female_count,
+        "accepted_other_count": accepted_other_count,
+        "accepted_undisclosed_count" : accepted_undisclosed_count
+    }
+    return output
 
-            elif review['application_status'] == "Declined":
+def get_rejected_gender_count(data):
+
+    declined_male_count = 0
+    declined_female_count = 0
+    declined_other_count = 0
+    declined_undisclosed_count = 0
+
+    for record in data:
+        for review in record['reviewed_by']:
+            if review['application_status'] == "Declined":
                 if review['gender'] == GENDER_LIST[0]:
                     declined_male_count += 1
                 elif review['gender'] == GENDER_LIST[1]:
@@ -396,17 +398,40 @@ def get_batch_presence_count(reviewer_id, batch_no):
                 elif review['gender'] == GENDER_LIST[3]:
                     declined_undisclosed_count +=1
 
+    output = {
+        "declined_male_count": declined_male_count,
+        "declined_female_count": declined_female_count,
+        "declined_other_count": declined_other_count,
+        "declined_undisclosed_count": declined_undisclosed_count,
+    }
+
+    return output
+
+@presence_blueprint.route('/api/v1/getCount/<reviewer_id>/<batch_no>/', methods=['GET'])
+# @token_required
+def get_batch_presence_count(reviewer_id, batch_no):
+    try:
+        reviewer_id = int(reviewer_id)
+        batch_no = int(batch_no)
+    except TypeError:
+        return {'error': 'reviewer id and batch no must be numeric'}, 403
+
+    batch_gender_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    data = mongo.db.batch_details.find(batch_gender_query)
+    get_gender_accepted = get_accepted_gender_count(data)
+    get_gender_rejected = get_rejected_gender_count(data)
+
     try:
         result = {
             "reviewer_id": reviewer_id,
-            "batch_declined_male_count": declined_male_count,
-            "batch_declined_female_count": declined_female_count,
-            "batch_declined_other_count": declined_other_count,
-            "batch_declined_undisclosed_count": declined_undisclosed_count,
-            "batch_accepted_male_count": accepted_male_count,
-            "batch_accepted_female_count": accepted_female_count,
-            "batch_accepted_other_count": accepted_other_count,
-            "batch_accepted_undisclosed_count" : accepted_undisclosed_count
+            "batch_declined_male_count": get_gender_rejected['declined_male_count'],
+            "batch_declined_female_count": get_gender_rejected['declined_female_count'],
+            "batch_declined_other_count": get_gender_rejected['declined_other_count'],
+            "batch_declined_undisclosed_count": get_gender_rejected['declined_undisclosed_count'],
+            "batch_accepted_male_count": get_gender_accepted['accepted_male_count'],
+            "batch_accepted_female_count": get_gender_accepted['accepted_female_count'],
+            "batch_accepted_other_count": get_gender_accepted['accepted_other_count'],
+            "batch_accepted_undisclosed_count" : get_gender_accepted['accepted_undisclosed_count']
         }
     except Exception as error:
         print("Exception", error)
@@ -461,7 +486,7 @@ def get_accepted_count(data):
     accepted_white_count = 0
     accepted_other_count = 0
     accepted_undisclosed_count = 0
-    
+
     for record in data:
         for review in record['reviewed_by']:
             if review['application_status'] == "Accepted":
@@ -481,7 +506,7 @@ def get_accepted_count(data):
                     accepted_other_count +=1
                 else:
                     accepted_undisclosed_count +=1
-    
+
     output = {
         'accepted_american_indian_count':accepted_american_indian_count,
         'accepted_asian_count':accepted_asian_count,
@@ -492,11 +517,11 @@ def get_accepted_count(data):
         'accepted_other_count':accepted_other_count,
         'accepted_undisclosed_count':accepted_undisclosed_count
     }
-    
+
     return output
 
 def get_rejected_count(data):
-    
+
     declined_american_indian_count = 0
     declined_asian_count = 0
     declined_black_american_count = 0
@@ -505,7 +530,7 @@ def get_rejected_count(data):
     declined_white_count = 0
     declined_other_count = 0
     declined_undisclosed_count = 0
-    
+
     for record in data:
         for review in record['reviewed_by']:
             if review['application_status'] == "Declined":
@@ -525,7 +550,7 @@ def get_rejected_count(data):
                     declined_other_count +=1
                 else:
                     declined_undisclosed_count +=1
-    
+
     output = {
         'declined_american_indian_count':declined_american_indian_count,
         'declined_asian_count':declined_asian_count,
@@ -536,7 +561,7 @@ def get_rejected_count(data):
         'declined_other_count':declined_other_count,
         'declined_undisclosed_count':declined_undisclosed_count
     }
-    
+
     return output
 
 @presence_blueprint.route('/api/v1/getCount/Ethnicity/<reviewer_id>/<batch_no>/', methods=['GET'])
@@ -700,7 +725,7 @@ def get_all_batch_details_for_a_reviewer(reviewer_id):
     # Get collections
     batch_col = mongo.db.batch_details
     get_results = batch_col.find({"hr_user_id": reviewer_id}, {'hr_user_id': 1,'batch_no': 1,'batch_size': 1, '_id': 0})
-    
+
     output = []
     try:
         for batch in get_results:
