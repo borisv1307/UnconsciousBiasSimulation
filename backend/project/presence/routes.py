@@ -361,54 +361,52 @@ def get_batch_presence_count(reviewer_id, batch_no):
     except TypeError:
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
+    accepted_male_count = 0
+    accepted_female_count = 0
+    accepted_other_count = 0
+    accepted_undisclosed_count = 0
 
-    declined_male_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "gender": GENDER_LIST[0]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_female_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": GENDER_LIST[1]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": GENDER_LIST[2]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    declined_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined" , "gender": GENDER_LIST[3]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_male_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": GENDER_LIST[0]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_female_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": GENDER_LIST[1]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": GENDER_LIST[2]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    accepted_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted" , "gender": GENDER_LIST[3]}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    declined_male_count = 0
+    declined_female_count = 0
+    declined_other_count = 0
+    declined_undisclosed_count = 0
 
+    batch_gender_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    data = mongo.db.batch_details.find(batch_gender_query)
 
+    for record in data:
+        for review in record['reviewed_by']:
+            if(review['application_status'] == "Accepted"):
+                if(review['gender'] == GENDER_LIST[0]):
+                    accepted_male_count += 1
+                elif(review['gender'] == GENDER_LIST[1]):
+                    accepted_female_count += 1
+                elif(review['gender'] == GENDER_LIST[2]):
+                    accepted_other_count +=1
+                elif(review['gender'] == GENDER_LIST[3]):
+                    accepted_undisclosed_count +=1
 
-    declined_male_count = mongo.db.batch_details.count_documents(
-        declined_male_query)
-    declined_female_count = mongo.db.batch_details.count_documents(
-        declined_female_query)
-    declined_other_count = mongo.db.batch_details.count_documents(
-        declined_other_query)
-    declined_undisclosed_count = mongo.db.batch_details.count_documents(
-        declined_undisclosed_query)
-    accepted_male_count = mongo.db.batch_details.count_documents(
-        accepted_male_query)
-    accepted_female_count = mongo.db.batch_details.count_documents(
-        accepted_female_query)
-    accepted_other_count = mongo.db.batch_details.count_documents(
-        accepted_other_query)
-    accepted_undisclosed_count = mongo.db.batch_details.count_documents(
-        accepted_undisclosed_query)
+            elif(review['application_status'] == "Declined"):
+                if(review['gender'] == GENDER_LIST[0]):
+                    declined_male_count += 1
+                elif(review['gender'] == GENDER_LIST[1]):
+                    declined_female_count += 1
+                elif(review['gender'] == GENDER_LIST[2]):
+                    declined_other_count +=1
+                elif(review['gender'] == GENDER_LIST[3]):
+                    declined_undisclosed_count +=1
 
     try:
         result = {
             "reviewer_id": reviewer_id,
-            "declined_male_count": declined_male_count,
-            "declined_female_count": declined_female_count,
-            "declined_other_count": declined_other_count,
-            "declined_undisclosed_count": declined_undisclosed_count,
-            "accepted_male_count": accepted_male_count,
-            "accepted_female_count": accepted_female_count,
-            "accepted_other_count": accepted_other_count,
-            "accepted_undisclosed_count" : accepted_undisclosed_count
+            "batch_declined_male_count": declined_male_count,
+            "batch_declined_female_count": declined_female_count,
+            "batch_declined_other_count": declined_other_count,
+            "batch_declined_undisclosed_count": declined_undisclosed_count,
+            "batch_accepted_male_count": accepted_male_count,
+            "batch_accepted_female_count": accepted_female_count,
+            "batch_accepted_other_count": accepted_other_count,
+            "batch_accepted_undisclosed_count" : accepted_undisclosed_count
         }
     except Exception as error:
         print("Exception", error)
@@ -462,104 +460,90 @@ def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
     except TypeError:
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
+    accepted_american_indian_count = 0
+    accepted_asian_count = 0
+    accepted_black_american_count = 0
+    accepted_hispanic_latino_count = 0
+    accepted_pacific_islander_count = 0
+    accepted_white_count = 0
+    accepted_other_count = 0
+    accepted_undisclosed_count = 0
 
-    batch_declined_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": AMERICANINDIAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_asian_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": ASIANAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": AFROAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_hispanic_latino__query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": HISPLATINO}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": PACIFICISLANDER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_white_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": WHITEAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": OTHER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_declined_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Declined", "ethnicity": UNDISCLOSED}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    declined_american_indian_count = 0
+    declined_asian_count = 0
+    declined_black_american_count = 0
+    declined_hispanic_latino_count = 0
+    declined_pacific_islander_count = 0
+    declined_white_count = 0
+    declined_other_count = 0
+    declined_undisclosed_count = 0
 
-    batch_accepted_american_indian_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": AMERICANINDIAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_asian_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": ASIANAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_black_american_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": AFROAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_hispanic_latino_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": HISPLATINO}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_pacific_islander_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": PACIFICISLANDER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_white_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": WHITEAMERICAN}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_other_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": OTHER}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    batch_accepted_undisclosed_query = {"$and": [{"reviewed_by": {ACTION: {
-        "reviewer_id": reviewer_id, "application_status": "Accepted", "ethnicity": UNDISCLOSED}}}, {"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    batch_ethnicity_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    data = mongo.db.batch_details.find(batch_ethnicity_query)
 
+    for record in data:
+        for review in record['reviewed_by']:
+            if(review['application_status'] == "Accepted"):
+                if(review['ethnicity'] == AMERICANINDIAN):
+                    accepted_american_indian_count += 1
+                elif(review['ethnicity'] == ASIANAMERICAN):
+                    accepted_asian_count += 1
+                elif(review['ethnicity'] == AFROAMERICAN):
+                    accepted_black_american_count +=1
+                elif(review['ethnicity'] == HISPLATINO):
+                    accepted_hispanic_latino_count +=1
+                elif(review['ethnicity'] == PACIFICISLANDER):
+                    accepted_pacific_islander_count +=1
+                elif(review['ethnicity'] == WHITEAMERICAN):
+                    accepted_white_count +=1
+                elif(review['ethnicity'] == OTHER):
+                    accepted_other_count +=1
+                else:
+                    accepted_undisclosed_count +=1
 
-    batch_declined_american_indian_count = mongo.db.batch_details.count_documents(
-        batch_declined_american_indian_query)
-    batch_declined_asian_count = mongo.db.batch_details.count_documents(
-        batch_declined_asian_query)
-    batch_declined_black_american_count = mongo.db.batch_details.count_documents(
-        batch_declined_black_american_query)
-    batch_declined_hispanic_latino_count = mongo.db.batch_details.count_documents(
-        batch_declined_hispanic_latino__query)
-    batch_declined_pacific_islander_count = mongo.db.batch_details.count_documents(
-        batch_declined_pacific_islander_query)
-    batch_declined_white_count = mongo.db.batch_details.count_documents(
-        batch_declined_white_query)
-    batch_declined_other_count = mongo.db.batch_details.count_documents(
-        batch_declined_other_query)
-    batch_declined_undisclosed_count = mongo.db.batch_details.count_documents(
-        batch_declined_undisclosed_query)
-
-
-    batch_accepted_american_indian_count = mongo.db.batch_details.count_documents(
-        batch_accepted_american_indian_query)
-    batch_accepted_asian_count = mongo.db.batch_details.count_documents(
-        batch_accepted_asian_query)
-    batch_accepted_black_american_count = mongo.db.batch_details.count_documents(
-        batch_accepted_black_american_query)
-    batch_accepted_hispanic_latino_count = mongo.db.batch_details.count_documents(
-        batch_accepted_hispanic_latino_query)
-    batch_accepted_pacific_islander_count = mongo.db.batch_details.count_documents(
-        batch_accepted_pacific_islander_query)
-    batch_accepted_white_count = mongo.db.batch_details.count_documents(
-        batch_accepted_white_query)
-    batch_accepted_other_count = mongo.db.batch_details.count_documents(
-        batch_accepted_other_query)
-    batch_accepted_undisclosed_count = mongo.db.batch_details.count_documents(
-        batch_accepted_undisclosed_query)
-
+            elif(review['application_status'] == "Declined"):
+                if(review['ethnicity'] == AMERICANINDIAN):
+                    declined_american_indian_count += 1
+                elif(review['ethnicity'] == ASIANAMERICAN):
+                    declined_asian_count += 1
+                elif(review['ethnicity'] == AFROAMERICAN):
+                    declined_black_american_count +=1
+                elif(review['ethnicity'] == HISPLATINO):
+                    declined_hispanic_latino_count +=1
+                elif(review['ethnicity'] == PACIFICISLANDER):
+                    declined_pacific_islander_count +=1
+                elif(review['ethnicity'] == WHITEAMERICAN):
+                    declined_white_count +=1
+                elif(review['ethnicity'] == OTHER):
+                    declined_other_count +=1
+                else:
+                    declined_undisclosed_count +=1
 
     try:
         result = {
             "reviewer_id": reviewer_id,
-            "declined_american_indian_count": batch_declined_american_indian_count,
-            "declined_asian_count": batch_declined_asian_count,
-            "declined_black_american_count": batch_declined_black_american_count,
-            "declined_hispanic_latino_count": batch_declined_hispanic_latino_count,
-            "declined_pacific_islander_count": batch_declined_pacific_islander_count,
-            "declined_white_count": batch_declined_white_count,
-            "declined_other_count": batch_declined_other_count,
-            "declined_undisclosed_count": batch_declined_undisclosed_count,
+            "batch_declined_american_indian_count": declined_american_indian_count,
+            "batch_declined_asian_count": declined_asian_count,
+            "batch_declined_black_american_count": declined_black_american_count,
+            "batch_declined_hispanic_latino_count": declined_hispanic_latino_count,
+            "batch_declined_pacific_islander_count": declined_pacific_islander_count,
+            "batch_declined_white_count": declined_white_count,
+            "batch_declined_other_count": declined_other_count,
+            "batch_declined_undisclosed_count": declined_undisclosed_count,
 
-            "accepted_american_indian_count": batch_accepted_american_indian_count,
-            "accepted_asian_count": batch_accepted_asian_count,
-            "accepted_black_american_count": batch_accepted_black_american_count,
-            "accepted_hispanic_latino_count": batch_accepted_hispanic_latino_count,
-            "accepted_pacific_islander_count" : batch_accepted_pacific_islander_count,
-            "accepted_white_count": batch_accepted_white_count,
-            "accepted_other_count": batch_accepted_other_count,
-            "accepted_undisclosed_count": batch_accepted_undisclosed_count
+            "batch_accepted_american_indian_count": accepted_american_indian_count,
+            "batch_accepted_asian_count": accepted_asian_count,
+            "batch_accepted_black_american_count": accepted_black_american_count,
+            "batch_accepted_hispanic_latino_count": accepted_hispanic_latino_count,
+            "batch_accepted_pacific_islander_count" : accepted_pacific_islander_count,
+            "batch_accepted_white_count": accepted_white_count,
+            "batch_accepted_other_count": accepted_other_count,
+            "batch_accepted_undisclosed_count": accepted_undisclosed_count
         }
     except Exception as error:
         print("Exception", error)
         result = {'code': 4, 'error': ERROR}, 403
     return result
-
 
 @presence_blueprint.route('/api/v1/getCountByEthnicity/<reviewer_id>/', methods=['GET'])
 @token_required
