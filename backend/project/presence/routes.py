@@ -650,3 +650,30 @@ def get_presence_count_by_ethnicity(reviewer_id):
         print("Exception", error)
         result = {'code': 4, 'error': ERROR}, 403
     return result
+
+# API for UI dropdown which contains list of batches for each HR
+@presence_blueprint.route('/api/v1/getAllBatches/<reviewer_id>/', methods=['GET'])
+@token_required
+def get_all_batch_details_for_a_reviewer(reviewer_id):
+    try:
+        reviewer_id = int(reviewer_id)
+    except TypeError:
+        return {'error': 'reviewer id must be numeric'}, 403
+
+    # Get collections
+    batch_col = mongo.db.batch_details
+    get_results = batch_col.find({"hr_user_id": reviewer_id}, {'hr_user_id': 1,'batch_no': 1,'batch_size': 1, '_id': 0})
+    
+    output = []
+    try:
+        for batch in get_results:
+            output.append({
+                    'hr_user_id': int(batch['hr_user_id']),
+                    'batch_no': int(batch['batch_no']),
+                    'batch_size': int(batch['batch_size'])
+                })
+        return {'count': len(output), 'results': output}
+    except:
+        return {'code': 4, 'error': "Batch details for this reviewer not found"}, 403
+
+    return output

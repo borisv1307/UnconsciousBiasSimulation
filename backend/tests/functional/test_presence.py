@@ -299,3 +299,15 @@ class TestPool:
         response = test_client.get(
             '/api/v1/getCountByEthnicity/99/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
+
+    def test_for_getAllBatches(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllBatches/' page is requested (GET)
+        THEN check that the response is valid
+        """
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get(
+            '/api/v1/getAllBatches/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
+        assert response.status_code == 200
