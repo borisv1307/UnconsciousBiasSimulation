@@ -417,9 +417,12 @@ def get_batch_presence_count(reviewer_id, batch_no):
         return {'error': 'reviewer id and batch no must be numeric'}, 403
 
     batch_gender_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
-    data = mongo.db.batch_details.find(batch_gender_query)
-    get_gender_accepted = get_accepted_gender_count(data)
-    get_gender_rejected = get_rejected_gender_count(data)
+    accept_data = mongo.db.batch_details.find(batch_gender_query)
+    reject_data = mongo.db.batch_details.find(batch_gender_query)
+    get_gender_accepted = get_accepted_gender_count(accept_data)
+    get_gender_rejected = get_rejected_gender_count(reject_data)
+    print(get_gender_accepted)
+    print(get_gender_rejected)
 
     try:
         result = {
