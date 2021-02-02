@@ -463,24 +463,24 @@ def get_accepted_count(data):
     accepted_undisclosed_count = 0
     
     for record in data:
-            for review in record['reviewed_by']:
-                if review['application_status'] == "Accepted":
-                    if review['ethnicity'] == AMERICANINDIAN:
-                        accepted_american_indian_count += 1
-                    elif review['ethnicity'] == ASIANAMERICAN:
-                        accepted_asian_count += 1
-                    elif review['ethnicity'] == AFROAMERICAN:
-                        accepted_black_american_count +=1
-                    elif review['ethnicity'] == HISPLATINO:
-                        accepted_hispanic_latino_count +=1
-                    elif review['ethnicity'] == PACIFICISLANDER:
-                        accepted_pacific_islander_count +=1
-                    elif review['ethnicity'] == WHITEAMERICAN:
-                        accepted_white_count +=1
-                    elif review['ethnicity'] == OTHER:
-                        accepted_other_count +=1
-                    else:
-                        accepted_undisclosed_count +=1
+        for review in record['reviewed_by']:
+            if review['application_status'] == "Accepted":
+                if review['ethnicity'] == AMERICANINDIAN:
+                    accepted_american_indian_count += 1
+                elif review['ethnicity'] == ASIANAMERICAN:
+                    accepted_asian_count += 1
+                elif review['ethnicity'] == AFROAMERICAN:
+                    accepted_black_american_count +=1
+                elif review['ethnicity'] == HISPLATINO:
+                    accepted_hispanic_latino_count +=1
+                elif review['ethnicity'] == PACIFICISLANDER:
+                    accepted_pacific_islander_count +=1
+                elif review['ethnicity'] == WHITEAMERICAN:
+                    accepted_white_count +=1
+                elif review['ethnicity'] == OTHER:
+                    accepted_other_count +=1
+                else:
+                    accepted_undisclosed_count +=1
     
     output = {
         'accepted_american_indian_count':accepted_american_indian_count,
