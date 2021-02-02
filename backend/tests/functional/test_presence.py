@@ -21,15 +21,19 @@ from bson.objectid import ObjectId
 profilename = "Profile B"
 
 login_data = {
-        "email":"justin43@yahoo.com",
+        "email":"mariahill@proctor-hopkins.com",
         "password": "Hello"
 }
 login_data_2 = {
-        "email":"osbornbrett@jones.com",
+        "email":"jflynn@gmail.com",
         "password": "Hello"
 }
 login_data_3 = {
-        "email":"rgeorge@yahoo.com",
+        "email":"renee78@simmons.com",
+        "password": "Hello"
+}
+login_data_4 = {
+        "email":"vanessa40@hotmail.com",
         "password": "Hello"
 }
 
@@ -184,7 +188,7 @@ class TestPool:
                 "application_status": "Accepted"
             }
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
             data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -206,7 +210,7 @@ class TestPool:
                 "application_status": "Declined"
             }
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.patch('/api/v1/savePresenceReview/', data=json.dumps(
             data), headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
@@ -231,7 +235,7 @@ class TestPool:
         WHEN the '/api/v1/getCount/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCount/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -244,7 +248,7 @@ class TestPool:
         WHEN the '/api/v1/getCount/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCount/4/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -257,7 +261,7 @@ class TestPool:
         WHEN the '/api/v1/getCount/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCount/99/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -269,7 +273,7 @@ class TestPool:
         WHEN the '/api/v1/getAcceptanceRate/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getAcceptanceRate/1/', headers={'Content-Type': 'application/json', 'Authorization':get_token['token']})
@@ -282,7 +286,7 @@ class TestPool:
         WHEN the '/api/v1/getCount/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCount/Ethnicity/99/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -306,7 +310,7 @@ class TestPool:
         WHEN the '/api/v1/getAllBatches/' page is requested (GET)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getAllBatches/4/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
