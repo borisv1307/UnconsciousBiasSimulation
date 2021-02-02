@@ -376,24 +376,24 @@ def get_batch_presence_count(reviewer_id, batch_no):
 
     for record in data:
         for review in record['reviewed_by']:
-            if(review['application_status'] == "Accepted"):
-                if(review['gender'] == GENDER_LIST[0]):
+            if review['application_status'] == "Accepted":
+                if review['gender'] == GENDER_LIST[0]:
                     accepted_male_count += 1
-                elif(review['gender'] == GENDER_LIST[1]):
+                elif review['gender'] == GENDER_LIST[1]:
                     accepted_female_count += 1
-                elif(review['gender'] == GENDER_LIST[2]):
+                elif review['gender'] == GENDER_LIST[2]:
                     accepted_other_count +=1
-                elif(review['gender'] == GENDER_LIST[3]):
+                elif review['gender'] == GENDER_LIST[3]:
                     accepted_undisclosed_count +=1
 
-            elif(review['application_status'] == "Declined"):
-                if(review['gender'] == GENDER_LIST[0]):
+            elif review['application_status'] == "Declined":
+                if review['gender'] == GENDER_LIST[0]:
                     declined_male_count += 1
-                elif(review['gender'] == GENDER_LIST[1]):
+                elif review['gender'] == GENDER_LIST[1]:
                     declined_female_count += 1
-                elif(review['gender'] == GENDER_LIST[2]):
+                elif review['gender'] == GENDER_LIST[2]:
                     declined_other_count +=1
-                elif(review['gender'] == GENDER_LIST[3]):
+                elif review['gender'] == GENDER_LIST[3]:
                     declined_undisclosed_count +=1
 
     try:
@@ -483,38 +483,38 @@ def get_batch_presence_by_ethnicity_count(reviewer_id, batch_no):
 
     for record in data:
         for review in record['reviewed_by']:
-            if(review['application_status'] == "Accepted"):
-                if(review['ethnicity'] == AMERICANINDIAN):
+            if review['application_status'] == "Accepted":
+                if review['ethnicity'] == AMERICANINDIAN:
                     accepted_american_indian_count += 1
-                elif(review['ethnicity'] == ASIANAMERICAN):
+                elif review['ethnicity'] == ASIANAMERICAN:
                     accepted_asian_count += 1
-                elif(review['ethnicity'] == AFROAMERICAN):
+                elif review['ethnicity'] == AFROAMERICAN:
                     accepted_black_american_count +=1
-                elif(review['ethnicity'] == HISPLATINO):
+                elif review['ethnicity'] == HISPLATINO:
                     accepted_hispanic_latino_count +=1
-                elif(review['ethnicity'] == PACIFICISLANDER):
+                elif review['ethnicity'] == PACIFICISLANDER:
                     accepted_pacific_islander_count +=1
-                elif(review['ethnicity'] == WHITEAMERICAN):
+                elif review['ethnicity'] == WHITEAMERICAN:
                     accepted_white_count +=1
-                elif(review['ethnicity'] == OTHER):
+                elif review['ethnicity'] == OTHER:
                     accepted_other_count +=1
                 else:
                     accepted_undisclosed_count +=1
 
-            elif(review['application_status'] == "Declined"):
-                if(review['ethnicity'] == AMERICANINDIAN):
+            elif review['application_status'] == "Declined":
+                if review['ethnicity'] == AMERICANINDIAN:
                     declined_american_indian_count += 1
-                elif(review['ethnicity'] == ASIANAMERICAN):
+                elif review['ethnicity'] == ASIANAMERICAN:
                     declined_asian_count += 1
-                elif(review['ethnicity'] == AFROAMERICAN):
+                elif review['ethnicity'] == AFROAMERICAN:
                     declined_black_american_count +=1
-                elif(review['ethnicity'] == HISPLATINO):
+                elif review['ethnicity'] == HISPLATINO:
                     declined_hispanic_latino_count +=1
-                elif(review['ethnicity'] == PACIFICISLANDER):
+                elif review['ethnicity'] == PACIFICISLANDER:
                     declined_pacific_islander_count +=1
-                elif(review['ethnicity'] == WHITEAMERICAN):
+                elif review['ethnicity'] == WHITEAMERICAN:
                     declined_white_count +=1
-                elif(review['ethnicity'] == OTHER):
+                elif review['ethnicity'] == OTHER:
                     declined_other_count +=1
                 else:
                     declined_undisclosed_count +=1
