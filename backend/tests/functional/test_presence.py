@@ -294,7 +294,7 @@ class TestPool:
         WHEN the '/api/v1/getAllPresence/' page is requested (POST)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/getCountByEthnicity/99/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
