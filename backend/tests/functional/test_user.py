@@ -511,7 +511,7 @@ class TestSomething:
         "email":"lauramontgomery@gmail.com",
         "password": "Hello"
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_1),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -637,7 +637,7 @@ class TestSomething:
             "user_id": "6",
             "otp": "  "
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_1),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
