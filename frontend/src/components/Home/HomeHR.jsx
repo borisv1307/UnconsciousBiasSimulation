@@ -99,6 +99,8 @@ class HomeHR extends Component {
         this.setState({ batch_result: res.results });
         if (res.results.length > 0)
           this.loadData(res.results[0]["batch_no"])
+        else
+        this.loadData("")
       })
 
 
@@ -124,9 +126,21 @@ class HomeHR extends Component {
     var acceptance_ethnicity = []
     var rejection_ethnicity = []
     var val = "Batch Number : " + event + " "
+    var get_count=""
+    var get_ethnicity=""
 
-    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/" + batchNo + "/", { headers: { "Content-type": "application/json", "Authorization": token } }),
-    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/Ethnicity/" + reviewer_id + "/" + batchNo + "/", { headers: { "Content-type": "application/json", "Authorization": token } })])
+    if(event===""){
+      get_count="https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/";
+      get_ethnicity="https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id + "/";
+    }
+    else{
+      get_count="https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/" + batchNo + "/";
+      get_ethnicity="https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/Ethnicity/" + reviewer_id + "/" + batchNo + "/";
+    }
+
+
+    Promise.all([fetch(get_count, { headers: { "Content-type": "application/json", "Authorization": token } }),
+    fetch(get_ethnicity, { headers: { "Content-type": "application/json", "Authorization": token } })])
 
       .then(([res1, res2]) => {
         return Promise.all([res1.json(), res2.json()])
