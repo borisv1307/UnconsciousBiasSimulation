@@ -3,13 +3,16 @@ import ls from "local-storage";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import HeaderHR from "../Header/HeaderHR";
 import HorizontalBarGraph from "../graphs/horizontalBarGraph";
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 class HomeHR extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      batch_result: [],
+      btnTitle: 'Batch Number',
       dataHorizontalGender: {
         labels: ["Male", "Female", "Other", "Prefer not to say"],
         datasets: [
@@ -69,9 +72,11 @@ class HomeHR extends Component {
           }]
         }
       }
-    };
-  }
 
+    };
+    this.loadData = this.loadData.bind(this);
+
+  }
 
 
 
@@ -82,6 +87,32 @@ class HomeHR extends Component {
     }
 
     const reviewer_id = ls.get("userid")
+
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getAllBatches/" + reviewer_id + "/", {
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": token
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ batch_result: res.results });
+        if (res.results.length > 0)
+          this.loadData(res.results[0]["batch_no"])
+      })
+
+
+  }
+
+
+  loadData(event) {
+    const token = ls.get("token");
+    if (token === null || token === "") {
+      window.location.href = "/login"
+    }
+    const reviewer_id = ls.get("userid")
+    const batchNo = event;
+
     const acceptBgColor = "rgba(29, 183, 40, 0.5)"
     const acceptBorderColor = "rgba(0,  150, 15, 1)"
     const rejectBgColor = "rgba(240, 30, 30, 0.5)"
@@ -92,15 +123,18 @@ class HomeHR extends Component {
     var rejection_gender = []
     var acceptance_ethnicity = []
     var rejection_ethnicity = []
+    var val = "Batch Number : " + event + " "
 
-    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/", { headers: { "Content-type": "application/json", "Authorization": token } }),
-    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id + "/", { headers: { "Content-type": "application/json", "Authorization": token } })])
+    Promise.all([fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/" + batchNo + "/", { headers: { "Content-type": "application/json", "Authorization": token } }),
+    fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/Ethnicity/" + reviewer_id + "/" + batchNo + "/", { headers: { "Content-type": "application/json", "Authorization": token } })])
 
       .then(([res1, res2]) => {
         return Promise.all([res1.json(), res2.json()])
 
       })
       .then(([res1, res2]) => {
+
+
         Object.keys(res1).forEach(function (key) {
           if (key === "accepted_male_count") {
             acceptance_gender.push(res1.accepted_male_count)
@@ -204,11 +238,13 @@ class HomeHR extends Component {
         dataHorizontalEthnicity.datasets[1].borderColor = new Array(rejection_ethnicity.length).fill(rejectBorderColor);
 
         this.setState({ dataHorizontalGender, dataHorizontalEthnicity })
-
+        this.setState({ btnTitle: val });
 
       })
-
   }
+
+
+
   render() {
     let name = ls.get("name");
     return (
@@ -237,6 +273,16 @@ class HomeHR extends Component {
             </h5>
             <br />
             <br />
+
+            <DropdownButton id="dropdown-basic-button" title={this.state.btnTitle} onSelect={event => { this.loadData(event) }}>
+
+              {this.state.batch_result.map((batch, i) => (
+                <Dropdown.Item eventKey={batch.batch_no} value={batch.batch_no}>{batch.batch_no}</Dropdown.Item>
+              ))}
+
+            </DropdownButton>
+
+            <br /><br />
             <Tabs defaultActiveKey="GenderCategoryInsight" transition={false} id="HRAnalysis">
 
               <Tab eventKey="GenderCategoryInsight" title=" Gender(category) Insight ">
