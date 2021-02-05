@@ -30,5 +30,9 @@ describe("HomeHR", () => {
   it("should have TAB", () => {
     expect(wrapper.find("Tabs").length).toEqual(1);
   });
+  it("should have DropdownButton", () => {
+    expect(wrapper.find("DropdownButton").length).toEqual(1);
+  });
+
 
 });
