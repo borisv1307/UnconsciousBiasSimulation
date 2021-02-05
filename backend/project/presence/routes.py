@@ -737,7 +737,8 @@ def get_all_batch_details_for_a_reviewer(reviewer_id):
             output.append({
                     'hr_user_id': int(batch['hr_user_id']),
                     'batch_no': int(batch['batch_no']),
-                    'batch_size': int(batch['batch_size'])
+                    'batch_size': int(batch['batch_size']),
+                    'date': batch['batch_start_date']
                 })
         return {'count': len(output), 'results': output}
     except ValueError:
