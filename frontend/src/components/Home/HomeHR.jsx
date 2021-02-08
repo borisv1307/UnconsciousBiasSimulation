@@ -117,10 +117,10 @@ class HomeHR extends Component {
     const batchNo = event;
 
 
-    const acceptBgColor = "rgba(29, 183, 40, 1)"
-    const acceptBorderColor = "rgba(0,  150, 15,1)"
-    const rejectBgColor = "rgba(240, 30, 30, 1)"
-    const rejectBorderColor = "rgba(220, 0, 0,1)"
+    const acceptBgColor = "rgba(29, 183, 40, 0.8)"
+    const acceptBorderColor = "rgba(0,  150, 15,0.8)"
+    const rejectBgColor = "rgba(240, 30, 30, 0.8)"
+    const rejectBorderColor = "rgba(220, 0, 0,0.8)"
     const dataHorizontalGender = this.state.dataHorizontalGender;
     const dataHorizontalEthnicity = this.state.dataHorizontalEthnicity;
     var acceptance_gender = []
