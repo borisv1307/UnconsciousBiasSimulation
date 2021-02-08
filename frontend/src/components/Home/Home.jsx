@@ -69,10 +69,10 @@ class Home extends Component {
     }
 
     const user_id = ls.get("userid")
-    const acceptBgColor = "rgba(29, 183, 40, 0.5)"
-    const acceptBorderColor = "rgba(0,  150, 15, 1)"
-    const rejectBgColor = "rgba(240, 30, 30, 0.5)"
-    const rejectBorderColor = "rgba(220, 0, 0, 1)"
+    const acceptBgColor = "rgba(29, 183, 40, 0.8)"
+    const acceptBorderColor = "rgba(0,  150, 15, 0.8)"
+    const rejectBgColor = "rgba(240, 30, 30, 0.8)"
+    const rejectBorderColor = "rgba(220, 0, 0, 0.8)"
 
     const dataHorizontal = this.state.dataHorizontal;
 
