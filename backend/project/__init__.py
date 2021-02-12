@@ -83,7 +83,7 @@ def get_aws_tags(image_url):
     response_content = response.content
     rekognition_response = rekognition.detect_faces(Image={'Bytes': response_content}, Attributes=['ALL'])
     get_face_details = rekognition_response['FaceDetails'][0]
-
+    # Filtering tags required for UBS App
     results = {
             'AgeRange':get_face_details['AgeRange'],
             'Smile':get_face_details['Smile'],
