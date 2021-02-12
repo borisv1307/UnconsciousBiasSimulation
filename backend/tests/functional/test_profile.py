@@ -52,7 +52,7 @@ class TestSomething:
         data = {
         "email": "email",
         "profileName":profilename,
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053868/unconsciousbias/ump6n9piiebujwjaqwmw.jpg",
         "first_name": "Test",
         "last_name": "User",
         "position": "Developer",
@@ -95,7 +95,7 @@ class TestSomething:
         data = {
         "email": "email",
         "profileName":profilename,
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053245/unconsciousbias/h7t5leznpbmmjizmjd1o.jpg",
         "first_name": "Test",
         "last_name": "User",
         "position": "Developer",
@@ -140,7 +140,7 @@ class TestSomething:
         data = {
         "email": "email",
         "profileName":profilename,
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053245/unconsciousbias/h7t5leznpbmmjizmjd1o.jpg",
         "first_name": "Test",
         "last_name": "User",
         "position": "Developer",
@@ -185,7 +185,7 @@ class TestSomething:
         data = {
         "email":"jasonmax@gmail.com",
         "profileName":profilename,
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053245/unconsciousbias/h7t5leznpbmmjizmjd1o.jpg",
         "first_name": "Test",
         "last_name": "User",
         "position": "Developer",
@@ -229,7 +229,7 @@ class TestSomething:
         data = {
         "email":"test@test78.com",
         "profileName":profilename,
-        "profileImg":"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053245/unconsciousbias/h7t5leznpbmmjizmjd1o.jpg",
         "first_name": "Test",
         "last_name": "User",
         "position": "Developer",
