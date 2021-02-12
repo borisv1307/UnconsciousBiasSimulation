@@ -54,10 +54,13 @@ class EmailValidation extends Component {
     if (!this.state.otp) {
       this.errorhandleShow("Field/s cannot be blank");
     } else {
+
+      const token = ls.get("token")
       fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/verify_otp/", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
+          "Authorization": token
         },
         body: JSON.stringify(data),
       })
@@ -159,7 +162,9 @@ class EmailValidation extends Component {
         <Container className="containbody justify-content-center logincard">
           <br />
           <h2 className="text-center">Validate OTP(One Time Passcode)</h2> <br />
-          <h3 className="text-center">Please enter the OTP to verify</h3> <br />
+          <h5 className="text-center">We have sent you the OTP through your email</h5> <br />
+          <h5 className="text-center">Please enter the OTP to verify</h5> <br />
+          
           <Container>
 
             {/* <div className="login-heading hv-center col-12 col-lg-4">Login</div> */}

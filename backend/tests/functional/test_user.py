@@ -27,8 +27,23 @@ login_data = {
         "email":"jamesthomas@gmail.com",
         "password": "Hello"
 }
+login_data_1 = {
+        "email":"samanthasmith@gmail.com",
+        "password": "Hello"
+}
+
 login_data_2 = {
-        "email":"harrisjames@yahoo.com",
+        "email":"sherry18@gmail.com",
+        "password": "Hello"
+}
+
+login_data_3 = {
+        "email":"rebecca89@hicks.com",
+        "password": "Hello"
+}
+
+login_data_4 = {
+        "email":"carl53@sheppard.com",
         "password": "Hello"
 }
 
@@ -316,7 +331,7 @@ class TestSomething:
         WHEN the '/api/v1/users/' page is requested (GET)
         THEN check that the response is valid
         """
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_1),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/users/one/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -355,7 +370,7 @@ class TestSomething:
             users.count_documents({}) - 1)[0]['user_id'])
         convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.delete(
             url, headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -371,7 +386,7 @@ class TestSomething:
 
         convert_to_str = str(10000)
         url = '/api/v1/users/'+convert_to_str+'/'
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.delete(
             url, headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -416,7 +431,7 @@ class TestSomething:
             users.count_documents({}) - 1)[0]['user_id'])
         convert_to_str = str(user_id)
         url = '/api/v1/users/'+convert_to_str+'/'
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.patch(url, data=json.dumps(data), headers={
                                      'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -577,7 +592,7 @@ class TestSomething:
             "user_id": set_user_id,
             "otp": 'fbLGnQruBM'
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_3),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -601,7 +616,7 @@ class TestSomething:
             "user_id": user_id,
             "otp": 'jdhd@RT'
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -637,7 +652,7 @@ class TestSomething:
             "user_id": "6",
             "otp": "  "
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_1),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
@@ -654,7 +669,7 @@ class TestSomething:
         data = {
 
         }
-        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_2),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post(
             '/api/v1/verify_otp/', data=json.dumps(data), headers={'Content-Type': 'application/json','Authorization':get_token['token']})
