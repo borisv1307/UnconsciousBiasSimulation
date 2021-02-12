@@ -88,7 +88,7 @@ def create_user_profile():
             'Emotions': get_tags['Emotions']
         })
 
-        if create_profile and create_aws_tags:
+        if create_profile:
             output = {
                 "profile_id": profile_id,
                 "user_id": get_user_id,
