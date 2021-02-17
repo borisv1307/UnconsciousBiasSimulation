@@ -45,7 +45,7 @@ def get_aws_tags_for_image():
         if get_tags['Code'] == 2:
             output = {'Code':2 , 'error':'Invalid Image, Please try another image'}
         else:
-            create_aws_tags = aws_tags.insert_one({
+            aws_tags.insert_one({
             "profile_id": get_profile_id,
             "user_id": get_int_user_id,
             'AgeRange':get_tags['AgeRange'],
