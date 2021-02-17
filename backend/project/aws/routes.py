@@ -33,10 +33,10 @@ def get_aws_tags_for_image():
     user = mongo.db.user
 
     try:
-        profile_id = int(profile.find().skip(
+        get_profile_id = int(profile.find().skip(
             profile.count_documents({}) - 1)[0]['profile_id'])+1
-    except Exception:
-        profile_id = 1
+    except ValueError:
+        get_profile_id = 1
 
     # check if user_id is already in database
     user_id_exists = user.count_documents({'user_id': get_int_user_id})
@@ -46,7 +46,7 @@ def get_aws_tags_for_image():
             output = {'Code':2 , 'error':'Invalid Image, Please try another image'}
         else:
             create_aws_tags = aws_tags.insert_one({
-            "profile_id": profile_id,
+            "profile_id": get_profile_id,
             "user_id": get_int_user_id,
             'AgeRange':get_tags['AgeRange'],
             'Smile':get_tags['Smile'],

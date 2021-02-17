@@ -4,7 +4,7 @@ from json import loads
 from functools import wraps
 from bson.json_util import dumps
 from flask import request
-from project import mongo ,token_required, get_aws_tags
+from project import mongo ,token_required
 from . import profile_blueprint
 
 ################
@@ -55,8 +55,7 @@ def create_user_profile():
 
     # check if user_id is already in database
     user_id_exists = user.count_documents({'user_id': get_user_id})
-    profile_id_exists = aws_tags.count_documents({'profile_id': profile_id})
-    if user_id_exists and profile_id_exists == 1:
+    if user_id_exists:
         create_profile = profile.insert_one({
             "profile_id": profile_id,
             "user_id": get_user_id,

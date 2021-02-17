@@ -213,6 +213,7 @@ class TestSomething:
         "gender": "Male",
         "ethnicity": "Asian"
         }
+
         post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.post('/api/v1/createProfile/', data=json.dumps(data),headers={'Content-Type': 'application/json','Authorization':get_token['token']})
