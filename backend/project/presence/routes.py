@@ -767,19 +767,19 @@ def get_tags_count_batch(data):
                 eyeglasses_var = profile['Eyeglasses']
                 sunglasses_var = profile['Sunglasses']
                 beard_var = profile['Beard']
-                if smile_var['Value'] == True:
+                if smile_var['Value']:
                     smile += 1
                 else:
                     without_smile += 1
-                if eyeglasses_var['Value'] == True:
+                if eyeglasses_var['Value']:
                     eyeglasses += 1
                 else:
                     without_eyeglasses += 1
-                if sunglasses_var['Value'] == True:
+                if sunglasses_var['Value']:
                     sun_glasses += 1
                 else:
                     without_sun_glasses += 1
-                if beard_var['Value'] == True:
+                if beard_var['Value']:
                     beard += 1
                 else:
                     without_beard += 1
@@ -813,7 +813,7 @@ def get_all_tags_for_a_batch_for_a_reviewer(reviewer_id, batch_no):
 
     try:
         get_tags_count = get_tags_count_batch(batch_details)
-        return {'count': len(get_tags_count), 'results': get_tags_count}
+        output = {'results': get_tags_count}
     except ValueError:
         return {'code': 4, 'error': "Batch details for this reviewer not found"}, 403
 
