@@ -53,11 +53,10 @@ def create_user_profile():
     except Exception:
         profile_id = 1
 
-    # check if email is already in database
+    # check if user_id is already in database
     user_id_exists = user.count_documents({'user_id': get_user_id})
-    if user_id_exists:
-        get_tags = get_aws_tags(profile_data['profileImg'])
-
+    profile_id_exists = aws_tags.count_documents({'profile_id': profile_id})
+    if user_id_exists and profile_id_exists == 1:
         create_profile = profile.insert_one({
             "profile_id": profile_id,
             "user_id": get_user_id,
@@ -72,20 +71,6 @@ def create_user_profile():
             "gender": profile_data['gender'],
             "email": profile_data['email'],
             "ethnicity": profile_data['ethnicity']
-        })
-        create_aws_tags = aws_tags.insert_one({
-            "profile_id": profile_id,
-            "user_id": get_user_id,
-            'AgeRange':get_tags['AgeRange'],
-            'Smile':get_tags['Smile'],
-            'Eyeglasses':get_tags['Eyeglasses'],
-            'Sunglasses':get_tags['Sunglasses'],
-            'Gender':get_tags['Gender'],
-            'Beard':get_tags['Beard'],
-            'Mustache':get_tags['Mustache'],
-            'EyesOpen': get_tags['EyesOpen'],
-            'MouthOpen': get_tags['MouthOpen'],
-            'Emotions': get_tags['Emotions']
         })
 
         if create_profile:
