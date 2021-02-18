@@ -47,7 +47,7 @@ def get_aws_tags_for_image():
     if user_id_exists:
         get_tags = get_aws_tags(get_image_url)
         if get_tags['Code'] == 2:
-            return {'Code':2 , 'error':'Invalid Image, Please try another image'}
+            output = {'Code':2 , 'error':'Invalid Image, Please try another image'}
         elif get_int_profile_id == 0:
             output = {'Code': 1, 'success':get_tags}
 
@@ -70,7 +70,4 @@ def get_aws_tags_for_image():
 
     else:
         output = {'Code':4 , 'error':'user_id does not exists'}
-
-    
-
     return output
