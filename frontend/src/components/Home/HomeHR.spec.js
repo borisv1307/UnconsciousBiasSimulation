@@ -25,7 +25,7 @@ describe("HomeHR", () => {
     expect(wrapper.find("h5").length).toEqual(1);
   });
   it("should have div", () => {
-    expect(wrapper.find("div").length).toEqual(3);
+    expect(wrapper.find("div").length).toEqual(4);
   });
   it("should have TAB", () => {
     expect(wrapper.find("Tabs").length).toEqual(1);
