@@ -263,7 +263,6 @@ class ProfileForm extends Component{
             gender: gender,
             ethnicity: ethnicity
           };
-          console.log("HERE")
           const profile_image_data =  {
             user_id: userId,
             profileImg: this.state.profileImg
@@ -278,31 +277,32 @@ class ProfileForm extends Component{
           })
             .then((res) => res.json())
             .then((res) => {
-              console.log("I AM RES")
               console.log(res)
-              if(res["Code"] === 1){
-                console.log(JSON.stringify(data));
-                fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
-                  method: "POST",
-                  headers: {
-                    "Content-type": "application/json",
-                    "Authorization": token
-                  },
-                  body: JSON.stringify(data),
-                })
-                  .then((res) => res.json())
-                  .then((res) => console.log(res));
-          
-                this.reset();
-                this.setState({
-                  alertMessage: "Successfully submitted",
-                  allSuccessState: true,
-                });
-              }
-              else{
-                console.log("CODE ERROR 2")
-              }
+              var image_checker_res =  res["Code"]
             })
+
+            if(image_checker_res === 1){
+              console.log(JSON.stringify(data));
+              fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
+                method: "POST",
+                headers: {
+                  "Content-type": "application/json",
+                  "Authorization": token
+                },
+                body: JSON.stringify(data),
+              })
+                .then((res) => res.json())
+                .then((res) => console.log(res));
+        
+              this.reset();
+              this.setState({
+                alertMessage: "Successfully submitted",
+                allSuccessState: true,
+              });
+            }
+            else{
+              console.log("Invalid Image")
+            }
         }
       };
 
