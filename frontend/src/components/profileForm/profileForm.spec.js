@@ -128,7 +128,7 @@ describe("ProfileForm", () => {
     expect(expStartDateInput.props().value).toEqual("2020-09");
     expect(expEndDateInput.props().value).toEqual("2020-09");
   });
-  
+
   it("should include buttons for submit and adding edu and exp", () => {
     const eduButton = wrapper.find("Button#addEducationButton");
     const expButton = wrapper.find("Button#addExperienceButton");
@@ -318,7 +318,6 @@ describe("ProfileForm", () => {
   
         expect(wrapper.state("alertMessage")).toEqual("Successfully submitted");
         expect(wrapper.state("allErrorState")).toEqual(false);
-        expect(wrapper.state("allSuccessState")).toEqual(true);
       });
     });
 
