@@ -59,6 +59,6 @@ def get_aws_tags_for_image():
             'MouthOpen': get_tags['MouthOpen'],
             'Emotions': get_tags['Emotions']
         })
-            output = {'Code': 1, 'Success':get_tags}
+            output = {'Code': 1, 'success':get_tags}
 
     return output

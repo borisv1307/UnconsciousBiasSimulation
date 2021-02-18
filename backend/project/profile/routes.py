@@ -44,7 +44,6 @@ def create_user_profile():
 
     # Get collections
     profile = mongo.db.profile
-    aws_tags = mongo.db.aws_tags
 
     user = mongo.db.user
     try:
