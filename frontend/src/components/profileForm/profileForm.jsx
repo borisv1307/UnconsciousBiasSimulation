@@ -156,6 +156,7 @@ class ProfileForm extends Component{
 
     imageHandler = async (e) => {
         const files = e.target.files;
+    
         if (files[0].size < 2000000) {
           const data = new FormData();
           data.append("file", files[0]);
@@ -263,46 +264,24 @@ class ProfileForm extends Component{
             gender: gender,
             ethnicity: ethnicity
           };
-          const profile_image_data =  {
-            user_id: userId,
-            profileImg: this.state.profileImg
-          };
-          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/uploadImage/", {
+    
+          console.log(JSON.stringify(data));
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
             method: "POST",
             headers: {
               "Content-type": "application/json",
               "Authorization": token
             },
-            body: JSON.stringify(profile_image_data),
+            body: JSON.stringify(data),
           })
             .then((res) => res.json())
-            .then((res) => {
-              console.log(res)
-              if(res["Code"] === 1){
-                console.log(JSON.stringify(data));
-                fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
-                  method: "POST",
-                  headers: {
-                    "Content-type": "application/json",
-                    "Authorization": token
-                  },
-                  body: JSON.stringify(data),
-                })
-                  .then((res) => res.json())
-                  .then((res) => console.log(res));
-          
-                this.reset();
-                this.setState({
-                  alertMessage: "Successfully submitted",
-                  allSuccessState: true,
-                });
-              }
-              else{
-                console.log("Invalid Image")
-              }
-            })
-
-            
+            .then((res) => console.log(res));
+    
+          this.reset();
+          this.setState({
+            alertMessage: "Successfully submitted",
+            allSuccessState: true,
+          });
         }
       };
 
@@ -881,24 +860,43 @@ render() {
                                             eventKey={"edu" + index + 1}
                                             >
                                         <Card.Body>
-                                            {edu.eduStartDate} to {edu.eduEndDate}{" "}
-                                            <br />
-                                            {edu.gpa ? (
-                                            <div>GPA: {edu.gpa}</div>
-                                            ) : (
-                                            ""
-                                            )}{" "}
-                                            <br />
+                                            
                                             {!this.state.editState ? (
-                                            <Button
-                                                id="toggleEditEducationButton"
-                                                onClick={this.toggleEditForm(true)}
-                                            >
-                                                Edit
-                                            </Button>
-                                            ) : (
-                                            ""
-                                            )}
+                                            <div>
+                                              {edu.eduStartDate} to {edu.eduEndDate}
+                                              <br />
+                                              {edu.gpa ? (
+                                                <div>GPA: {edu.gpa}</div>
+                                              ) : ("")}
+                                              <br />
+                                              <Row>
+                                                <Col xs={1}></Col>
+                                                <Col>
+                                                <Button
+                                                  id="toggleEditEducationButton"
+                                                  onClick={this.toggleEditForm(true)}
+                                                  block
+                                                >
+                                                    Edit
+                                                </Button>
+                                                </Col>
+                                                <Col xs={1}></Col>
+                                                <Col>
+                                                <Button
+                                                  id="deleteEducationButton"
+                                                  onClick={this.deleteEducation(
+                                                      index
+                                                  )}
+                                                  variant="danger"
+                                                  block
+                                                >
+                                                Delete
+                                                </Button>
+                                                </Col>
+                                                <Col xs={1}></Col>
+                                              </Row>
+                                            </div>
+                                            ) : ("")}
 
                                         {this.state.editState ? (
                                         <div>
@@ -986,41 +984,30 @@ render() {
                                             <div className="text-center"></div>
                                             </Form>
                                             <Row>
+                                              <Col xs={1}></Col>
                                                 <Col>
-                                                    {" "}
                                                     <Button
-                                                    id="editEducationButton"
-                                                    onClick={this.editEducation(
-                                                        index
-                                                    )}
+                                                      id="editEducationButton"
+                                                      onClick={this.editEducation(index)}
+                                                      block
                                                     >
-                                                    {" "}
-                                                    Save{" "}
-                                                    </Button>{" "}
+                                                    Save
+                                                    </Button>
                                                 </Col>
+                                                <Col xs={1}></Col>
                                                 <Col>
-                                                  <Button
-                                                    id="deleteEducationButton"
-                                                    onClick={this.deleteEducation(
-                                                        index
-                                                    )}
-                                                    variant="warning"
-                                                    >
-                                                    Delete
-                                                  </Button>
-                                                </Col>
-                                                <Col>
-                                                    {" "}
                                                     <Button
-                                                    id="cancelEditEducationButton"
-                                                    onClick={this.toggleEditForm(
-                                                        false
-                                                    )}
-                                                    variant="danger"
+                                                      id="cancelEditEducationButton"
+                                                      onClick={this.toggleEditForm(
+                                                          false
+                                                      )}
+                                                      variant="danger"
+                                                      block
                                                     >
                                                     Cancel
-                                                    </Button>{" "}
+                                                    </Button>
                                                 </Col>
+                                                <Col xs={1}></Col>
                                             </Row>
                                         </div>
                                         ) : ("")}
@@ -1113,19 +1100,15 @@ render() {
                                         <Alert variant="danger">
                                             {this.state.alertMessage}
                                         </Alert>
-                                        ) : (
-                                        " "
-                                        )}
+                                        ) : (" ")}
                                         {this.state.expSuccessState ? (
                                         <Alert variant="success">
                                             {this.state.alertMessage}
                                         </Alert>
-                                        ) : (
-                                        " "
-                                        )}
+                                        ) : (" ")}
                                         <Button
-                                        id="addExperienceButton"
-                                        onClick={this.addExperience}
+                                          id="addExperienceButton"
+                                          onClick={this.addExperience}
                                         >
                                         Add Experience
                                         </Button>
@@ -1157,17 +1140,36 @@ render() {
                                             eventKey={"exp" + index + 1}
                                             >
                                             <Card.Body>
-                                                {exp.location} <br />
-                                                {exp.expStartDate} to {exp.expEndDate}{" "}
-                                                <br />
+                                                
                                                 {!this.state.editState ? (
-                                                <Button
-                                                    id="toggleEditExperienceButton"
-                                                    onClick={this.toggleEditForm(true)}
-                                                >
-                                                    {" "}
-                                                    Edit{" "}
-                                                </Button>
+                                                <div>
+                                                  {exp.location} <br />
+                                                  {exp.expStartDate} to {exp.expEndDate}<br /> <br />
+                                                  <Row>
+                                                    <Col xs={1}></Col>
+                                                    <Col>
+                                                    <Button
+                                                      id="toggleEditExperienceButton"
+                                                      onClick={this.toggleEditForm(true)}
+                                                      block
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    </Col>
+                                                    <Col xs={1}></Col>
+                                                    <Col>
+                                                      <Button
+                                                        id="deleteExperienceButton"
+                                                        onClick={this.deleteExperience(index)}
+                                                        variant="danger"
+                                                        block
+                                                      >
+                                                        Delete
+                                                      </Button>
+                                                    </Col>
+                                                    <Col xs={1}></Col>
+                                                  </Row>
+                                                </div>
                                                 ) : (
                                                 ""
                                                 )}
@@ -1243,38 +1245,28 @@ render() {
                                                     </Form.Row>
                                                     </Form>
                                                     <Row>
+                                                    <Col xs={1}></Col>
                                                     <Col>
                                                         <Button
-                                                        id="editExperienceButton"
-                                                        onClick={this.editExperience(
-                                                            index
-                                                        )}
+                                                          id="editExperienceButton"
+                                                          onClick={this.editExperience(index)}
+                                                          block
                                                         >
                                                         Save
                                                         </Button>
                                                     </Col>
-                                                    <Col>
-                                                      <Button
-                                                        id="deleteExperienceButton"
-                                                        onClick={this.deleteExperience(
-                                                            index
-                                                        )}
-                                                        variant="warning"
-                                                        >
-                                                        Delete
-                                                      </Button>
-                                                    </Col>
+                                                    <Col xs={1}></Col>
                                                     <Col>
                                                         <Button
-                                                        id="cancelEditExperienceButton"
-                                                        onClick={this.toggleEditForm(
-                                                            false
-                                                        )}
-                                                        variant="danger"
+                                                          id="cancelEditExperienceButton"
+                                                          onClick={this.toggleEditForm(false)}
+                                                          variant="danger"
+                                                          block
                                                         >
                                                         Cancel
                                                         </Button>
                                                     </Col>
+                                                    <Col xs={1}></Col>
                                                     </Row>
                                                 </div>
                                                 ) : (
