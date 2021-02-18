@@ -267,7 +267,7 @@ class ProfileForm extends Component{
             user_id: userId,
             profileImg: this.state.profileImg
           };
-          fetch("http://localhost:5000/api/v1/uploadImage/", {
+          fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/uploadImage/", {
             method: "POST",
             headers: {
               "Content-type": "application/json",
@@ -278,31 +278,31 @@ class ProfileForm extends Component{
             .then((res) => res.json())
             .then((res) => {
               console.log(res)
-              var image_checker_res =  res["Code"]
+              if(res["Code"] === 1){
+                console.log(JSON.stringify(data));
+                fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
+                  method: "POST",
+                  headers: {
+                    "Content-type": "application/json",
+                    "Authorization": token
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((res) => res.json())
+                  .then((res) => console.log(res));
+          
+                this.reset();
+                this.setState({
+                  alertMessage: "Successfully submitted",
+                  allSuccessState: true,
+                });
+              }
+              else{
+                console.log("Invalid Image")
+              }
             })
 
-            if(image_checker_res === 1){
-              console.log(JSON.stringify(data));
-              fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/createProfile/", {
-                method: "POST",
-                headers: {
-                  "Content-type": "application/json",
-                  "Authorization": token
-                },
-                body: JSON.stringify(data),
-              })
-                .then((res) => res.json())
-                .then((res) => console.log(res));
-        
-              this.reset();
-              this.setState({
-                alertMessage: "Successfully submitted",
-                allSuccessState: true,
-              });
-            }
-            else{
-              console.log("Invalid Image")
-            }
+            
         }
       };
 
