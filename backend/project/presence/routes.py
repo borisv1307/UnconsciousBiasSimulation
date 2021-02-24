@@ -1,8 +1,7 @@
 # pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string
-import datetime
-from datetime import datetime
 from flask import request
 from project import mongo, token_required, get_batch_count
+from datetime import datetime, date
 from pymongo.collection import ReturnDocument
 from . import presence_blueprint
 ACTION = "$elemMatch"
@@ -817,7 +816,7 @@ def get_all_tags_for_a_batch_for_a_reviewer(reviewer_id, batch_no):
 
 
 @presence_blueprint.route('/api/v1/getCountByAge/<reviewer_id>/<batch_no>/', methods=['GET'])
-# @token_required
+@token_required
 def get_presence_count_by_age(reviewer_id, batch_no):
     declined_young = 0
     declined_middle = 0
