@@ -62,7 +62,7 @@ class HomeHR extends Component {
       },
 
       dataHorizontalTags: {
-        labels: ["Smiling", "Wearing Glasses", "Wearing Sunglasses", "Bearded"],
+        labels: ["Smiling", "Wearing Glasses", "Facial Hair"],
         datasets: [
           {
             label: 'Acceptance',
@@ -159,7 +159,7 @@ class HomeHR extends Component {
     })
 
     var val = "Batch : " + batchdate[0]["date"] + " "
-    
+
     var get_count = ""
     var get_ethnicity = ""
     var get_tags = ""
@@ -302,21 +302,19 @@ class HomeHR extends Component {
           else {
             rejection_tags.push(res3.without_eyeglasses)
           }
-          if (key === "sun_glasses") {
-            acceptance_tags.push(res3.sun_glasses)
+          if (key === "facial_hair") {
+            acceptance_tags.push(res3.facial_hair)
           }
           else {
-            rejection_tags.push(res3.without_sun_glasses)
+            rejection_tags.push(res3.without_facial_hair)
           }
-          if (key === "beard") {
-            acceptance_tags.push(res3.beard)
-          }
-          else {
-            rejection_tags.push(res3.without_beard)
-          }
+
+
+
         });
 
         console.log(res2)
+        console.log("this is response 3")
         console.log(res3)
 
         dataHorizontalTags.datasets[0].data = acceptance_tags;
