@@ -777,7 +777,7 @@ def get_tags_count_batch(data):
                     eyeglasses += 1
                 else:
                     without_eyeglasses += 1
-                if beard_var['Value'] or Mustache_var['Value']:
+                if beard_var['Value'] or mustache_var['Value']:
                     facial_hair += 1
                 else:
                     without_facial_hair += 1
