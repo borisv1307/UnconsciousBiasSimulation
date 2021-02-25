@@ -444,10 +444,10 @@ def edit_one_user(user_id):
         output = {'code': 5, "error": "User does not exist"}, 403
     return output
 
+# Pass list of email_ids and return email domains and their count
 def get_email_domains(get_email_ids):
     domain_count = defaultdict(lambda: 0)
-    out = map(lambda x:x.lower(), get_email_ids)
-    get_lower = list(out)
+    get_lower = list(map(lambda x:x.casefold(), get_email_ids))
     for line in get_lower:
         domain = line.split('@')[-1]
         domain_count[domain] += 1
@@ -474,7 +474,8 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
     accepted_emails = []
     declined_user_ids = []
     accepted_user_ids = []
-    if batch_data_query:
+
+    if get_data:
         try:
             for record in get_data:
                 for review in record['reviewed_by']:
@@ -493,6 +494,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
                 accepted_domains = get_email_domains(accepted_emails)
             else:
                 accepted_domains = {}
+                
             if get_rejected_email_ids:
                 for rejected_email in get_rejected_email_ids:
                     declined_emails.append(rejected_email['email'])
