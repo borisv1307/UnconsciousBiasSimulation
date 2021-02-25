@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-branches, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
 from datetime import datetime
 import bcrypt
 import re
@@ -455,7 +455,7 @@ def get_email_domains(get_email_ids):
     return domain_count
 
 @user_blueprint.route('/api/v1/getCount/emailDomain/<reviewer_id>/<batch_no>/', methods=['GET'])
-# @token_required
+@token_required
 def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
     
     # Get mongo collections
@@ -465,7 +465,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
         reviewer_id = int(reviewer_id)
         batch_no = int(batch_no)
     except TypeError:
-        return {'error': 'reviewer id and batch no must be numeric'}, 403
+        return {'error': 'Please pass numeric values for reviewer_id and batch_no'}, 403
 
     batch_data_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
     get_data = mongo.db.batch_details.find(batch_data_query)
@@ -509,3 +509,4 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
             return {'code': 4, 'error': "No emails found"}, 403
     else:
         return {'code': 4, 'error': "No batch found"}, 403
+
