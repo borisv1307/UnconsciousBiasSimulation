@@ -767,7 +767,7 @@ def get_tags_count_batch(data):
             for profile in mongo.db.aws_tags.find({"$and": [{"profile_id": review['profile_id']}, {"user_id": review['user_id']}]}):
                 smile_var = profile['Smile']
                 eyeglasses_var = profile['Eyeglasses']
-                Mustache_var = profile['Mustache']
+                mustache_var = profile['Mustache']
                 beard_var = profile['Beard']
                 if smile_var['Value']:
                     smile += 1
