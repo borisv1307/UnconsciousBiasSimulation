@@ -159,30 +159,54 @@ class ProfileForm extends Component{
 
     imageHandler = async (e) => {
         const files = e.target.files;
-    
+        var allowedExtensions =  
+                    /(\.jpg|\.jpeg|\.png)$/i;
+
         if (files[0].size < 2000000) {
-          const data = new FormData();
-          data.append("file", files[0]);
-          data.append("upload_preset", "unconsciousbias");
-          const res = await fetch(
-            "	https://api.cloudinary.com/v1_1/unconsciousbiassimulator/image/upload",
-            {
-              method: "POST",
-              body: data,
-            }
-          );
-          const file = await res.json();
-    
-          this.setState(
-            {
-              profileImg: file.secure_url,
-            },
-            () => {
-              console.log("profileImg State:", this.state.profileImg);
-            }
-          );
+
+          if (!allowedExtensions.exec(files[0]['name'])){
+            this.setState({
+              alertMessage: "Invalid image file format. Accepted file formats are PNG or JPEG.",
+              allErrorState: true,
+              allSuccessState: false
+            });
+          }
+
+          else{
+
+            this.setState({
+              allErrorState: false,
+              allSuccessState: false
+            });
+
+            const data = new FormData();
+            data.append("file", files[0]);
+            data.append("upload_preset", "unconsciousbias");
+            const res = await fetch(
+              "	https://api.cloudinary.com/v1_1/unconsciousbiassimulator/image/upload",
+              {
+                method: "POST",
+                body: data,
+              }
+            );
+            const file = await res.json();
+      
+            this.setState(
+              {
+                profileImg: file.secure_url,
+              },
+              () => {
+                console.log("profileImg State:", this.state.profileImg);
+              }
+            );
+          }
+          
         } else {
-          console.log("File is too large");
+          this.setState({
+            alertMessage: "Image size uploaded is too large.",
+            allErrorState: true,
+            allSuccessState: false
+          });
         }
       };
 
@@ -314,7 +338,7 @@ class ProfileForm extends Component{
           }
           else{
             this.setState({
-              alertMessage: "Invalid image used. Please upload another image.",
+              alertMessage: "Our system couldn't process your image . Please uploud another image.",
               allErrorState: true,
               allSuccessState: false
             });
@@ -687,7 +711,13 @@ render() {
                       <Popover id="popover-basic">
                       <Popover.Title as="h3"><strong>Image</strong> requirements</Popover.Title>
                       <Popover.Content>
-                        <strong>Image</strong> should be less than 2 MB in size
+                        <ul>
+                          <li>Should be less than 2 MB in size.</li>
+                          <li>Should be a PNG or JPEG file.</li>
+                          <li>Make sure you are clear and visible in the image.</li>
+                        </ul>
+                        
+                        
                       </Popover.Content>
                       </Popover>
                         }>
