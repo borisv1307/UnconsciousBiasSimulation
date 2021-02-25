@@ -50,7 +50,6 @@ def get_aws_tags_for_image():
             output = {'Code':2 , 'error':'Invalid Image, Please try another image'}
         elif get_int_profile_id == 0:
             output = {'Code': 1, 'success':get_tags}
-
             aws_tags.insert_one({
             "profile_id": get_profile_id,
             "user_id": get_int_user_id,
@@ -64,10 +63,9 @@ def get_aws_tags_for_image():
             'EyesOpen': get_tags['EyesOpen'],
             'MouthOpen': get_tags['MouthOpen'],
             'Emotions': get_tags['Emotions']
-        })
+             })
         else:
             output = {'Code':3 , 'error':'entry for this profile_id already exists. profile_id:-'+str(get_profile_id)}
-
     else:
         output = {'Code':4 , 'error':'user_id does not exists'}
     return output
