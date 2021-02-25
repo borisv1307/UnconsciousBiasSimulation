@@ -1,7 +1,8 @@
 # pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string
 from flask import request
 from project import mongo, token_required, get_batch_count
-from datetime import datetime, date
+from datetime import datetime
+from datetime import date
 from pymongo.collection import ReturnDocument
 from . import presence_blueprint
 ACTION = "$elemMatch"
