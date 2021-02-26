@@ -9,7 +9,7 @@ import pytest
 import os
 import sys
 from flask import jsonify, request, json
-from datetime import datetime
+import datetime
 import random
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 PARENT_ROOT = os.path.abspath(os.path.join(SITE_ROOT, os.pardir))
@@ -97,7 +97,7 @@ class TestPool:
                     "status": ""
                 }
             ],
-            "added_on": datetime.utcnow(),
+            "added_on": datetime.datetime.utcnow(),
             "gender": "Male",
             "ethnicity": "White"
         }
@@ -148,7 +148,7 @@ class TestPool:
                 }
             ],
             "reviewed_by": [],
-            "added_on": datetime.utcnow(),
+            "added_on": datetime.datetime.utcnow(),
             "gender": "Male",
             "ethnicity": "White"
         }
@@ -326,4 +326,16 @@ class TestPool:
         get_token = json.loads(post_response.data)
         response = test_client.get(
             '/api/v1/batchesTagsCount/4/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
+        assert response.status_code == 200
+
+    def test_for_get_count_by_age(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getAllBatches/' page is requested (GET)
+        THEN check that the response is valid
+        """
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get(
+            '/api/v1/getCountByAge/34/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200

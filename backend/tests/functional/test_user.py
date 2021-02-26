@@ -765,3 +765,15 @@ class TestSomething:
             '/api/v1/logout/', data=json.dumps(data), headers={'Content-Type': 'application/json'})
         assert response.status_code == 403
         assert response.data == b'{"error":"Token cannot be blank or null"}\n'
+
+    def test_for_get_email_domains(self, test_client):
+        """
+        GIVEN a Flask application configured for testing
+        WHEN the '/api/v1/getCount/emailDomain/<reviewer_id>/<batch_no>/' page is requested (GET)
+        THEN check that the response is valid
+        """
+        post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
+        get_token = json.loads(post_response.data)
+        response = test_client.get(
+            '/api/v1/getCount/emailDomain/4/2/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
+        assert response.status_code == 200

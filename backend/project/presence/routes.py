@@ -1,7 +1,8 @@
 # pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string
-from datetime import datetime
 from flask import request
 from project import mongo, token_required, get_batch_count
+from datetime import datetime
+from datetime import date
 from pymongo.collection import ReturnDocument
 from . import presence_blueprint
 ACTION = "$elemMatch"
@@ -51,7 +52,7 @@ def add_presence_to_pool():
                 "first_name": profile_data['first_name'],
                 "last_name": profile_data['last_name'],
                 "added_on": date_joined,
-                "reviewed_by": output['reviewed_by'],
+                "reviewed_by": profile_data['reviewed_by'],
                 "gender": profile_data['gender'],
                 "ethnicity":profile_data['ethnicity']
             }
@@ -748,6 +749,10 @@ def get_all_batch_details_for_a_reviewer(reviewer_id):
 
     return output
 
+def calculate_age(dtob):
+    today = date.today()
+    return today.year - dtob.year - ((today.month, today.day) < (dtob.month, dtob.day))
+
 
 def get_tags_count_batch(data):
 
@@ -755,17 +760,15 @@ def get_tags_count_batch(data):
     without_smile = 0
     eyeglasses = 0
     without_eyeglasses = 0
-    sun_glasses = 0
-    without_sun_glasses = 0
-    beard = 0
-    without_beard = 0
+    facial_hair = 0
+    without_facial_hair = 0
 
     for record in data:
         for review in record['reviewed_by']:
             for profile in mongo.db.aws_tags.find({"$and": [{"profile_id": review['profile_id']}, {"user_id": review['user_id']}]}):
                 smile_var = profile['Smile']
                 eyeglasses_var = profile['Eyeglasses']
-                sunglasses_var = profile['Sunglasses']
+                mustache_var = profile['Mustache']
                 beard_var = profile['Beard']
                 if smile_var['Value']:
                     smile += 1
@@ -775,24 +778,18 @@ def get_tags_count_batch(data):
                     eyeglasses += 1
                 else:
                     without_eyeglasses += 1
-                if sunglasses_var['Value']:
-                    sun_glasses += 1
+                if beard_var['Value'] or mustache_var['Value']:
+                    facial_hair += 1
                 else:
-                    without_sun_glasses += 1
-                if beard_var['Value']:
-                    beard += 1
-                else:
-                    without_beard += 1
+                    without_facial_hair += 1
 
     output = {
         'smile':smile,
         'without_smile':without_smile,
         'eyeglasses':eyeglasses,
         'without_eyeglasses':without_eyeglasses,
-        'sun_glasses':sun_glasses,
-        'without_sun_glasses':without_sun_glasses,
-        'beard':beard,
-        'without_beard':without_beard
+        'facial_hair':facial_hair,
+        'without_facial_hair':without_facial_hair
     }
     return output
 
@@ -817,3 +814,57 @@ def get_all_tags_for_a_batch_for_a_reviewer(reviewer_id, batch_no):
         return {'code': 4, 'error': "Batch details for this reviewer not found"}, 403
 
     return output
+
+
+@presence_blueprint.route('/api/v1/getCountByAge/<reviewer_id>/<batch_no>/', methods=['GET'])
+@token_required
+def get_presence_count_by_age(reviewer_id, batch_no):
+    declined_young = 0
+    declined_middle = 0
+    declined_old = 0
+    accepted_young = 0
+    accepted_middle = 0
+    accepted_old = 0
+
+
+    try:
+        reviewer_id = int(reviewer_id)
+        batch_no = int(batch_no)
+    except TypeError:
+        return {'error': 'reviewer id must be numeric'}, 403
+
+    batch_details_query = {"$and": [{"batch_no": batch_no}, {"hr_user_id": reviewer_id}]}
+    batch_details = mongo.db.batch_details.find(batch_details_query)
+
+    for record in batch_details:
+        for review in record['reviewed_by']:
+            dob = review['date_of_birth']
+            date_array = dob.split("-")
+            age = calculate_age(date(int(date_array[0]), int(date_array[1]), int(date_array[2])))
+            if review['application_status'] == "Declined":
+                if 0 <= age <= 22:
+                    declined_young += 1
+                elif 23 <= age <= 35:
+                    declined_middle +=1
+                else:
+                    declined_old +=1
+            elif review['application_status'] == "Accepted":
+                if 0 <= age <= 22:
+                    accepted_young += 1
+                elif 23 <= age <= 35:
+                    accepted_middle +=1
+                else:
+                    accepted_old +=1
+    try:
+        result = {
+            'declined_young' : declined_young,
+            'declined_middle': declined_middle,
+            'declined_old': declined_old,
+            'accepted_young': accepted_young,
+            'accepted_middle': accepted_middle,
+            'accepted_old': accepted_old
+        }
+    except Exception as error:
+        print("Exception", error)
+        result = {'code': 4, 'error': ERROR}, 403
+    return result

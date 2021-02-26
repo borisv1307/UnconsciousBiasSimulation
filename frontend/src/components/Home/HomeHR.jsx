@@ -62,7 +62,7 @@ class HomeHR extends Component {
       },
 
       dataHorizontalTags: {
-        labels: ["Smiling", "Wearing Glasses", "Wearing Sunglasses", "Bearded"],
+        labels: ["Smiling", "Wearing Glasses", "Facial Hair"],
         datasets: [
           {
             label: 'Acceptance',
@@ -84,7 +84,52 @@ class HomeHR extends Component {
           }
         ]
       },
-
+      dataHorizontalAge: {
+        labels: ["Young", "Middle", "Old"],
+        datasets: [
+          {
+            label: 'Acceptance',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+            stack: '2',
+          },
+          {
+            label: 'Rejection',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+            stack: '2',
+          }
+        ]
+      },
+      dataHorizontalEmail: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Acceptance',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            stack: '2',
+            borderWidth: 1
+          },
+          {
+            label: 'Rejection',
+            data: [],
+            fill: false,
+            backgroundColor: [],
+            borderColor: [],
+            stack: '2',
+            borderWidth: 1
+          }
+        ]
+      },
       barChartOptions: {
         scales: {
           xAxes: [{
@@ -147,45 +192,61 @@ class HomeHR extends Component {
     const dataHorizontalGender = this.state.dataHorizontalGender;
     const dataHorizontalEthnicity = this.state.dataHorizontalEthnicity;
     const dataHorizontalTags = this.state.dataHorizontalTags;
+    const dataHorizontalAge = this.state.dataHorizontalAge;
+    const dataHorizontalEmail = this.state.dataHorizontalEmail;
     var acceptance_gender = []
     var rejection_gender = []
     var acceptance_ethnicity = []
     var rejection_ethnicity = []
     var acceptance_tags = []
     var rejection_tags = []
-
+    var acceptance_age = []
+    var rejection_age = []
+    var acceptance_email = []
+    var rejection_email = []
+    var collect_labels = []
     var batchdate = this.state.batch_result.filter(function (batch) {
       return batch.batch_no === parseInt(event);
     })
 
     var val = "Batch : " + batchdate[0]["date"] + " "
-    
+
     var get_count = ""
     var get_ethnicity = ""
     var get_tags = ""
+    var get_age = ""
+    var get_email = ""
 
     if (event === "") {
       get_count = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/";
       get_ethnicity = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByEthnicity/" + reviewer_id + "/";
       get_tags = "https://ubs-app-api-dev.herokuapp.com/api/v1/batchesTagsCount/" + reviewer_id + "/";
+      get_age = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByAge/" + reviewer_id + "/";
+      get_email = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/emailDomain/" + reviewer_id + "/";
     }
     else {
       get_count = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/" + reviewer_id + "/" + batchNo + "/";
       get_ethnicity = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/Ethnicity/" + reviewer_id + "/" + batchNo + "/";
       get_tags = "https://ubs-app-api-dev.herokuapp.com/api/v1/batchesTagsCount/" + reviewer_id + "/" + batchNo + "/";
+      get_age = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCountByAge/" + reviewer_id + "/" + batchNo + "/";
+      get_email = "https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/emailDomain/" + reviewer_id + "/" + batchNo + "/";
     }
 
-    console.log("Tags link", get_tags)
+
 
     Promise.all([fetch(get_count, { headers: { "Content-type": "application/json", "Authorization": token } }),
     fetch(get_ethnicity, { headers: { "Content-type": "application/json", "Authorization": token } }),
-    fetch(get_tags, { headers: { "Content-type": "application/json", "Authorization": token } }),])
+    fetch(get_tags, { headers: { "Content-type": "application/json", "Authorization": token } }),
+    fetch(get_age, { headers: { "Content-type": "application/json", "Authorization": token } }),
+    fetch(get_email, { headers: { "Content-type": "application/json", "Authorization": token } })
+    ])
 
-      .then(([res1, res2, res3]) => {
-        return Promise.all([res1.json(), res2.json(), res3.json()])
+      .then(([res1, res2, res3, res4, res5]) => {
+
+        return Promise.all([res1.json(), res2.json(), res3.json(), res4.json(), res5.json()])
 
       })
-      .then(([res1, res2, res3]) => {
+      .then(([res1, res2, res3, res4, res5]) => {
 
         Object.keys(res1).forEach(function (key) {
           if (key === "accepted_male_count") {
@@ -302,22 +363,14 @@ class HomeHR extends Component {
           else {
             rejection_tags.push(res3.without_eyeglasses)
           }
-          if (key === "sun_glasses") {
-            acceptance_tags.push(res3.sun_glasses)
+          if (key === "facial_hair") {
+            acceptance_tags.push(res3.facial_hair)
           }
           else {
-            rejection_tags.push(res3.without_sun_glasses)
+            rejection_tags.push(res3.without_facial_hair)
           }
-          if (key === "beard") {
-            acceptance_tags.push(res3.beard)
-          }
-          else {
-            rejection_tags.push(res3.without_beard)
-          }
-        });
 
-        console.log(res2)
-        console.log(res3)
+        });
 
         dataHorizontalTags.datasets[0].data = acceptance_tags;
         dataHorizontalTags.datasets[0].backgroundColor = new Array(acceptance_tags.length).fill(acceptBgColor);
@@ -327,7 +380,65 @@ class HomeHR extends Component {
         dataHorizontalTags.datasets[1].backgroundColor = new Array(rejection_tags.length).fill(rejectBgColor);
         dataHorizontalTags.datasets[1].borderColor = new Array(rejection_tags.length).fill(rejectBorderColor);
 
-        this.setState({ dataHorizontalGender, dataHorizontalEthnicity, dataHorizontalTags })
+
+        Object.keys(res4).forEach(function (key) {
+          if (key === "accepted_young") {
+            acceptance_age.push(res4.accepted_young)
+          }
+          else {
+            rejection_age.push(res4.declined_young)
+          }
+          if (key === "accepted_middle") {
+            acceptance_age.push(res4.accepted_middle)
+          }
+          else {
+            rejection_age.push(res4.declined_middle)
+          }
+          if (key === "accepted_old") {
+            acceptance_age.push(res4.accepted_old)
+          }
+          else {
+            rejection_age.push(res4.declined_old)
+          }
+        });
+        dataHorizontalAge.datasets[0].data = acceptance_age;
+        dataHorizontalAge.datasets[0].backgroundColor = new Array(acceptance_age.length).fill(acceptBgColor);
+        dataHorizontalAge.datasets[0].borderColor = new Array(acceptance_age.length).fill(acceptBorderColor);
+
+        dataHorizontalAge.datasets[1].data = rejection_age;
+        dataHorizontalAge.datasets[1].backgroundColor = new Array(rejection_age.length).fill(rejectBgColor);
+        dataHorizontalAge.datasets[1].borderColor = new Array(rejection_age.length).fill(rejectBorderColor);
+
+
+
+        if ((Object.keys(res5["accepted"]).length) > Object.keys(res5["rejected"]).length) {
+          dataHorizontalEmail.labels = Object.keys(res5["accepted"])
+        }
+        else {
+          dataHorizontalEmail.labels = Object.keys(res5["rejected"])
+        }
+
+
+
+        Object.keys(res5["accepted"]).forEach(function (key1) {
+          acceptance_email.push(res5["accepted"][key1]);
+        })
+
+        Object.keys(res5["rejected"]).forEach(function (key2) {
+          rejection_email.push(res5["rejected"][key2]);
+        })
+
+
+        dataHorizontalEmail.datasets[0].data = acceptance_email;
+        dataHorizontalEmail.datasets[0].backgroundColor = new Array(acceptance_email.length).fill(acceptBgColor);
+        dataHorizontalEmail.datasets[0].borderColor = new Array(acceptance_email.length).fill(acceptBorderColor);
+
+        dataHorizontalEmail.datasets[1].data = rejection_email;
+        dataHorizontalEmail.datasets[1].backgroundColor = new Array(rejection_email.length).fill(rejectBgColor);
+        dataHorizontalEmail.datasets[1].borderColor = new Array(rejection_email.length).fill(rejectBorderColor);
+
+
+        this.setState({ dataHorizontalGender, dataHorizontalEthnicity, dataHorizontalTags, dataHorizontalAge, dataHorizontalEmail })
         this.setState({ btnTitle: val });
 
       })
@@ -394,7 +505,20 @@ class HomeHR extends Component {
                   <HorizontalBarGraph inputData={this.state.dataHorizontalTags} barChartOptions={this.barChartOptions} />
                 </div>
               </Tab>
-
+              <Tab eventKey="AgeInsight" title=" Age(category) Insight ">
+                <div>
+                  <br />
+                  <h3 className="text-center"> Age(category) Insight </h3>
+                  <HorizontalBarGraph inputData={this.state.dataHorizontalAge} barChartOptions={this.barChartOptions} />
+                </div>
+              </Tab>
+              <Tab eventKey="EmailInsight" title=" Email(category) Insight ">
+                <div>
+                  <br />
+                  <h3 className="text-center"> Email(category) Insight </h3>
+                  <HorizontalBarGraph inputData={this.state.dataHorizontalEmail} barChartOptions={this.barChartOptions} />
+                </div>
+              </Tab>
             </Tabs>
 
           </Container>
