@@ -505,7 +505,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
                 for accepted_user_id in sorted_accepted_users:
                     get_ac_email = users.find_one({'user_id': accepted_user_id}, {'email':1, '_id':0})
                     accepted_emails.append(get_ac_email['email'])
-                    
+
                 accepted_count = len(accepted_emails)
                 accepted_domains = get_email_domains(accepted_emails)
             else:
@@ -513,8 +513,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
                 accepted_domains = {}
 
             return {'accepted_email_count': accepted_count, 'accepted': accepted_domains, 'rejected_email_count':rejected_count, 'rejected':rejected_domains}
-        else:
-            return {'code': 4, 'error': "No batch found"}, 403
+        return {'code': 4, 'error': "No batch found"}, 403
     except Exception as error:
         print("Error:-",error)
         return {'code': 4, 'error': "No emails found"}, 403
