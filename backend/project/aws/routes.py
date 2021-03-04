@@ -24,7 +24,7 @@ def load(url):
 
 def predict(image_url):
     image = load(image_url)
-    currentDir = os.getcwd()
+    current_dir = os.getcwd()
     hair_model = tf.keras.models.load_model(currentDir+"/project/aws/Hair_Model.h5")
     background_model = tf.keras.models.load_model(currentDir+"/project/aws/Background_Location_Model.h5")
     hair_prediction = hair_model.predict(image)[0]
@@ -34,17 +34,17 @@ def predict(image_url):
     if hair_prediction[0] > hair_prediction[1]:
         output['Long_Hair'] = {
             'Value': False
-            },
+        }
         output['Short_Hair'] = {
             'Value': True
         }
     else:
         output['Short_Hair'] = {
             'Value': False
-            }
+        }
         output['Long_Hair'] = {
             'Value': True
-        },
+        }
 
     if location_prediction[0] > location_prediction[1]:
         output['Indoor'] = {
@@ -65,7 +65,7 @@ def predict(image_url):
 
 
 @aws_blueprint.route('/api/v1/uploadImage/',  methods=['POST'])
-# @token_required
+@token_required
 def get_aws_tags_for_image():
     # Get fields from request body, check for missing fields
 
@@ -99,21 +99,22 @@ def get_aws_tags_for_image():
     # Convert to int
     get_int_profile_id = int(profile_id_exists)
     if user_id_exists:
+		url = get_image_url.split(".")
         if url[3] == "jpg":
             get_prediction = predict(get_image_url)
         else:
             get_prediction['Long_Hair'] = {
                 'Value': False
-                },
+                }
             get_prediction['Short_Hair'] = {
                 'Value': False
-            },
+            }
             get_prediction['Indoor'] = {
                 'Value': False
-                },
+            }
             get_prediction['Outdoor'] = {
                 'Value': False
-                }
+            }
 
         get_tags = get_aws_tags(get_image_url)
         if get_tags['Code'] == 2:
