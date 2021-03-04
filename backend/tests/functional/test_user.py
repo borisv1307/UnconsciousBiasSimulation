@@ -1,6 +1,5 @@
 """
-This file (test_profile.py) contains the functional tests which
-test create profile and view profile.
+This file (test_user.py) contains the functional tests.
 
 Command to run tests:- pytest --setup-show tests/functional
 
