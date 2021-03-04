@@ -204,7 +204,8 @@ class HomeHR extends Component {
     var rejection_age = []
     var acceptance_email = []
     var rejection_email = []
-    var collect_labels = []
+    // var collect_labels = []
+    let collect_labels = new Set()
     var batchdate = this.state.batch_result.filter(function (batch) {
       return batch.batch_no === parseInt(event);
     })
@@ -411,24 +412,21 @@ class HomeHR extends Component {
 
 
 
-        if ((Object.keys(res5["accepted"]).length) > Object.keys(res5["rejected"]).length) {
-          dataHorizontalEmail.labels = Object.keys(res5["accepted"])
-        }
-        else {
-          dataHorizontalEmail.labels = Object.keys(res5["rejected"])
-        }
 
 
 
         Object.keys(res5["accepted"]).forEach(function (key1) {
+          collect_labels.add(key1);
           acceptance_email.push(res5["accepted"][key1]);
         })
 
         Object.keys(res5["rejected"]).forEach(function (key2) {
+          collect_labels.add(key2);
           rejection_email.push(res5["rejected"][key2]);
         })
 
 
+        dataHorizontalEmail.labels = [...collect_labels];
         dataHorizontalEmail.datasets[0].data = acceptance_email;
         dataHorizontalEmail.datasets[0].backgroundColor = new Array(acceptance_email.length).fill(acceptBgColor);
         dataHorizontalEmail.datasets[0].borderColor = new Array(acceptance_email.length).fill(acceptBorderColor);
