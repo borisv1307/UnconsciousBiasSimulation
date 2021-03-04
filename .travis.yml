@@ -16,7 +16,7 @@ install:
   - npm --prefix $FRONTEND_DIR install
   - pip install codecov
   - pip install pylint
-  - pip install --user awscli
+  - pip install awscli
 
 
 # command to run tests
