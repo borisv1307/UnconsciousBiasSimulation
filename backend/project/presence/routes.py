@@ -762,10 +762,14 @@ def get_tags_count_batch(data):
     without_eyeglasses = 0
     facial_hair = 0
     without_facial_hair = 0
-    short_hair = 0
-    long_hair = 0
-    indoor = 0
-    outdoor = 0
+    accept_short_hair = 0
+    reject_short_hair = 0
+    accept_long_hair = 0
+    reject_long_hair = 0
+    accept_indoor = 0
+    reject_indoor = 0
+    accept_outdoor = 0
+    reject_outdoor = 0
 
     for record in data:
         for review in record['reviewed_by']:
@@ -788,14 +792,25 @@ def get_tags_count_batch(data):
                     facial_hair += 1
                 else:
                     without_facial_hair += 1
-                if shorthair_var['Value']:
-                    short_hair += 1
-                else:
-                    long_hair +=1
-                if indoor_var['Value']:
-                    indoor += 1
-                else:
-                    outdoor += 1
+                if review['application_status'] == "Accepted":
+                    if shorthair_var['Value']:
+                        accept_short_hair += 1
+                    else:
+                        accept_long_hair +=1
+                    if indoor_var['Value']:
+                        accept_indoor += 1
+                    else:
+                        accept_outdoor += 1
+                elif review['application_status'] == "Declined":
+                    if shorthair_var['Value']:
+                        reject_short_hair += 1
+                    else:
+                        reject_long_hair +=1
+                    if indoor_var['Value']:
+                        reject_indoor += 1
+                    else:
+                        reject_outdoor += 1
+
 
     output = {
         'smile':smile,
@@ -804,10 +819,14 @@ def get_tags_count_batch(data):
         'without_eyeglasses':without_eyeglasses,
         'facial_hair':facial_hair,
         'without_facial_hair':without_facial_hair,
-        'short_hair': short_hair,
-        'long_hair': long_hair,
-        'indoor': indoor,
-        'outdoor': outdoor
+        'accept_short_hair': accept_short_hair,
+        'accept_long_hair': accept_long_hair,
+        'accept_indoor': accept_indoor,
+        'accept_outdoor': accept_outdoor,
+        'reject_short_hair': reject_short_hair,
+        'reject_long_hair': reject_long_hair,
+        'reject_indoor': reject_indoor,
+        'reject_outdoor': reject_outdoor
     }
     return output
 
