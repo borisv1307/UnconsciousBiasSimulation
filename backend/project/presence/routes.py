@@ -833,24 +833,24 @@ def get_tags_count_batch(data):
 
     output = {
         'accept_smile':accept_smile,
-        'accept_without_smile':accept_without_smile,
-        'accept_eyeglasses':accept_eyeglasses,
-        'accept_without_eyeglasses':accept_without_eyeglasses,
-        'accept_facial_hair':accept_facial_hair,
-        'accept_without_facial_hair':accept_without_facial_hair,
-        'accept_short_hair': accept_short_hair,
-        'accept_long_hair': accept_long_hair,
-        'accept_indoor': accept_indoor,
-        'accept_outdoor': accept_outdoor,
         'reject_smile':reject_smile,
+        'accept_without_smile':accept_without_smile,
         'reject_without_smile':reject_without_smile,
+        'accept_eyeglasses':accept_eyeglasses,
         'reject_eyeglasses':reject_eyeglasses,
+        'accept_without_eyeglasses':accept_without_eyeglasses,
         'reject_without_eyeglasses':reject_without_eyeglasses,
+        'accept_facial_hair':accept_facial_hair,
         'reject_facial_hair':reject_facial_hair,
+        'accept_without_facial_hair':accept_without_facial_hair,
         'reject_without_facial_hair':reject_without_facial_hair,
+        'accept_short_hair': accept_short_hair,
         'reject_short_hair': reject_short_hair,
+        'accept_long_hair': accept_long_hair,
         'reject_long_hair': reject_long_hair,
+        'accept_indoor': accept_indoor,
         'reject_indoor': reject_indoor,
+        'accept_outdoor': accept_outdoor,
         'reject_outdoor': reject_outdoor
     }
     return output
