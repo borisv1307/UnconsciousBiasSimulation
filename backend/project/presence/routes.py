@@ -756,12 +756,18 @@ def calculate_age(dtob):
 
 def get_tags_count_batch(data):
 
-    smile = 0
-    without_smile = 0
-    eyeglasses = 0
-    without_eyeglasses = 0
-    facial_hair = 0
-    without_facial_hair = 0
+    accept_smile = 0
+    accept_without_smile = 0
+    accept_eyeglasses = 0
+    accept_without_eyeglasses = 0
+    accept_facial_hair = 0
+    accept_without_facial_hair = 0
+    reject_smile = 0
+    reject_without_smile = 0
+    reject_eyeglasses = 0
+    reject_without_eyeglasses = 0
+    reject_facial_hair = 0
+    reject_without_facial_hair = 0
     accept_short_hair = 0
     reject_short_hair = 0
     accept_long_hair = 0
@@ -780,18 +786,7 @@ def get_tags_count_batch(data):
                 beard_var = profile['Beard']
                 shorthair_var = profile['ShortHair']
                 indoor_var = profile['Indoor']
-                if smile_var['Value']:
-                    smile += 1
-                else:
-                    without_smile += 1
-                if eyeglasses_var['Value']:
-                    eyeglasses += 1
-                else:
-                    without_eyeglasses += 1
-                if beard_var['Value'] or mustache_var['Value']:
-                    facial_hair += 1
-                else:
-                    without_facial_hair += 1
+
                 if review['application_status'] == "Accepted":
                     if shorthair_var['Value']:
                         accept_short_hair += 1
@@ -801,6 +796,18 @@ def get_tags_count_batch(data):
                         accept_indoor += 1
                     else:
                         accept_outdoor += 1
+                    if smile_var['Value']:
+                        accept_smile += 1
+                    else:
+                        accept_without_smile += 1
+                    if eyeglasses_var['Value']:
+                        accept_eyeglasses += 1
+                    else:
+                        accept_without_eyeglasses += 1
+                    if beard_var['Value'] or mustache_var['Value']:
+                        accept_facial_hair += 1
+                    else:
+                        accept_without_facial_hair += 1
                 elif review['application_status'] == "Declined":
                     if shorthair_var['Value']:
                         reject_short_hair += 1
@@ -810,19 +817,37 @@ def get_tags_count_batch(data):
                         reject_indoor += 1
                     else:
                         reject_outdoor += 1
+                    if smile_var['Value']:
+                        reject_smile += 1
+                    else:
+                        reject_without_smile += 1
+                    if eyeglasses_var['Value']:
+                        reject_eyeglasses += 1
+                    else:
+                        reject_without_eyeglasses += 1
+                    if beard_var['Value'] or mustache_var['Value']:
+                        reject_facial_hair += 1
+                    else:
+                        reject_without_facial_hair += 1
 
 
     output = {
-        'smile':smile,
-        'without_smile':without_smile,
-        'eyeglasses':eyeglasses,
-        'without_eyeglasses':without_eyeglasses,
-        'facial_hair':facial_hair,
-        'without_facial_hair':without_facial_hair,
+        'accept_smile':accept_smile,
+        'accept_without_smile':accept_without_smile,
+        'accept_eyeglasses':accept_eyeglasses,
+        'accept_without_eyeglasses':accept_without_eyeglasses,
+        'accept_facial_hair':accept_facial_hair,
+        'accept_without_facial_hair':accept_without_facial_hair,
         'accept_short_hair': accept_short_hair,
         'accept_long_hair': accept_long_hair,
         'accept_indoor': accept_indoor,
         'accept_outdoor': accept_outdoor,
+        'reject_smile':reject_smile,
+        'reject_without_smile':reject_without_smile,
+        'reject_eyeglasses':reject_eyeglasses,
+        'reject_without_eyeglasses':reject_without_eyeglasses,
+        'reject_facial_hair':reject_facial_hair,
+        'reject_without_facial_hair':reject_without_facial_hair,
         'reject_short_hair': reject_short_hair,
         'reject_long_hair': reject_long_hair,
         'reject_indoor': reject_indoor,
