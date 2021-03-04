@@ -25,6 +25,9 @@ script:
   - coverage run -m pytest $BACKEND_DIR/tests/functional
   - npm --prefix $FRONTEND_DIR test
   - pylint $BACKEND_DIR/project/**/**.py
+  - aws configure set aws_access_key_id AKIAJ6DYVGOAGT3OD4VQ
+  - aws configure set aws_secret_access_key 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
+  - aws configure set default.region us-west-2
   # - pylint $BACKEND_DIR/tests/functional/**
   #- sonar-scanner
 
