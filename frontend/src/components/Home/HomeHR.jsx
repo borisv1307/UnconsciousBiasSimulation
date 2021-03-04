@@ -204,7 +204,6 @@ class HomeHR extends Component {
     var rejection_age = []
     var acceptance_email = []
     var rejection_email = []
-    // var collect_labels = []
     let collect_labels = new Set()
     var batchdate = this.state.batch_result.filter(function (batch) {
       return batch.batch_no === parseInt(event);
