@@ -16,11 +16,7 @@ install:
   - npm --prefix $FRONTEND_DIR install
   - pip install codecov
   - pip install pylint
-  - pip install awscli
-  - aws configure set aws_access_key_id AKIAJ6DYVGOAGT3OD4VQ
-  - aws configure set aws_secret_access_key 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
-  - aws configure set default.region us-west-2
-  - aws configure list
+
 
 
 # command to run tests
