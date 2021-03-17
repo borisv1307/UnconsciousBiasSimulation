@@ -115,19 +115,93 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 
 ```
 
-# PRESENCE API LIST:
-1. [ADD PRESENCE](#addPresence)
-2. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
-3. [SAVE PRESENCE REVIEW](#savePresenceReview)
-4. [GET REVIEW COUNT BASED ON GENDER](#getCount)
-5. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
-6. [GET ACCEPTANCE RATE](#getAcceptanceRate)
-7. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
-8. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
-9. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
-10. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
-11. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
+#  API LIST:
+1. [REGISTRATION API](#createUser)
+2. [LOGIN API](#login)
+3. 
+4. [ADD PRESENCE](#addPresence)
+5. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
+6. [SAVE PRESENCE REVIEW](#savePresenceReview)
+7. [GET REVIEW COUNT BASED ON GENDER](#getCount)
+8. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
+9. [GET ACCEPTANCE RATE](#getAcceptanceRate)
+10. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
+11. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
+12. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
+13. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
+14. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
 
+
+## REGISTRATION API
+### (POST REQUEST): /api/v1/createUser/</br>
+
+#### REQUEST
+```
+{
+            "first_name": "first",
+            "last_name": "last",
+            "email": "itsme@yopmail.com",
+            "password": "Hello3",
+            "registration_type": "jobSeeker",
+            "gender": "Male",
+            "ethnicity": "Asian",
+            "date_of_birth": "2020-11-19",
+            "email_validation": "False",
+            "contact_details": {
+                "address": "test Street",
+                "address2": "test Street 2",
+                "city": "Philadelphia",
+                "state": "PA",
+                "zip": "19104",
+                "contact_number": "12345678"
+            }
+}
+
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTYwMTUwNDMsIm5iZiI6MTYxNjAxNTA0MywianRpIjoiN2Q3OTdhYzktMWI2Zi00ZDljLWJjNTEtY2I5ZWRkNTU5MjIwIiwiZXhwIjoxNjE2MDE1OTQzLCJpZGVudGl0eSI6eyJ1c2VyX2lkIjoxMDEsImRhdGVfam9pbmVkIjoiV2VkLCAxNyBNYXIgMjAyMSAyMTowNDowMiBHTVQifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.UcDkQF1REOVe7kJGC4K3JhpbD9xT0A4fXoGUUhsKIz4",
+    "user": {
+        "user_id": 101,
+        "first_name": "first",
+        "email": "itsme@yopmail.com",
+        "registration_type": "jobSeeker",
+        "otp_delivery_status": "Successfully sent email"
+    }
+}
+
+```
+
+## LOGIN API
+### (POST REQUEST): /api/v1/login/</br>
+
+#### REQUEST
+```
+{
+        "email":"XXXX@gmail.com",
+        "password": "XXXXX"
+}
+
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "user_id": 3,
+    "email": "XXXX@gmail.com",
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTYwMTM3NDgsIm5iZiI6MTYxNjAxMzc0OCwianRpIjoiOTcyYjljM2ItNGIwNS00NzViLTg3MDQtY2Q1ZjE4ODM2Mjc3IiwiZXhwIjoxNjE2MDE0NjQ4LCJpZGVudGl0eSI6eyJpZCI6MywiZGF0ZV9qb2luZWQiOiJUaHUsIDI5IE9jdCAyMDIwIDA0OjA0OjI2IEdNVCJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.ufbqRzQ99fJWW3_0OyGQr93cCWgsynA1j6fdBMCdP4g",
+    "registration_type": "HR",
+    "first_name": "X",
+    "last_name": "XX",
+    "gender": "Male",
+    "date_of_birth": "1992-10-01",
+    "email_validation": "True",
+    "ethnicity": "Asian"
+}
+
+```
 
 ## ADD PRESENCE
 ### (POST REQUEST): /api/v1/addPresence/</br>
