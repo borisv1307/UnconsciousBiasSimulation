@@ -57,11 +57,11 @@ Steps to install Python on mac: -
 ```
 1. Clone git repository into your local.
    Command: - git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
-2. cd backend 
+2. cd backend
 3. python app.py
 ```
 
-## Steps to run backend testcase 
+## Steps to run backend testcase
 
 ```
 1. pytest --setup-show tests/functional
@@ -89,16 +89,29 @@ Steps to install Python on mac: -
 
 ![](images/cn_string.png)
 
-## Steps to change the batch size 
+## Steps to change the batch size
 
 ```
 1. Clone git repository into your local.
    Command: - git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
-2. cd backend 
-3. cd project 
+2. cd backend
+3. cd project
 4. Edit __init__.py and modify BATCH_COUNT to the desired value.
 ```
 ![](images/batch_size.png)
+
+## Continuios Integration.
+```
+CI is implemented using Travis CI. The file '.travis.yml' in the rool directory has the commands to perform the build. The following description explains the commands in .travis.yml file.
+
+1. Language, environment and Python version are declared.
+2. In the addons section, additional checks on the code are mentioned. We have implemented sonarcloud static code analysis.
+3. Change the organization in sonar cloud to your account for a successful run.
+4. Requirements for frontend, backend and other dependencies are installed.
+5. The commands in the Script section runs the tests for Backend, Frontend as well as code coverage
+
+In case of setup issues look into travis documentation https://docs.travis-ci.com/user/tutorial/
+```
 
 # PRESENCE API LIST:
 1. [ADD PRESENCE](#addPresence)
