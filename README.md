@@ -125,7 +125,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 6. [GET EMAIL DOMAIN COUNT](#GET_EMAIL_DOMAIN_COUNT)
 7. [CREATE PROFILE](#CREATE_PROFILE)
 8. [GET PROFILES](#GET_PROFILES)
-9. 
+9. [EDIT PROFILES](#EDIT_PROFILES)
 10. 
 11. [ADD PRESENCE](#ADD_PRESENCE)
 12. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
@@ -647,6 +647,82 @@ https://ubs-app-api-dev.herokuapp.com/api/v1/getProfiles/33/
             "ethnicity": "Asian"
         }
     ]
+}
+```
+
+## EDIT_PROFILES
+### (PUT REQUEST): /api/v1/editProfile/</br>
+
+#### REQUEST
+```
+{
+        "user_id":20,
+        "profile_id":14,
+        "profileName":"Test AWS CLI 2",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053524/unconsciousbias/gvaqsvbiv0uejvdc8lus.jpg",
+        "first_name": "VJ",
+        "last_name": "Maxino",
+        "position": "Developer",
+        "gender":"Male",
+        "email":"vjboss@yopmail.com",
+        "ethnicity":"Asian",
+        "aboutMe": "Hello World",
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]  
+        }
+
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "profile_id": 14,
+    "user_id": 20,
+    "profileName": "Test AWS CLI 2",
+    "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053524/unconsciousbias/gvaqsvbiv0uejvdc8lus.jpg",
+    "first_name": "VJ",
+    "last_name": "Maxino",
+    "position": "Developer",
+    "aboutMe": "Hello World",
+    "education": [
+        {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+        }
+    ],
+    "experience": [
+        {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+        }
+    ],
+    "gender": "Male",
+    "email": "vjboss@yopmail.com",
+    "ethnicity": "Asian"
 }
 ```
 
