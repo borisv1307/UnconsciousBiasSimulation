@@ -45,11 +45,12 @@ If machine learning were applied to the data set thus produced, the employee may
 2. pip install -r requirements.txt
 3. pip install pytest
 
+```
 Steps to install Python on windows: -
       •	https://www.howtogeek.com/197947/how-to-install-python-on-windows/
 Steps to install Python on mac: -
       •	https://python.tutorials24x7.com/blog/how-to-install-python-3-9-on-mac
-
+```
 
 ## UBS Front-End
 
@@ -79,17 +80,23 @@ Back-End [README file](backend/README.md)
 
 ## MongoDB Connection setup
 1. Login into mongo db atlas.
+
+```
    https://account.mongodb.com/account/login
    Email Address: - xxx@xxx.com
    Password: - xxxx@xxxx
+```
 
 2. Click on connect.
+
 ![](images/first.png)
 
 3. Click on connect your application.
+
 ![](images/mongo_menu.png)
 
 4. Select driver name and version from the drop down, replace username, password and database name.
+
 ![](images/cn_string.png)
 
 # PRESENCE API LIST:
