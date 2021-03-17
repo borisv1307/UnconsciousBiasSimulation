@@ -102,7 +102,10 @@ Steps to install Python on mac: -
 
 ## Continuios Integration.
 ```
-CI is implemented using Travis CI. The file '.travis.yml' in the rool directory has the commands to perform the build. The following description explains the commands in .travis.yml file.
+CI is implemented using Travis CI. The file '.travis.yml' in the rool directory has the commands to perform the build.
+The following description explains the commands in .travis.yml file.
+
+To setup Travis look into travis documentation https://docs.travis-ci.com/user/tutorial/
 
 1. Language, environment and Python version are declared.
 2. In the addons section, additional checks on the code are mentioned. We have implemented sonarcloud static code analysis.
@@ -110,7 +113,6 @@ CI is implemented using Travis CI. The file '.travis.yml' in the rool directory 
 4. Requirements for frontend, backend and other dependencies are installed.
 5. The commands in the Script section runs the tests for Backend, Frontend as well as code coverage
 
-In case of setup issues look into travis documentation https://docs.travis-ci.com/user/tutorial/
 ```
 
 # PRESENCE API LIST:
