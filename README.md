@@ -89,6 +89,17 @@ Steps to install Python on mac: -
 
 ![](images/cn_string.png)
 
+## Steps to change the batch size 
+
+```
+1. Clone git repository into your local.
+   Command: - git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
+2. cd backend 
+3. cd project 
+4. Edit __init__.py and modify BATCH_COUNT to the desired value.
+```
+![](images/batch_size.png)
+
 # PRESENCE API LIST:
 1. [ADD PRESENCE](#addPresence)
 2. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
