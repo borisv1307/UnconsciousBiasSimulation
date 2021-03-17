@@ -23,45 +23,44 @@ def load(url):
 	return np_image
 
 def predict(image_url):
-    image = load(image_url)
-    current_dir = os.getcwd()
-    hair_model = tf.keras.models.load_model(current_dir+"/project/aws/Hair_Model_V2.h5")
-    background_model = tf.keras.models.load_model(current_dir+"/project/aws/Background_Location_Model_V2.h5")
-    hair_prediction = hair_model.predict(image)[0]
-    location_prediction = background_model.predict(image)[0]
-    output = {}
+	image = load(image_url)
+	current_dir = os.getcwd()
+	hair_model = tf.keras.models.load_model(current_dir+"/project/aws/Hair_Model_V2.h5")
+	background_model = tf.keras.models.load_model(current_dir+"/project/aws/Background_Location_Model_V2.h5")
+	hair_prediction = hair_model.predict(image)[0]
+	location_prediction = background_model.predict(image)[0]
+	output = {}
 
-    if hair_prediction[0] > hair_prediction[1]:
-        output['Long_Hair'] = {
-            'Value': False
-        }
-        output['Short_Hair'] = {
-            'Value': True
-        }
-    else:
-        output['Short_Hair'] = {
-            'Value': False
-        }
-        output['Long_Hair'] = {
-            'Value': True
-        }
+	if hair_prediction[0] > hair_prediction[1]:
+		output['Long_Hair'] = {
+			'Value': False
+			}
+		output['Short_Hair'] = {
+			'Value': True
+			}
+	else:
+		output['Short_Hair'] = {
+			'Value': False
+			}
+		output['Long_Hair'] = {
+			'Value': True
+			}
 
-    if location_prediction[0] > location_prediction[1]:
-        output['Indoor'] = {
-            'Value': True
-            }
-        output['Outdoor'] = {
-            'Value': False
-            }
-    else:
-        output['Outdoor'] = {
-            'Value': True
-            }
-        output['Indoor'] = {
-            'Value': False
-            }
-    return output
-
+	if location_prediction[0] > location_prediction[1]:
+		output['Indoor'] = {
+			'Value': True
+			}
+		output['Outdoor'] = {
+			'Value': False
+			}
+	else:
+		output['Outdoor'] = {
+			'Value': True
+			}
+		output['Indoor'] = {
+			'Value': False
+			}
+	return output
 
 
 @aws_blueprint.route('/api/v1/uploadImage/',  methods=['POST'])
@@ -74,7 +73,6 @@ def get_aws_tags_for_image():
 		get_int_user_id = int(get_image_data['user_id'])
 	except TypeError:
 		return {'error': 'User id must be numeric'}, 403
-
 	try:
 		get_image_url = get_image_data['profileImg']
 	except TypeError:
@@ -88,6 +86,7 @@ def get_aws_tags_for_image():
 		get_profile_id = int(profile.find().skip(profile.count_documents({}) - 1)[0]['profile_id'])+1
 	except ValueError:
 		get_profile_id = 1
+
 	user_id_exists = user.count_documents({'user_id': get_int_user_id})
 	profile_id_exists = aws_tags.count_documents({'profile_id':get_profile_id })
 	get_int_profile_id = int(profile_id_exists)
@@ -106,22 +105,22 @@ def get_aws_tags_for_image():
 		elif get_int_profile_id == 0:
 			output = {'Code': 1, 'success':get_tags}
 			aws_tags.insert_one({
-			'profile_id': get_profile_id,
-			'user_id': get_int_user_id,
-			'AgeRange':get_tags['AgeRange'],
-			'Smile':get_tags['Smile'],
-			'Eyeglasses':get_tags['Eyeglasses'],
-			'Sunglasses':get_tags['Sunglasses'],
-			'Gender':get_tags['Gender'],
-			'Beard':get_tags['Beard'],
-			'Mustache':get_tags['Mustache'],
-			'EyesOpen': get_tags['EyesOpen'],
-			'MouthOpen': get_tags['MouthOpen'],
-			'Emotions': get_tags['Emotions'],
-			'ShortHair': get_prediction['Short_Hair'],
-			'LongHair': get_prediction['Long_Hair'],
-			'Indoor': get_prediction['Indoor'],
-			'Outdoor': get_prediction['Outdoor']
+				'profile_id': get_profile_id,
+				'user_id': get_int_user_id,
+				'AgeRange':get_tags['AgeRange'],
+				'Smile':get_tags['Smile'],
+				'Eyeglasses':get_tags['Eyeglasses'],
+				'Sunglasses':get_tags['Sunglasses'],
+				'Gender':get_tags['Gender'],
+				'Beard':get_tags['Beard'],
+				'Mustache':get_tags['Mustache'],
+				'EyesOpen': get_tags['EyesOpen'],
+				'MouthOpen': get_tags['MouthOpen'],
+				'Emotions': get_tags['Emotions'],
+				'ShortHair': get_prediction['Short_Hair'],
+				'LongHair': get_prediction['Long_Hair'],
+				'Indoor': get_prediction['Indoor'],
+				'Outdoor': get_prediction['Outdoor']
 			})
 		else:
 			output = {'Code':3 , 'error':'entry for this profile_id already exists. profile_id:-'+ str(get_profile_id)}
