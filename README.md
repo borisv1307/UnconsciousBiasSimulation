@@ -116,7 +116,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 ```
 
 #  API LIST:
-1. [REGISTRATION API](#REGISTRATION)
+1. [REGISTRATION API](#/api/v1/createUser/)
 2. [LOGIN API](#LOGIN)
 3. 
 4. [ADD PRESENCE](#ADD_PRESENCE)
