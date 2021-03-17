@@ -116,10 +116,10 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 ```
 
 #  API LIST:
-1. [REGISTRATION API](#createUser)
-2. [LOGIN API](#login)
+1. [REGISTRATION API](#REGISTRATION)
+2. [LOGIN API](#LOGIN)
 3. 
-4. [ADD PRESENCE](#addPresence)
+4. [ADD PRESENCE](#ADD_PRESENCE)
 5. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
 6. [SAVE PRESENCE REVIEW](#savePresenceReview)
 7. [GET REVIEW COUNT BASED ON GENDER](#getCount)
@@ -132,7 +132,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 14. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
 
 
-## REGISTRATION API
+## REGISTRATION
 ### (POST REQUEST): /api/v1/createUser/</br>
 
 #### REQUEST
@@ -174,7 +174,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 
 ```
 
-## LOGIN API
+## LOGIN
 ### (POST REQUEST): /api/v1/login/</br>
 
 #### REQUEST
@@ -203,7 +203,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 
 ```
 
-## ADD PRESENCE
+## ADD_PRESENCE
 ### (POST REQUEST): /api/v1/addPresence/</br>
 Add Presence USING POSTMAN: body, raw </br>
 
