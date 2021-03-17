@@ -1,7 +1,8 @@
-# Unconscious Bias Simulation
+# Unconscious Bias Simulation [![Build Status](https://travis-ci.org/Jijogeorge69/UnconsciousBiasSimulation.svg?branch=master)](https://travis-ci.org/Jijogeorge69/UnconsciousBiasSimulation)
 
 ---
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=Jijogeorge69_UnconsciousBiasSimulation)](https://sonarcloud.io/dashboard?id=Jijogeorge69_UnconsciousBiasSimulation)
+
 ## Introduction
 
 All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. This website serves both populations with a simulation..
@@ -119,22 +120,24 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 1. [REGISTRATION API](#REGISTRATION)
 2. [LOGIN API](#LOGIN)
 3. [VERIFY OTP](#VERIFY_OTP)
-4. [RESEND_OTP](#RESEND_OTP)
-5. 
-6. 
-7. 
-8. 
-9. [ADD PRESENCE](#ADD_PRESENCE)
-10. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
-11. [SAVE PRESENCE REVIEW](#savePresenceReview)
-12. [GET REVIEW COUNT BASED ON GENDER](#getCount)
-13. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
-14. [GET ACCEPTANCE RATE](#getAcceptanceRate)
-15. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
-16. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
-17. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
-18. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
-19. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
+4. [RESEND OTP](#RESEND_OTP)
+5. [LOGOUT](#LOGOUT)
+6. [GET EMAIL DOMAIN COUNT](#GET_EMAIL_DOMAIN_COUNT)
+7. [CREATE PROFILE](#CREATE_PROFILE)
+8. [GET PROFILES](#GET_PROFILES)
+9. 
+10. 
+11. [ADD PRESENCE](#ADD_PRESENCE)
+12. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
+13. [SAVE PRESENCE REVIEW](#savePresenceReview)
+14. [GET REVIEW COUNT BASED ON GENDER](#getCount)
+15. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
+16. [GET ACCEPTANCE RATE](#getAcceptanceRate)
+17. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
+18. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
+19. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
+20. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
+21. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
 
 
 ## REGISTRATION
@@ -243,6 +246,408 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
     "success": "OTP sent via email"
 }
 
+```
+
+## LOGOUT
+### (POST REQUEST): /api/v1/logout/</br>
+
+#### REQUEST
+```
+{
+    "user_id":101,
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTYwMTUwNDMsIm5iZiI6MTYxNjAxNTA0MywianRpIjoiN2Q3OTdhYzktMWI2Zi00ZDljLWJjNTEtY2I5ZWRkNTU5MjIwIiwiZXhwIjoxNjE2MDE1OTQzLCJpZGVudGl0eSI6eyJ1c2VyX2lkIjoxMDEsImRhdGVfam9pbmVkIjoiV2VkLCAxNyBNYXIgMjAyMSAyMTowNDowMiBHTVQifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.UcDkQF1REOVe7kJGC4K3JhpbD9xT0A4fXoGUUhsKIz4"
+}
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "success": "Successfully logged out"
+}
+
+```
+
+## GET_EMAIL_DOMAIN_COUNT
+### (GET REQUEST): /api/v1/getCount/emailDomain/<reviewer_id>/<batch_no>/</br>
+
+#### REQUEST
+```
+https://ubs-app-api-dev.herokuapp.com/api/v1/getCount/emailDomain/994/994/
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "accepted_email_count": 13,
+    "accepted": {
+        "gmail.com": 13
+    },
+    "rejected_email_count": 87,
+    "rejected": {
+        "gmail.com": 85,
+        "drexel.edu": 1,
+        "wqcefp.com": 1
+    }
+}
+```
+
+## CREATE_PROFILE
+### (POST REQUEST): /api/v1/createProfile/</br>
+
+#### REQUEST
+```
+{
+        "user_id":96,
+        "profileName":"Test AWS CLI 2",
+        "profileImg":"https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053524/unconsciousbias/gvaqsvbiv0uejvdc8lus.jpg",
+        "first_name": "VJ",
+        "last_name": "Maxino",
+        "position": "Developer",
+        "gender":"Male",
+        "email":"vjboss@yopmail.com",
+        "ethnicity":"Asian",
+        "aboutMe": "Hello World",
+        "education": [
+            {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+            }
+        ],
+        "experience": [
+            {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+            }
+        ]  
+        }
+
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "profile_id": 85,
+    "user_id": 96,
+    "profileName": "Test AWS CLI 2",
+    "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613053524/unconsciousbias/gvaqsvbiv0uejvdc8lus.jpg",
+    "first_name": "VJ",
+    "last_name": "Maxino",
+    "position": "Developer",
+    "aboutMe": "Hello World",
+    "education": [
+        {
+            "school": "Drexel",
+            "degree": "MA",
+            "major": "SE",
+            "eduStartDate": "0001-01",
+            "eduEndDate": "0001-01",
+            "gpa": "3"
+        }
+    ],
+    "experience": [
+        {
+            "title": "Developer",
+            "company": "ABC",
+            "location": "PH",
+            "expStartDate": "0001-01",
+            "expEndDate": "0001-01"
+        }
+    ],
+    "gender": "Male",
+    "email": "vjboss@yopmail.com",
+    "ethnicity": "Asian"
+}
+
+```
+## GET_PROFILES
+### (GET REQUEST): /api/v1/getProfiles/<user_id>/</br>
+
+#### REQUEST
+```
+https://ubs-app-api-dev.herokuapp.com/api/v1/getProfiles/33/
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "count": 10,
+    "results": [
+        {
+            "profile_id": 18,
+            "profileName": "Software Developer",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1605163769/unconsciousbias/hvj2kx7opzmrwrycsgbt.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior Software Engineer",
+            "aboutMe": "I'm a software engineer based in Boston, MA specializing in building (and occasionally designing) exceptional websites, applications, and everything in between.",
+            "education": [
+                {
+                    "school": "Drexel University",
+                    "degree": "Masters ",
+                    "major": "Software Engineering ",
+                    "eduStartDate": "2020-01",
+                    "eduEndDate": "2021-10",
+                    "gpa": "4"
+                }
+            ],
+            "experience": [
+                {
+                    "title": "DevOps Engineer",
+                    "company": "DXC Technology",
+                    "location": "Bostan",
+                    "expStartDate": "2014-01",
+                    "expEndDate": "2020-11",
+                    "duration": "6 years 10 months"
+                }
+            ],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 19,
+            "profileName": "DevOps Engineer",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1605164326/unconsciousbias/nvrvfkklri6cxiuabzqc.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior DevOps Engineer",
+            "aboutMe": "Spent 10 years developing the skills to increase velocity, reliability, and quality for BFSI vertical with a high focus on security. Deep experience with AWS, Docker, Kubernetes, and Openstack, helping organizations instill Devops for the modern age.",
+            "education": [
+                {
+                    "school": "RGPV University",
+                    "degree": "B.E",
+                    "major": "Computer Science",
+                    "eduStartDate": "2010-01",
+                    "eduEndDate": "2014-12",
+                    "gpa": ""
+                },
+                {
+                    "school": "Drexel University",
+                    "degree": "Masters",
+                    "major": "Software Engineering ",
+                    "eduStartDate": "2019-09",
+                    "eduEndDate": "2021-06",
+                    "gpa": ""
+                }
+            ],
+            "experience": [
+                {
+                    "title": "Technology Consultant ",
+                    "company": "Hewlett Packard",
+                    "location": "Bangalore",
+                    "expStartDate": "2014-03",
+                    "expEndDate": "2019-07",
+                    "duration": "5 years 4 months"
+                },
+                {
+                    "title": "DevOps Engineer ",
+                    "company": "DXC Technology",
+                    "location": "Bangalore",
+                    "expStartDate": "2019-06",
+                    "expEndDate": "2020-11",
+                    "duration": "1 year 5 months"
+                }
+            ],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 29,
+            "profileName": "Manager",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1611164810/unconsciousbias/hgnhxc0eoc6j63u9mwp5.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Manager",
+            "aboutMe": "aosasclclclkadclclacdlkclkclc;cjchdckjdchkk",
+            "education": [
+                {
+                    "school": "Drexel",
+                    "degree": "MBA",
+                    "major": "Business Analytics",
+                    "eduStartDate": "2020-01",
+                    "eduEndDate": "2021-01",
+                    "gpa": ""
+                }
+            ],
+            "experience": [
+                {
+                    "title": "Team Lead",
+                    "company": "Google",
+                    "location": "California",
+                    "expStartDate": "2019-01",
+                    "expEndDate": "2020-01"
+                }
+            ],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 30,
+            "profileName": "Test Presence",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1611176450/unconsciousbias/q85rypgvub3ctumfswpw.png",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Dev",
+            "aboutMe": "Dev",
+            "education": [
+                {
+                    "school": "Drexel",
+                    "degree": "BS",
+                    "major": "SE",
+                    "eduStartDate": "2018-01",
+                    "eduEndDate": "2021-02",
+                    "gpa": "3.99"
+                }
+            ],
+            "experience": [
+                {
+                    "title": "Dev",
+                    "company": "DXC Technology",
+                    "location": "4r42",
+                    "expStartDate": "2013-02",
+                    "expEndDate": "2021-06",
+                    "duration": "8 years 4 months"
+                }
+            ],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 69,
+            "profileName": "Martin Test",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613626844/unconsciousbias/jjlxsdcizjdxdotatskb.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Dev",
+            "aboutMe": "Dev",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 73,
+            "profileName": "Test Girls Image",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613647912/unconsciousbias/tiwo9dssdoc5kiwtfz0w.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior Software Engineer",
+            "aboutMe": "Dev",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 74,
+            "profileName": "Test My Picture",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613648009/unconsciousbias/wrxkrgddj83jun4qzpfk.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior Software Engineer Edit",
+            "aboutMe": "Dev",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 75,
+            "profileName": "Test Invalid",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613648161/unconsciousbias/fzyx45ahaclldu54kjov.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior Software Engineer Edit",
+            "aboutMe": "Invalid",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 76,
+            "profileName": "Random Invalid",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1613650122/unconsciousbias/plrhpcwwcy3oe9bya6wp.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "Senior Software Engineer Edit",
+            "aboutMe": "Dev",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        },
+        {
+            "profile_id": 80,
+            "profileName": "New Dynamic Presence",
+            "user_id": 33,
+            "state": "PA",
+            "zip": "19104-5477",
+            "city": "PHILADELPHIA",
+            "email": "ER.JIJOGEORGE@GMAIL.COM",
+            "profileImg": "https://res.cloudinary.com/unconsciousbiassimulator/image/upload/v1614261152/unconsciousbias/oxeldhguprn5t5b7sktr.jpg",
+            "first_name": "Jijo",
+            "last_name": "George",
+            "position": "New Dynamic Presence",
+            "aboutMe": "New Dynamic Presence",
+            "education": [],
+            "experience": [],
+            "gender": "Male",
+            "ethnicity": "Asian"
+        }
+    ]
+}
 ```
 
 ## ADD_PRESENCE
