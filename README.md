@@ -52,16 +52,6 @@ Steps to install Python on mac: -
       •	https://python.tutorials24x7.com/blog/how-to-install-python-3-9-on-mac
 ```
 
-## UBS Front-End
-
-Source code for FE could be found under [frontend](frontend) directory in the root of the repository.  
-Front-End [README file](frontend/README.md)
-
-## UBS Back-End
-
-Source code for BE could be found under [backend](backend) directory in the root of the repository.  
-Back-End [README file](backend/README.md)
-
 ## Steps to run backend code
 
 ```
