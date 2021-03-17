@@ -40,6 +40,17 @@ If machine learning were applied to the data set thus produced, the employee may
 
 ## Setup
 
+## Dependencies
+1. Python 3.8
+2. pip install -r requirements.txt
+3. pip install pytest
+
+Steps to install Python on windows: -
+      •	https://www.howtogeek.com/197947/how-to-install-python-on-windows/
+Steps to install Python on mac: -
+      •	https://python.tutorials24x7.com/blog/how-to-install-python-3-9-on-mac
+
+
 ## UBS Front-End
 
 Source code for FE could be found under [frontend](frontend) directory in the root of the repository.  
@@ -50,34 +61,36 @@ Front-End [README file](frontend/README.md)
 Source code for BE could be found under [backend](backend) directory in the root of the repository.  
 Back-End [README file](backend/README.md)
 
-## Steps to run the application
+## Steps to run backend code
 
 ```
-cd backend
-pip install -r requirements.txt
-python app.py
-
-
-cd frontend
-npm install
-npm start
-
+1. Clone git repository into your local.
+   Command: - git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
+2. cd backend 
+3. python app.py
 ```
 
-## Steps to TDD the application
+## Steps to run backend testcase 
 
 ```
-cd backend/tests
-pytest tests_UBS.py
-
-
-cd frontend
-npm test
+1. pytest --setup-show tests/functional
 
 ```
 
-## Usage
+## MongoDB Connection setup
+1. Login into mongo db atlas.
+   https://account.mongodb.com/account/login
+   Email Address: - xxx@xxx.com
+   Password: - xxxx@xxxx
 
+2. Click on connect.
+![](images/first.png)
+
+3. Click on connect your application.
+![](images/mongo_menu.png)
+
+4. Select driver name and version from the drop down, replace username, password and database name.
+![](images/cn_string.png)
 
 # PRESENCE API LIST:
 1. [ADD PRESENCE](#addPresence)
