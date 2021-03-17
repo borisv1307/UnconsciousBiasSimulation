@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long, cyclic-import,relative-beyond-top-level, too-many-branches, too-many-locals, broad-except, trailing-newlines,inconsistent-return-statements, trailing-whitespace, bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string,R0912,R0915,W0311
 from datetime import datetime
 import bcrypt
 import re
@@ -451,14 +451,14 @@ def get_email_domains(get_email_ids):
     for line in get_lower:
         domain = line.split('@')[-1]
         domain_count[domain] += 1
-    
+
     return domain_count
 
 
 @user_blueprint.route('/api/v1/getCount/emailDomain/<reviewer_id>/<batch_no>/', methods=['GET'])
 @token_required
 def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
-    
+
     # Get mongo collections
     users = mongo.db.user
 
@@ -489,7 +489,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
 
             sorted_declined_users = sorted(declined_user_ids, reverse=False)
             sorted_accepted_users = sorted(accepted_user_ids, reverse=False)
-            
+
             if len(sorted_declined_users)>0:
                 for declined_user_id in sorted_declined_users:
                     get_email = users.find_one({'user_id': declined_user_id}, {'email':1, '_id':0})
@@ -500,7 +500,7 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
             else:
                 rejected_domains = {}
                 rejected_count = 0
-            
+
             if len(sorted_accepted_users)>0:
                 for accepted_user_id in sorted_accepted_users:
                     get_ac_email = users.find_one({'user_id': accepted_user_id}, {'email':1, '_id':0})
@@ -517,5 +517,3 @@ def get_batch_presence_by_email_domain_count(reviewer_id, batch_no):
     except Exception as error:
         print("Error:-",error)
         return {'code': 4, 'error': "No emails found"}, 403
-
-
