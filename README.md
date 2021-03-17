@@ -100,7 +100,7 @@ Steps to install Python on mac: -
 ```
 ![](images/batch_size.png)
 
-## Continuios Integration.
+## Continuous Integration.
 ```
 CI is implemented using Travis CI. The file '.travis.yml' in the rool directory has the commands to perform the build.
 The following description explains the commands in .travis.yml file.
@@ -116,20 +116,25 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 ```
 
 #  API LIST:
-1. [REGISTRATION API](#/api/v1/createUser/)
+1. [REGISTRATION API](#REGISTRATION)
 2. [LOGIN API](#LOGIN)
-3. 
-4. [ADD PRESENCE](#ADD_PRESENCE)
-5. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
-6. [SAVE PRESENCE REVIEW](#savePresenceReview)
-7. [GET REVIEW COUNT BASED ON GENDER](#getCount)
-8. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
-9. [GET ACCEPTANCE RATE](#getAcceptanceRate)
-10. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
-11. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
-12. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
-13. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
-14. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
+3. [VERIFY OTP](#VERIFY_OTP)
+4. [RESEND_OTP](#RESEND_OTP)
+5. 
+6. 
+7. 
+8. 
+9. [ADD PRESENCE](#ADD_PRESENCE)
+10. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
+11. [SAVE PRESENCE REVIEW](#savePresenceReview)
+12. [GET REVIEW COUNT BASED ON GENDER](#getCount)
+13. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
+14. [GET ACCEPTANCE RATE](#getAcceptanceRate)
+15. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
+16. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
+17. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
+18. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
+19. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
 
 
 ## REGISTRATION
@@ -173,7 +178,6 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 }
 
 ```
-
 ## LOGIN
 ### (POST REQUEST): /api/v1/login/</br>
 
@@ -199,6 +203,44 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
     "date_of_birth": "1992-10-01",
     "email_validation": "True",
     "ethnicity": "Asian"
+}
+
+```
+
+## VERIFY_OTP
+### (POST REQUEST): /api/v1/verify_otp/</br>
+
+#### REQUEST
+```
+{
+    "user_id":101,
+    "otp":"FUYOVA4NE33Y7PEI"
+}
+
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "success": "Email validation successful"
+}
+
+```
+
+## RESEND_OTP
+### (POST REQUEST): /api/v1/resend_otp/</br>
+
+#### REQUEST
+```
+{
+    "email":"itsme@yopmail.com"
+}
+```
+
+#### RESPONSE SUCCESS
+```
+{
+    "success": "OTP sent via email"
 }
 
 ```
