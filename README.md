@@ -109,7 +109,7 @@ Note for Microsoft Windows users: replace the virtual environment activation com
 ```
 ![](images/batch_size.png)
 
-## Continuous Integration.
+## Continuous Integration
 ```
 CI is implemented using Travis CI. The file '.travis.yml' in the rool directory has the commands to perform the build.
 The following description explains the commands in .travis.yml file.
@@ -169,6 +169,15 @@ https://id.heroku.com/login
      Backend Heroku app: -  https://ubs-app-api-dev.herokuapp.com/
      Backend GitHub repo: - https://github.com/Jijogeorge69/ubsapp-rest-api.git
 ```
+
+## JWT Token for API Authentication
+1. Fetch appropriate JWT token via login API.
+
+![](images/login_auth.png)
+
+2. Pass Key as Authorization and JWT token as value.
+
+![](images/login_auth1.png)
 
 #  API LIST:
 1. [REGISTRATION](#REGISTRATION)
