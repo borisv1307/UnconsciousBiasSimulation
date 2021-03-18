@@ -125,7 +125,14 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 5. The commands in the Script section runs the tests for Backend, Frontend as well as code coverage
 
 ```
+# Steps to setup AWS Rekognition
+```
+1. Create a new AWS account using this link: https://portal.aws.amazon.com/billing/signup#/start
+2. Install the AWS CLI using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
+3. Create the access keys by referring this link: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+4. Configure the access keys by following this link: https://chalice-workshop.readthedocs.io/en/latest/env-setup.html#id5
 
+```
 #  API LIST:
 1. [REGISTRATION](#REGISTRATION)
 2. [LOGIN](#LOGIN)
