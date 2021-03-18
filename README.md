@@ -1427,7 +1427,7 @@ Each folder also contains the files to test each component. These are the files 
 ## Defining the path of each page
 The path to each page is defined in [src/index.js](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/blob/refactored_Code/frontend/src/index.js). Each component that corresponds to a page to be displayed under a certain URL is imported in this file. Each route is defined in the Router with the URL defined in path. 
 
-## Image Classifier
+# Image Classifier
 The images provided for each presence is tagged using AWS and custom image classifier models. Custom models were created to classify features that AWS did not have. The custom models were created by referencing Tanishq Gautam's [Create your Own Image Classification Model using Python and Keras](https://www.analyticsvidhya.com/blog/2020/10/create-image-classification-model-python-keras/).
 
 ### Dependencies
