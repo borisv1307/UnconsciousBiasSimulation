@@ -15,8 +15,8 @@ from skimage import transform
 from . import aws_blueprint
 
 
-apiKey = "sim44RTACPPs2FqnDNPdUflr/em1"
-client = Algorithmia.client(apiKey)
+API_KEY = "sim44RTACPPs2FqnDNPdUflr/em1"
+client = Algorithmia.client(API_KEY)
 algo = client.algo('ms4975/image_classifier/1.0.0')
 
 
@@ -69,26 +69,6 @@ def predict(image_url):
 
 def new_predict(image_url):
 	return algo.pipe(image_url).result
-
-@aws_blueprint.route('/api/v1/TESTuploadImage/',  methods=['POST'])
-@token_required
-def test_new_tagging():
-	print("HELLO")
-	# Get fields from request body, check for missing fields
-	get_image_data = request.get_json()
-	# Check for nulls and whitespaces
-	try:
-		get_int_user_id = int(get_image_data['user_id'])
-	except TypeError:
-		return {'error': 'User id must be numeric'}, 403
-	try:
-		get_image_url = get_image_data['profileImg']
-	except TypeError:
-		return {'error': 'Please provide image URL'}, 403
-
-	output = new_predict(get_image_url)
-
-	return output
 
 @aws_blueprint.route('/api/v1/uploadImage/',  methods=['POST'])
 @token_required
