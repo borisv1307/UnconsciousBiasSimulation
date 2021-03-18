@@ -286,6 +286,8 @@ https://id.heroku.com/login
 
 ```
 
+![](images/verify.png)
+
 ## RESEND_OTP
 ### (POST REQUEST): /api/v1/resend_otp/</br>
 
@@ -303,6 +305,8 @@ https://id.heroku.com/login
 }
 
 ```
+
+![](images/resend_otp.png)
 
 ## LOGOUT
 ### (POST REQUEST): /api/v1/logout/</br>
