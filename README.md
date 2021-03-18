@@ -41,7 +41,7 @@ If machine learning were applied to the data set thus produced, the employee may
 
 ---
 
-## Setup
+# Backend
 
 ## Dependencies
 1. Python 3.8
@@ -54,8 +54,6 @@ Steps to install Python on windows: -
 Steps to install Python on mac: -
       •	https://python.tutorials24x7.com/blog/how-to-install-python-3-9-on-mac
 ```
-
-# Backend
 
 ## Steps to run backend code
 
@@ -125,7 +123,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 5. The commands in the Script section runs the tests for Backend, Frontend as well as code coverage
 
 ```
-# Steps to setup AWS Rekognition
+## Steps to setup AWS Rekognition
 ```
 1. Create a new AWS account using this link: https://portal.aws.amazon.com/billing/signup#/start
 2. Install the AWS CLI using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
@@ -184,16 +182,16 @@ https://id.heroku.com/login
 9. [EDIT PROFILES](#EDIT_PROFILES)
 10. [AWS TAGS](#EDIT_PROFILES)
 11. [ADD PRESENCE](#ADD_PRESENCE)
-12. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
-13. [SAVE PRESENCE REVIEW](#savePresenceReview)
-14. [GET REVIEW COUNT BASED ON GENDER](#getCount)
-15. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#getCountBatch)
-16. [GET ACCEPTANCE RATE](#getAcceptanceRate)
-17. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#getCountEthnicity)
-18. [GET REVIEW COUNT BASED ON ETHNICITY](#getCountByEthnicity)
-19. [GET ALL BATCHES FOR A REVIEWER](#getAllBatches)
-20. [GET TAGS COUNT FOR A BATCH](#batchesTagsCount)
-21. [GET BATCH COUNT BASED ON AGE](#getCountByAge)
+12. [GET ALL PRESENCE BY REVIEWER ID ](#GET_ALL_PRESENCE_BY_REVIEWERID)
+13. [SAVE PRESENCE REVIEW](#SAVE_PRESENCE_REVIEW)
+14. [GET REVIEW COUNT BASED ON GENDER](#GET_REVIEW_COUNT_BASED_ON_GENDER)
+15. [GET REVIEW COUNT BASED ON GENDER FOR BATCH](#GET_REVIEW_COUNT_BASED_ON_GENDER_FOR_BATCH)
+16. [GET ACCEPTANCE RATE](#GET_ACCEPTANCE_COUNT_FOR_JOB_SEEKER)
+17. [GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH](#GET_REVIEW_COUNT_BASED_ON_ETHNICITY_FOR_BATCH)
+18. [GET REVIEW COUNT BASED ON ETHNICITY](#GET_REVIEW_COUNT_BASED_ON_ETHNICITY)
+19. [GET ALL BATCHES FOR A REVIEWER](#GET_ALL_BATCHES_FOR_A_REVIEWER)
+20. [GET TAGS COUNT FOR A BATCH](#GET_TAGS_COUNT_FOR_A_BATCH)
+21. [GET BATCH COUNT BASED ON AGE](#GET_BATCH_COUNT_BASED_ON_AGE)
 
 
 ## REGISTRATION
@@ -900,7 +898,7 @@ Add Presence USING POSTMAN: body, raw </br>
 }
 ```
 
-## GET ALL PRESENCE BY REVIEWERID
+## GET_ALL_PRESENCE_BY_REVIEWERID
 ### (GET REQUEST): /api/v1/getAllPresence/<reviewer_id>/</br>
 Get Presences USING POSTMAN: body, raw </br>
 
@@ -964,7 +962,7 @@ GET:- https://localhost/api/v1/getAllPresence/32/
 }
 ```
 
-## SAVE PRESENCE REVIEW
+## SAVE_PRESENCE_REVIEW
 ### (PATCH REQUEST): /api/v1/savePresenceReview/</br>
 Save Presence Review USING POSTMAN: body, raw </br>
 
@@ -1050,7 +1048,7 @@ Save Presence Review USING POSTMAN: body, raw </br>
 }
 ```
 
-## GET REVIEW COUNT BASED ON GENDER
+## GET_REVIEW_COUNT_BASED_ON_GENDER
 ### (GET REQUEST): /api/v1/getCount/<reviewer_id>/</br>
 Get Count For Review USING POSTMAN: body, raw </br>
 
@@ -1082,7 +1080,7 @@ GET:- https://localhost/api/v1/getCount/31/
 }
 ```
 
-## GET REVIEW COUNT BASED ON GENDER FOR BATCH
+## GET_REVIEW_COUNT_BASED_ON_GENDER_FOR_BATCH
 ### (GET REQUEST): /api/v1/getCount/<reviewer_id>/<batch_no>/</br>
 Get Count For Review USING POSTMAN: body, raw </br>
 
@@ -1114,7 +1112,7 @@ GET:- https://localhost/api/v1/getCount/31/1/
 }
 ```
 
-## GET ACCEPTANCE COUNT FOR JOB SEEKER
+## GET_ACCEPTANCE_COUNT_FOR_JOB_SEEKER
 ### (GET REQUEST): /api/v1/getCount/<reviewer_id>/<batch_no>/</br>
 Get Acceptance Rate For Job Seeker USING POSTMAN: body, raw </br>
 
@@ -1139,7 +1137,7 @@ GET:- https://localhost/api/v1/getAcceptanceRate/1/
 }
 ```
 
-## GET REVIEW COUNT BASED ON ETHNICITY FOR BATCH
+## GET_REVIEW_COUNT_BASED_ON_ETHNICITY_FOR_BATCH
 ### (GET REQUEST): /api/v1/getCount/Ethnicity/<reviewer_id>/<batch_no>/</br>
 Get Review Count Based on Ethnicity For a Batch USING POSTMAN: body, raw </br>
 
@@ -1180,7 +1178,7 @@ GET:- https://localhost/api/v1/getCount/Ethnicity/34/1/
 ```
 
 
-## GET REVIEW COUNT BASED ON ETHNICITY
+## GET_REVIEW_COUNT_BASED_ON_ETHNICITY
 ### (GET REQUEST): /api/v1/getCountByEthnicity/<reviewer_id>/</br>
 Get Review Count Based on Ethnicity USING POSTMAN: body, raw </br>
 
@@ -1220,7 +1218,7 @@ GET:- https://localhost/api/v1/getCountByEthnicity/34/
 }
 ```
 
-## GET ALL BATCHES FOR A REVIEWER
+## GET_ALL_BATCHES_FOR_A_REVIEWER
 ### (GET REQUEST): /api/v1/getAllBatches/<reviewer_id>/</br>
 Get All Batches Data USING POSTMAN: body, raw </br>
 
@@ -1253,7 +1251,7 @@ GET:- https://localhost/api/v1/getAllBatches/34/
 ```
 
 
-## GET TAGS COUNT FOR A BATCH
+## GET_TAGS_COUNT_FOR_A_BATCH
 ### (GET REQUEST): /api/v1/batchesTagsCount/<reviewer_id>/</br>
 Get Tags Count For A  Batches USING POSTMAN: body, raw </br>
 
@@ -1298,7 +1296,7 @@ GET:- https://localhost/api/v1/batchesTagsCount/34/
 }
 ```
 
-## GET BATCH COUNT BASED ON AGE
+## GET_BATCH_COUNT_BASED_ON_AGE
 ### (GET REQUEST): /api/v1/getCountByAge/<reviewer_id>/<batch_no>/</br>
 Get Batch count based on Age USING POSTMAN: body, raw </br>
 
