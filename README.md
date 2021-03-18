@@ -43,8 +43,8 @@ If machine learning were applied to the data set thus produced, the employee may
 
 ## Dependencies
 1. Python 3.8
-2. pip install -r requirements.txt
-3. pip install pytest
+2. virtualenv (if you wish)
+3. git (only to clone repository)
 
 ```
 Steps to install Python on windows: -
@@ -56,10 +56,16 @@ Steps to install Python on mac: -
 ## Steps to run backend code
 
 ```
-1. Clone git repository into your local.
-   Command: - git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
-2. cd backend
-3. python app.py
+The commands below set everything up to run the code base:
+
+$ git clone https://github.com/Jijogeorge69/UnconsciousBiasSimulation.git
+$ cd backend
+$ virtualenv venv
+$ . venv/bin/activate
+(venv) pip install -r requirements.txt
+(venv) pip install pytest
+
+Note for Microsoft Windows users: replace the virtual environment activation command above with venv\Scripts\activate.
 ```
 
 ## Steps to run backend testcase
@@ -117,8 +123,8 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 ```
 
 #  API LIST:
-1. [REGISTRATION API](#REGISTRATION)
-2. [LOGIN API](#LOGIN)
+1. [REGISTRATION](#REGISTRATION)
+2. [LOGIN](#LOGIN)
 3. [VERIFY OTP](#VERIFY_OTP)
 4. [RESEND OTP](#RESEND_OTP)
 5. [LOGOUT](#LOGOUT)
@@ -126,7 +132,7 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 7. [CREATE PROFILE](#CREATE_PROFILE)
 8. [GET PROFILES](#GET_PROFILES)
 9. [EDIT PROFILES](#EDIT_PROFILES)
-10. 
+10. [AWS TAGS](#EDIT_PROFILES)
 11. [ADD PRESENCE](#ADD_PRESENCE)
 12. [GET ALL PRESENCE BY REVIEWER ID ](#getAllPresence)
 13. [SAVE PRESENCE REVIEW](#savePresenceReview)
