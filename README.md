@@ -1478,7 +1478,14 @@ The model is currently limited to classifying images between two labels at a tim
 Datasets for the models created were sourced from Kaggle.
 
 
-#### Limitation and Suggestion
-One limitation with the current implementation of the project relating to the custom models is the storage of the free tier of Heroku. Heroku only allows 500 MB of storage per application. The current models for hair and background location are 75 MB each. One way this could be fixed is by deploying the models separately on a different platform such as Algorithmia or FastAPI.
+### Model Deployment
+We deployed our locally trained models on Algorithmia  which allows us to get passed the performance bottleneck that was present when loading and running models on Heroku.
+
+The official documentation can help guide you through this process:
+https://algorithmia.com/developers/model-deployment
+As well as this video that does it step-by-step by Algorithmia:
+https://www.youtube.com/watch?v=NLq2gFhoMvI
+
+In order to follow through you will need an account on Algorithmia to have access to an API key as well as downloading the python Algorithmia package.
 
 
