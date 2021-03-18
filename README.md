@@ -1426,3 +1426,47 @@ Each folder also contains the files to test each component. These are the files 
 
 ## Defining the path of each page
 The path to each page is defined in [src/index.js](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/blob/refactored_Code/frontend/src/index.js). Each component that corresponds to a page to be displayed under a certain URL is imported in this file. Each route is defined in the Router with the URL defined in path. 
+
+## Image Classifier
+The images provided for each presence is tagged using AWS and custom image classifier models. Custom models were created to classify features that AWS did not have. The custom models were created by referencing Tanishq Gautam's [Create your Own Image Classification Model using Python and Keras](https://www.analyticsvidhya.com/blog/2020/10/create-image-classification-model-python-keras/).
+
+### Dependencies
+These are the dependencies that have to be installed with python 3
+- tensorflow 2
+- scikit-image
+- sklearn
+- Pillow
+
+### Training the model
+
+The model is trained using train.py. This currently trains and saves a model to classify an image between two labels. To use the training file, the following should be defined:
+- SAVED_MODEL_NAME: name of the saved model at the end of training. This is an h5 file.
+- TRAIN_DIR: directory pointing to the training data
+- TEST_DIR: directory pointing to the test data
+- labels: array containing the two labels that the model will classify an image to
+
+#### Training data
+The data for each model is current saved in a file structure such that the train and test data are found in separate folders. The data is separated in the 80/20 split that image classification training usually applies. This pertains to the train folder containing 80% of the dataset and the test folder containing 20% of the dataset. For example, if a dataset contains 100 images, the train folder would have 80 images and the test folder would have 20 images.
+
+#### Using the model
+The model can be loaded and ran using Load_Model.py. To use the loading file, the following should be defined:
+- MODEL_DIR: the directory and name of the model
+- IMAGE_DIR: the directory and name of the image
+- labels: array containing the two labels that the model will classify an image to
+
+This file will print the label that the model classifies the image as.
+
+### Existing Models
+The project currently has two trained models. 
+- Hair_Model: classifies if the person in the image has short or long hair
+- Background_Location_Model: classifies if the person in the image is indoor or outdoor
+
+The model is currently limited to classifying images between two labels at a time, which is why there are two trained models for hair and background location.
+
+Datasets for the models created were sourced from Kaggle.
+
+
+#### Limitation and Suggestion
+One limitation with the current implementation of the project relating to the custom models is the storage of the free tier of Heroku. Heroku only allows 500 MB of storage per application. The current models for hair and background location are 75 MB each. One way this could be fixed is by deploying the models separately on a different platform such as Algorithmia or FastAPI.
+
+
