@@ -274,7 +274,6 @@ class ProfileForm extends Component{
             const profile_image_data =  {
               user_id: userId,
               profileImg: this.state.profileImg
-            };
             const response = await fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/uploadImage/", {
             method: "POST",
             headers: {
