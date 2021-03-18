@@ -157,11 +157,20 @@ https://id.heroku.com/login
 
 ![](images/heroku_4.png)
 
-6. 6.	Select the deployment branch from GitHub and then click on deploy. View build log gives you additional details on what is being deployed.
+6. Select the deployment branch from GitHub and then click on deploy. View build log gives you additional details on what is being deployed.
 
 ![](images/heroku_5.png)
 
 ![](images/heroku_6.png)
+
+7. We have used two separate GitHub repos and two separate Heroku app. Below are the URL’s.
+
+```
+     Frontend Heroku app: -  https://ubs-application-dev.herokuapp.com/
+     Frontend GitHub repo: - https://github.com/Jijogeorge69/ubs-application.git
+     Backend Heroku app: -  https://ubs-app-api-dev.herokuapp.com/
+     Backend GitHub repo: - https://github.com/Jijogeorge69/ubsapp-rest-api.git
+```
 
 #  API LIST:
 1. [REGISTRATION](#REGISTRATION)
