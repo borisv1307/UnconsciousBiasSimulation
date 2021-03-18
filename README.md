@@ -133,6 +133,36 @@ To setup Travis look into travis documentation https://docs.travis-ci.com/user/t
 4. Configure the access keys by following this link: https://chalice-workshop.readthedocs.io/en/latest/env-setup.html#id5
 
 ```
+## Steps to setup Heroku App
+
+1. Sign up on Heroku using below link.
+
+```
+https://id.heroku.com/login
+```
+
+2. Login into Heroku dashboard, click on new >> Create new app.
+
+![](images/heroku_1.png)
+
+3. Provide app name and then select region.
+
+![](images/heroku_2.png)
+
+4. Under deploy tab, Select GitHub as deployment method, Search for the code base and select corresponding code base.
+
+![](images/heroku_3.png)
+
+5. Under Automatic deploys click on enable automatic deploys. Deployment happens automatically whenever the code base is updated on GitHub.
+
+![](images/heroku_4.png)
+
+6. 6.	Select the deployment branch from GitHub and then click on deploy. View build log gives you additional details on what is being deployed.
+
+![](images/heroku_5.png)
+
+![](images/heroku_6.png)
+
 #  API LIST:
 1. [REGISTRATION](#REGISTRATION)
 2. [LOGIN](#LOGIN)
