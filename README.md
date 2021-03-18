@@ -1479,13 +1479,12 @@ Datasets for the models created were sourced from Kaggle.
 
 
 ### Model Deployment
-We deployed our locally trained models on Algorithmia  which allows us to get passed the performance bottleneck that was present when loading and running models on Heroku.
+We deployed our locally trained models on [Algorithmia](https://algorithmia.com/developers/model-deployment)  which allows us to get passed the performance bottleneck that was present when loading and running models on Heroku.
 
-- The official documentation can help guide you through this process:
-https://algorithmia.com/developers/model-deployment
-- As well as this video that does it step-by-step by Algorithmia:
+- This video by Algorithmia provides a step-by-step guide to model deployment:
 https://www.youtube.com/watch?v=NLq2gFhoMvI
 
 In order to follow through you will need an account on Algorithmia to have access to an API key as well as downloading the python Algorithmia package.
 
+The source code we used for the algorithm that we published on Algorithmia to load and utilize the models can be found in the local image classifier folder  named Algorithmia_Source_Code.py.
 
