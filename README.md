@@ -5,7 +5,11 @@
 
 ## Introduction
 
-All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. This website serves both populations with a simulation..
+All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. The project focuses on creating an application that serves both job seekers and HR professionals navigate through unconscious biases in online presences. 
+
+For job seekers, the application serves to allow users to create presences. Presences are online profiles that are sent to HR professionals for assessment for acceptance or rejection. Job seekers are able to create multiple presences to see how well each one does under the examination of an HR professional.
+
+For HR professionals, the application serves to allow users to view the ratio at which they accept or reject applications based on unconscious biases they might have. HR professionals would be shown multiple applications to accept or reject. Once they have assessed a number of applications, they are shown how much they accepted or rejected applications based on factors such as gender, ethnicity, age, etc.
 
 ## Requirements
 
@@ -15,8 +19,6 @@ Create a basic online profile similar to Linked In but with a reduced scope. It 
 
 The job seeker would eventually receive a report from the simulation providing statistics related to their profile. This information would reveal how likely that profile was to move on to the next step in the hiring process. The job seeker could then use that information to tweak their profile and try again. In this way, after several iterations, they could fine tune their profile for a positive response.
 
----
-
 #### HR Professionals
 
 We can assume that most companies do not want their HR professionals, or any employee, to allow personal unconscious bias to influence company decisions. This simulation could be part of an overall training package or program to help employees uncover their unconscious biases.
@@ -25,13 +27,13 @@ The employee would open the site or app and see a randomly chosen applicant prof
 
 If machine learning were applied to the data set thus produced, the employee may even get a report detailing biases based on details like hair color, length of last name, or clothing style.
 
----
-
 ## Features
 
--
-- ***
-- ***
+- Registration and login: Users can register as job seekers or HR professionals and login to the application. This includes OTP verification for user's emails.
+- Create presences: Job seekers can create and view multiple presences that can be sent as applications for HR professionals to assess.
+- Assess applications: HR professionals can view applications sent by job seekers to accept or reject. 
+- Visualization: Job seekers can view the acceptance rate of presences that they have sent as applications. HR professionals can view the acceptance rate of the applications that they have assessed in batches based on factors such as gender, ethnicity, age, etc.
+- Image tagging: Images that job seekers include in their presences are tagged with labels describing the image using AWS and custom image classification models. 
 
 ## Architecture
 
@@ -52,6 +54,8 @@ Steps to install Python on windows: -
 Steps to install Python on mac: -
       •	https://python.tutorials24x7.com/blog/how-to-install-python-3-9-on-mac
 ```
+
+# Backend
 
 ## Steps to run backend code
 
@@ -1272,3 +1276,105 @@ GET:- https://localhost/api/v1/getCountByAge/34/1/
     "error": "reviewer id must be numeric"
 }
 ```
+
+# Frontend
+The frontend of the project is a web application that uses [React](https://reactjs.org/). 
+
+To use the application, run the following in the project directory:
+ `npm install`: Installs all the dependencies that have been used so far
+ `npm start`: Runs the application and opens it in browser on http://localhost:3000/
+ `npm test`: Runs the tests based on [Enzyme](https://enzymejs.github.io/enzyme/docs/guides/react-native.html)
+
+Note: `npm install` only has to be used on the first run of the application.
+
+## Pages
+The Unconscious Bias Simulation web application currently has pages for registration, login, OTP verification, home, create presence, view presence, and view application. 
+
+#### Registration
+When a user registers, the following form fields are displayed:
+- First name
+- Last name
+- Email
+- Password
+- Gender
+- Ethnicity
+- Birth Date
+- Registration Type
+
+Registration type allows the user to select if they are a job seeker or an HR professional. If the user is a job seeker, more form fields would be displayed for the following:
+- Address
+- Phone number
+
+#### Login
+The login page is the default page that the application would go to when it is first loaded. It includes a form for a user's email and password. It includes a link to registration.
+
+#### OTP Verification
+The OTP verification page is displayed after a user logs in for the first time. Once the user has verified their OTP, the user is redirected to the homepage. If a user has verified their OTP previously, the user is redirected to the homepage immediately after logging in. 
+
+The OTP verification page includes a form to submit the OTP that they receive through email. The page also includes a button to resend an OTP if the user was unable to receive their OTP.
+
+#### Homepage
+The homepage is the first page that the user is redirected to after logging in. There are two homepages that a user can be redirected to depending on the type of user. 
+- Job Seeker: The homepage includes a horizontal bar graph displaying the acceptance and rejection rate of presences submitted.
+- HR Professional: The homepage includes several graphs to show the user's acceptance and rejection rate of applications based on gender, ethnicity, tags of the application's image, age, and email. The data of the graphs displayed are dependent on the batch of applications that the HR professional went through. The batch can be chosen through a dropdown menu in the homepage.
+
+#### Create Presence
+This is a page unique to the job seeker. It displays the form for job seekers to create a presence. The form includes the following fields:
+- Profile name: name of the profile for users to differentiate each one
+- Email
+- First name
+- Last name
+- Position sought
+- Objective
+- Education: includes a form for school, degree, major, start date, end date, and GPA. (Start dates must precede end dates).
+- Experience: includes a form for title, company, location, start date, and end date. (Start dates must precede end dates).
+
+#### View Presence
+This is a page unique to the job seeker. It displays all of the presences that job seekers have created in an accordion. The header of each is named after the profile name of each presence. Each presence includes two buttons. The "Send" button is used to send the presence to the HR professionals. This puts it in the pool of applications that HR professionals can assess. The "Edit" button allows the job seeker to edit the presence.
+
+#### View Application
+
+This is a page unique to the HR professional. It displays applications one by one. Each application includes an Accept or Decline button. When a button is clicked, the next application is displayed. When the HR professional has gone through all the applications, a message shows that there are no more applications to be assessed. When the HR professional completes a whole batch, the results of that batch becomes available in the drop down menu of batches in the homepage.
+
+Note: HR professionals are able to assess applications and not complete a batch. A batch is only completed when the HR professional assesses a number of applications corresponding to the batch size. A batch does not have to be completed in one sitting.
+
+## Components
+Components have been written for several parts of the project. The components can be found in [src/components/](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components). Components are separated in folders named according to their function. Each folder contains the following files:
+
+ #### [Header](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/Header)
+ Displays the Navbar for each page.
+
+ - Header.jsx: Displays the name of the job seeker and links to create a presence, view created presences, and to logout.
+ - HeaderHR.jsx: Displays the name of the HR professional and links to view applications to assess them and to logout.
+
+#### [Home](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/Home)
+Displays the page that includes the graphs corresponding to each user. It is the first page that users are redirected to after logging in.
+ - Home.jsx: Displays the homepage of the job seeker. 
+ - HomeHR.jsx: Displays the homepage of the HR professional.
+ 
+#### [Login](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/Login)
+ -	login.jsx: Displays the login page of the application.
+ -	EmailValidation.jsx: Displays the page where users enter the OTP they receive through email.
+ 
+#### [createProfile](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/createProfile)
+- createProfile.jsx: Displays the page that holds the form for creating a presence.
+
+#### [graphs](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/graphs): 
+Includes files that are templates to create graphs. There are templates for doughnut charts, horizontal bar graphs, and pie charts. Each template are named according to the type of graph that they display. Graphs are created using [React Chart.js 2](https://reactchartjs.github.io/react-chartjs-2/#/).
+
+####  [profileForm](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/profileForm)
+Displays the form for job seekers to create or edit presences. This is used in createProfile.jsx and in viewProfiles.jsx when the user is editing their profile.
+
+#### [register](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/register)
+Displays the registration page of the application. 
+####  [viewApplications](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/viewApplications)
+Displays the page where HR professionals view applications one by one to accept or reject them.
+
+#### [viewProfile](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/tree/refactored_Code/frontend/src/components/viewProfile)
+- Profile.jsx: Displays a single profile. This component is used to display profiles in viewProfiles and viewApplications
+- viewProfiles.jsx: Displays the page that shows job seekers all of their presences
+
+Each folder also contains the files to test each component. These are the files with extension of .spec.js. Each test file is named exactly the same as the file that they are testing. 
+
+## Defining the path of each page
+The path to each page is defined in [src/index.js](https://github.com/Jijogeorge69/UnconsciousBiasSimulation/blob/refactored_Code/frontend/src/index.js). Each component that corresponds to a page to be displayed under a certain URL is imported in this file. Each route is defined in the Router with the URL defined in path. 
