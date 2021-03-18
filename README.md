@@ -1329,8 +1329,11 @@ GET:- https://localhost/api/v1/getCountByAge/34/1/
 The frontend of the project is a web application that uses [React](https://reactjs.org/). 
 
 To use the application, run the following in the project directory:
+
  `npm install`: Installs all the dependencies that have been used so far
+ 
  `npm start`: Runs the application and opens it in browser on http://localhost:3000/
+ 
  `npm test`: Runs the tests based on [Enzyme](https://enzymejs.github.io/enzyme/docs/guides/react-native.html)
 
 Note: `npm install` only has to be used on the first run of the application.
