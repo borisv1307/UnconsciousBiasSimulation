@@ -62,7 +62,7 @@ class HomeHR extends Component {
       },
 
       dataHorizontalTags: {
-        labels: ["Smiling", "Wearing Glasses", "Facial Hair"],
+        labels: ["Smiling", "Not Smiling", "Wearing Glasses", "Not Wearing Glasses", "Facial Hair", "No Facial Hair", "Short Hair", "Long Hair", "Indoor", "Outdoor"],
         datasets: [
           {
             label: 'Acceptance',
@@ -204,7 +204,7 @@ class HomeHR extends Component {
     var rejection_age = []
     var acceptance_email = []
     var rejection_email = []
-    var collect_labels = []
+    let collect_labels = new Set()
     var batchdate = this.state.batch_result.filter(function (batch) {
       return batch.batch_no === parseInt(event);
     })
@@ -351,23 +351,65 @@ class HomeHR extends Component {
         dataHorizontalEthnicity.datasets[1].borderColor = new Array(rejection_ethnicity.length).fill(rejectBorderColor);
 
         Object.keys(res3).forEach(function (key) {
-          if (key === "smile") {
-            acceptance_tags.push(res3.smile)
+          if (key === "accept_smile") {
+            acceptance_tags.push(res3.accept_smile)
           }
-          else {
-            rejection_tags.push(res3.without_smile)
+          else if (key === "reject_smile") {
+            rejection_tags.push(res3.reject_smile)
           }
-          if (key === "eyeglasses") {
-            acceptance_tags.push(res3.eyeglasses)
+          else if (key === "accept_without_smile") {
+            acceptance_tags.push(res3.accept_without_smile)
           }
-          else {
-            rejection_tags.push(res3.without_eyeglasses)
+          else if (key === "reject_without_smile") {
+            rejection_tags.push(res3.reject_without_smile)
           }
-          if (key === "facial_hair") {
-            acceptance_tags.push(res3.facial_hair)
+          else if (key === "accept_eyeglasses") {
+            acceptance_tags.push(res3.accept_eyeglasses)
           }
-          else {
-            rejection_tags.push(res3.without_facial_hair)
+          else if (key === "reject_eyeglasses") {
+            rejection_tags.push(res3.reject_eyeglasses)
+          }
+          else if (key === "accept_without_eyeglasses") {
+            acceptance_tags.push(res3.accept_without_eyeglasses)
+          }
+          else if (key === "reject_without_eyeglasses") {
+            rejection_tags.push(res3.reject_without_eyeglasses)
+          }
+          else if (key === "accept_facial_hair") {
+            acceptance_tags.push(res3.accept_facial_hair)
+          }
+          else if (key === "reject_facial_hair") {
+            rejection_tags.push(res3.reject_facial_hair)
+          }
+          else if (key === "accept_without_facial_hair") {
+            acceptance_tags.push(res3.accept_without_facial_hair)
+          }
+          else if (key === "reject_without_facial_hair") {
+            rejection_tags.push(res3.reject_without_facial_hair)
+          }
+          else if (key === "accept_short_hair") {
+            acceptance_tags.push(res3.accept_short_hair)
+          }
+          else if (key === "reject_short_hair") {
+            rejection_tags.push(res3.reject_short_hair)
+          }
+          else if (key === "accept_long_hair") {
+            acceptance_tags.push(res3.accept_long_hair)
+          }
+          else if (key === "reject_long_hair") {
+            rejection_tags.push(res3.reject_long_hair)
+          }
+          else if (key === "accept_indoor") {
+            acceptance_tags.push(res3.accept_indoor)
+          }
+          else if (key === "reject_indoor") {
+            rejection_tags.push(res3.reject_indoor)
+          }
+          else if (key === "accept_outdoor") {
+            acceptance_tags.push(res3.accept_outdoor)
+          }
+          else if (key === "reject_outdoor") {
+            rejection_tags.push(res3.reject_outdoor)
           }
 
         });
@@ -411,24 +453,21 @@ class HomeHR extends Component {
 
 
 
-        if ((Object.keys(res5["accepted"]).length) > Object.keys(res5["rejected"]).length) {
-          dataHorizontalEmail.labels = Object.keys(res5["accepted"])
-        }
-        else {
-          dataHorizontalEmail.labels = Object.keys(res5["rejected"])
-        }
 
 
 
         Object.keys(res5["accepted"]).forEach(function (key1) {
+          collect_labels.add(key1);
           acceptance_email.push(res5["accepted"][key1]);
         })
 
         Object.keys(res5["rejected"]).forEach(function (key2) {
+          collect_labels.add(key2);
           rejection_email.push(res5["rejected"][key2]);
         })
 
 
+        dataHorizontalEmail.labels = [...collect_labels];
         dataHorizontalEmail.datasets[0].data = acceptance_email;
         dataHorizontalEmail.datasets[0].backgroundColor = new Array(acceptance_email.length).fill(acceptBgColor);
         dataHorizontalEmail.datasets[0].borderColor = new Array(acceptance_email.length).fill(acceptBorderColor);

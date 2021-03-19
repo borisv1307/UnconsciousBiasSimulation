@@ -160,13 +160,13 @@ class ProfileForm extends Component{
     imageHandler = async (e) => {
         const files = e.target.files;
         var allowedExtensions =  
-                    /(\.jpg|\.jpeg|\.png)$/i;
+                    /(\.jpg|\.jpeg)$/i;
 
         if (files[0].size < 2000000) {
 
           if (!allowedExtensions.exec(files[0]['name'])){
             this.setState({
-              alertMessage: "Invalid image file format. Accepted file formats are PNG or JPEG.",
+              alertMessage: "Invalid image file format. Accepted file formats are JPEG or JPG.",
               allErrorState: true,
               allSuccessState: false
             });
@@ -274,7 +274,7 @@ class ProfileForm extends Component{
             const profile_image_data =  {
               user_id: userId,
               profileImg: this.state.profileImg
-            };
+            }; 
             const response = await fetch("https://ubs-app-api-dev.herokuapp.com/api/v1/uploadImage/", {
             method: "POST",
             headers: {
@@ -713,7 +713,7 @@ render() {
                       <Popover.Content>
                         <ul>
                           <li>Should be less than 2 MB in size.</li>
-                          <li>Should be a PNG or JPEG file.</li>
+                          <li>Should be a JPEG or JPG file.</li>
                           <li>Make sure you are clear and visible in the image.</li>
                         </ul>
                         

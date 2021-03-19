@@ -1,5 +1,5 @@
 """
-This file (test_app.py) contains the functional tests .
+This file (test_home.py) contains the functional tests .
 
 """
 #pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order

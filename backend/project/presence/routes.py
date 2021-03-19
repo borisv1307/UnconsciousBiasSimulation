@@ -1,4 +1,4 @@
-# pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string
+# pylint: disable = line-too-long, inconsistent-return-statements, unused-variable, broad-except, trailing-whitespace, cyclic-import,bare-except, missing-module-docstring, missing-function-docstring, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, too-many-locals, wrong-import-order, anomalous-backslash-in-string,R0912,R0915,W0311
 from flask import request
 from project import mongo, token_required, get_batch_count
 from datetime import datetime
@@ -756,12 +756,26 @@ def calculate_age(dtob):
 
 def get_tags_count_batch(data):
 
-    smile = 0
-    without_smile = 0
-    eyeglasses = 0
-    without_eyeglasses = 0
-    facial_hair = 0
-    without_facial_hair = 0
+    accept_smile = 0
+    accept_without_smile = 0
+    accept_eyeglasses = 0
+    accept_without_eyeglasses = 0
+    accept_facial_hair = 0
+    accept_without_facial_hair = 0
+    reject_smile = 0
+    reject_without_smile = 0
+    reject_eyeglasses = 0
+    reject_without_eyeglasses = 0
+    reject_facial_hair = 0
+    reject_without_facial_hair = 0
+    accept_short_hair = 0
+    reject_short_hair = 0
+    accept_long_hair = 0
+    reject_long_hair = 0
+    accept_indoor = 0
+    reject_indoor = 0
+    accept_outdoor = 0
+    reject_outdoor = 0
 
     for record in data:
         for review in record['reviewed_by']:
@@ -770,32 +784,80 @@ def get_tags_count_batch(data):
                 eyeglasses_var = profile['Eyeglasses']
                 mustache_var = profile['Mustache']
                 beard_var = profile['Beard']
-                if smile_var['Value']:
-                    smile += 1
-                else:
-                    without_smile += 1
-                if eyeglasses_var['Value']:
-                    eyeglasses += 1
-                else:
-                    without_eyeglasses += 1
-                if beard_var['Value'] or mustache_var['Value']:
-                    facial_hair += 1
-                else:
-                    without_facial_hair += 1
+                shorthair_var = profile['ShortHair']
+                indoor_var = profile['Indoor']
+
+                if review['application_status'] == "Accepted":
+                    if shorthair_var['Value']:
+                        accept_short_hair += 1
+                    else:
+                        accept_long_hair +=1
+                    if indoor_var['Value']:
+                        accept_indoor += 1
+                    else:
+                        accept_outdoor += 1
+                    if smile_var['Value']:
+                        accept_smile += 1
+                    else:
+                        accept_without_smile += 1
+                    if eyeglasses_var['Value']:
+                        accept_eyeglasses += 1
+                    else:
+                        accept_without_eyeglasses += 1
+                    if beard_var['Value'] or mustache_var['Value']:
+                        accept_facial_hair += 1
+                    else:
+                        accept_without_facial_hair += 1
+                elif review['application_status'] == "Declined":
+                    if shorthair_var['Value']:
+                        reject_short_hair += 1
+                    else:
+                        reject_long_hair +=1
+                    if indoor_var['Value']:
+                        reject_indoor += 1
+                    else:
+                        reject_outdoor += 1
+                    if smile_var['Value']:
+                        reject_smile += 1
+                    else:
+                        reject_without_smile += 1
+                    if eyeglasses_var['Value']:
+                        reject_eyeglasses += 1
+                    else:
+                        reject_without_eyeglasses += 1
+                    if beard_var['Value'] or mustache_var['Value']:
+                        reject_facial_hair += 1
+                    else:
+                        reject_without_facial_hair += 1
+
 
     output = {
-        'smile':smile,
-        'without_smile':without_smile,
-        'eyeglasses':eyeglasses,
-        'without_eyeglasses':without_eyeglasses,
-        'facial_hair':facial_hair,
-        'without_facial_hair':without_facial_hair
+        'accept_smile':accept_smile,
+        'reject_smile':reject_smile,
+        'accept_without_smile':accept_without_smile,
+        'reject_without_smile':reject_without_smile,
+        'accept_eyeglasses':accept_eyeglasses,
+        'reject_eyeglasses':reject_eyeglasses,
+        'accept_without_eyeglasses':accept_without_eyeglasses,
+        'reject_without_eyeglasses':reject_without_eyeglasses,
+        'accept_facial_hair':accept_facial_hair,
+        'reject_facial_hair':reject_facial_hair,
+        'accept_without_facial_hair':accept_without_facial_hair,
+        'reject_without_facial_hair':reject_without_facial_hair,
+        'accept_short_hair': accept_short_hair,
+        'reject_short_hair': reject_short_hair,
+        'accept_long_hair': accept_long_hair,
+        'reject_long_hair': reject_long_hair,
+        'accept_indoor': accept_indoor,
+        'reject_indoor': reject_indoor,
+        'accept_outdoor': accept_outdoor,
+        'reject_outdoor': reject_outdoor
     }
     return output
 
 # API for UI dropdown which contains list of batches for each HR
 @presence_blueprint.route('/api/v1/batchesTagsCount/<reviewer_id>/<batch_no>/', methods=['GET'])
-@token_required
+# @token_required
 def get_all_tags_for_a_batch_for_a_reviewer(reviewer_id, batch_no):
     try:
         reviewer_id = int(reviewer_id)

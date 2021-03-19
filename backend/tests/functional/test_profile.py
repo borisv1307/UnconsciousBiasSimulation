@@ -1,6 +1,5 @@
 """
-This file (test_profile.py) contains the functional tests which
-test create profile and view profile.
+This file (test_profile.py) contains the functional tests.
 
 """
 #pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order

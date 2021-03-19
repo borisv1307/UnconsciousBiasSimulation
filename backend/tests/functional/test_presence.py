@@ -1,6 +1,5 @@
 """
-This file (test_profile.py) contains the functional tests which
-test create profile and view profile.
+This file (test_presence.py) contains the functional tests.
 
 """
 # pylint: disable = line-too-long, too-many-lines, no-name-in-module, import-error, multiple-imports, pointless-string-statement, wrong-import-order
@@ -325,7 +324,7 @@ class TestPool:
         post_response = test_client.post('/api/v1/login/', data=json.dumps(login_data_4),headers={'Content-Type': 'application/json'})
         get_token = json.loads(post_response.data)
         response = test_client.get(
-            '/api/v1/batchesTagsCount/4/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
+            '/api/v1/batchesTagsCount/34/1/', headers={'Content-Type': 'application/json','Authorization':get_token['token']})
         assert response.status_code == 200
 
     def test_for_get_count_by_age(self, test_client):
