@@ -5,11 +5,12 @@
 
 ## Introduction
 
+
 All humans have unconscious biases, and those in human resources often undergo training to reveal them so they can consciously work on them. Job seekers make many choices when setting up their online profile and do not know how HR professionals will respond to it before there are consequences. The project focuses on creating an application that serves both job seekers and HR professionals navigate through unconscious biases in online presences. 
 
 For job seekers, the application serves to allow users to create presences. Presences are online profiles that are sent to HR professionals for assessment for acceptance or rejection. Job seekers are able to create multiple presences to see how well each one does under the examination of an HR professional.
 
-For HR professionals, the application serves to allow users to view the ratio at which they accept or reject applications based on unconscious biases they might have. HR professionals would be shown multiple applications to accept or reject. Once they have assessed a number of applications, they are shown how much they accepted or rejected applications based on factors such as gender, ethnicity, age, etc.
+
 
 ## Requirements
 
