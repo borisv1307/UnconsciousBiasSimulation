@@ -3,15 +3,9 @@
 ################
 #### routes ####
 ################
-import tensorflow as tf
-import numpy as np
-import os
-import requests
 import Algorithmia
 from flask import request
 from project import mongo, token_required, get_aws_tags
-from PIL import Image
-from skimage import transform
 from . import aws_blueprint
 
 # This is your Algorithmia Account API Key
